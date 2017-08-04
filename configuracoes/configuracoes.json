@@ -1,0 +1,67 @@
+{
+    "frases":"../../frases/frases.txt",
+    "servidores": {
+        "virtuoso": {
+            "endpoint": "http://127.0.0.1:8890/sparql",
+            "servicos":{},
+            "queries": {
+                "subject": "/arquivos/queries_sparql/subject.sparql",
+                "predicate": "/arquivos/queries_sparql/predicate.sparql",
+                "object": "/arquivos/queries_sparql/object.sparql"
+            }
+        },
+        "palavras": {
+            "endpoint": "http://127.0.0.1:5001",
+            "servicos":{
+                "analisar_frase": "/palavras/analisar/{frase}"
+            }
+        }
+    },
+    "tipo_frases": {
+        "quem_sao": [
+            "quem são",
+            "quem é"
+        ],
+        "quem": [
+            "quem"
+        ],
+        "que_quais": [
+            "que",
+            "quais"
+        ],
+        "qual_e": [
+            "qual"
+        ],
+        "quais_sao": [
+            "quais são"
+        ],
+        "ha_existe_tem_algum": [
+            "há",
+            "tem algum",
+            "existe"
+        ],
+        "alguem": [
+            "alguém"
+        ],
+        "onde_e": [
+            "onde é"
+        ],
+        "o_que_e": [
+            "o que é",
+            "o_que é"
+        ],
+        "consulta": [
+            "liste",
+            "busque",
+            "ache",
+            "encontre",
+            "descubra",
+            "mostre",
+            "nomeie",
+            "localize",
+            "obtenha",
+            "recupere",
+            "consiga"
+        ]
+    }
+}
