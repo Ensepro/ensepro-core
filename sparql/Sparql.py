@@ -7,15 +7,6 @@
 
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-class Sparql(object):
-
-
-
-
-
-
-    pass
-
 
 
 

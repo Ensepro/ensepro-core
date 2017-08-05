@@ -5,53 +5,49 @@
 
 """
 
-from bean import Frase
-from utils import StringUtil
 import configuracoes
-
 
 tipos = []
 for tipo in configuracoes.getTipoFrases():
     tipos.append((tipo, configuracoes.getTipoFrases()[tipo]))
 
 #TODO FIXME tem problema.
-# "QUEM É BLALA" ele está achando o tipo "quem" e deveria ser "quem_sao". Ele pega a primeira palavra e procura o tipo.
-def getTipoFrase(frase : Frase):
+# Está sendo encontrado o tipo corretamente, porém, como a frase é montada de tras para frete, se tem um problema.
+# No caso do tipo "quem_sao", somente é validade este tipo quando a palavra "quem" é contatenada ao trechoVerificado, logo
+# retorando o numero da palavra "quem" e não da palavra "são" que também faz parte do tipo.
+# Também no caso do "quem sao", a ordem que os tipos estão na lista interfere, pois ambos "quem" e "quem são" estarão no trecho validado.
+def getTipoFrase(frase):
     """
     Obtem o tipo de uma frase. Caso o tipo não for determinado, o retorno será None.
     :param frase:
     :return:
     """
-    palavras = getPalavrasDaFrase(frase)
-    textoFrase = palavras[0].palavraOriginal
-    palavras.pop(0)
-    for palavra in palavras:
+    palavras = frase.obterPalavrasComPalavraOriginalNaoVazia()
+    textoFrase = ""
+    for palavra in reversed(palavras):
+        textoFrase = palavra.palavraOriginal + " " + textoFrase
         tipo = buscarTipo(textoFrase)
         if(tipo is not None):
-            return (palavra.numero, tipo)
-        textoFrase = textoFrase + " " + palavra.palavraOriginal
-
+            return {
+                    "numero_palavra": palavra.numero -5,
+                    "tipo": tipo
+                   }
     return None
 
 
+
+
+#TODO FIXME pensar em uma estrutura mais otimizada para determinar o tipo. for(for()) não é legal.
+# Neste momento foi feito assim(pensando em funcionar) pois este trecho pode não servir mais tarde devido a verificação que será mais complexa.
 def buscarTipo(trechoFrase: str) -> str:
     """
     Verifica se o inicio da frase(trechoFrase) está relacionado a algum dos tipos configurados.
     :param trechoFrase:
     :return:
     """
-    # print("buscarTipo:'"+trechoFrase+"'")
     trechoFrase = trechoFrase.lower()
     for tipo in tipos:
-        if (trechoFrase in tipo[1]):
-            return tipo[0]
+        for valorTipo in tipo[1]:
+            if (valorTipo in trechoFrase):
+                return tipo[0]
     return None
-
-
-def getPalavrasDaFrase(frase : Frase):
-    """
-    Este método irá remover as palavras que não possuem a palavra original na frase.
-    :param frase:
-    :return:
-    """
-    return [palavra for palavra in frase.palavras if not StringUtil.isEmpty(palavra.palavraOriginal)]

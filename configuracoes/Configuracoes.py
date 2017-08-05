@@ -77,10 +77,8 @@ def getPathArquivoFrases():
     return configuracoes[CONFIG_ARQUIVO_FRASES]
 
 
-
-
 configFile = "../configuracoes/configuracoes.json"
-debug = False
+debug = True
 
 try:
     if debug:

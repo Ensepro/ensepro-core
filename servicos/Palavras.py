@@ -5,15 +5,12 @@
 
 """
 
-
 import requests
 import configuracoes
 
-from bean import Frase
-
 nome_servidor = "palavras"
 
-def analisarFrase(frase : str) -> Frase:
+def analisarFrase(frase : str):
     response = requests.get(
                     _buildUrlService("analisar_frase").replace("{frase}", frase)
                 )

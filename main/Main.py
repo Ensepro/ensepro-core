@@ -4,23 +4,29 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-import requests
-
-import configuracoes
-import tipofrases
+import nlu
 from servicos import Palavras as palavras
 from bean.Frase import Frase
-from bean.Palavra import Palavra
+import json
 
-print("Virtuoso endpoint: "+configuracoes.getServidorEndpoint("virtuoso"))
-print("Serviços: "+str(configuracoes.getServicos("virtuoso")))
-print("Palavras endpoint"+configuracoes.getServidorEndpoint("palavras"))
-print("Serviços: "+str(configuracoes.getServicos("palavras")))
-print("Serviços: "+str(configuracoes.getServico("palavras", "analisar_frase")))
+# fraseTexto = "quais doutorandos estão trabalhando na CWI?"
+fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
 
-fraseTexto = "quais doutorandos estão trabalhando na CWI?"
+print("\nFrase a ser analisada: " + fraseTexto + "\n")
+
+
 fraseAnalisada = palavras.analisarFrase(fraseTexto)
 
-print(fraseAnalisada.content)
+if(not fraseAnalisada.ok):
+    raise Exception("Falha na chamada do serviço de analise da frase(status_code="+str(fraseAnalisada.status_code)+")")
 
+jsonFrase = json.loads(fraseAnalisada.content)
+frase = Frase.fraseFromJson(jsonFrase)
 
+fraseProcessada = nlu.processarFrase(frase)
+
+# print(fraseProcessada)
+# for palavra in frase.palavras:
+#     palavra.getSinonimos()
+
+print(json.dumps(frase, indent=4, sort_keys=True))
