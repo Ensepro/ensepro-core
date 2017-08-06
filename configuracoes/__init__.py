@@ -11,3 +11,5 @@ from .Configuracoes import getServidorEndpoint
 from .Configuracoes import getPathArquivoFrases
 from .Configuracoes import getServicos
 from .Configuracoes import getServico
+from .Configuracoes import getValue
+from .Configuracoes import getSparqlQueries

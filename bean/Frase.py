@@ -51,15 +51,16 @@ class Frase(object):
                         re.compile("^H:prop$"),
                         re.compile("^S:n$"),
                         re.compile("^Cs:n$"),
-                        re.compile("^DP:n$")
+                        re.compile("^DP:n$"),
+                        re.compile("^Cs:prop$")
                     ]
 
-        palavrasMatchingRegex = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
+        _palavrasRelevantesTemp = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
 
         #Remove palavras que não devem ser consideradas relevantes
         #1. Palavras que fazem parte do tipo da frase
         #2. Palavras que possuem palavraOriginal vazia.
-        self._palavrasRelevantes = [palavra for palavra in palavrasMatchingRegex
+        self._palavrasRelevantes = [palavra for palavra in _palavrasRelevantesTemp
                                 if not StringUtil.isEmpty(palavra.palavraOriginal)
                                    and palavra.numero > self.obterTipoFrase()["numero_palavra"]
                              ]
@@ -113,7 +114,8 @@ class Frase(object):
         return self._palavrasComPalavraOriginalNaoVazia
 
     def _obterPalavrasComPalavraOriginalNaoVazia(self):
-        self._palavrasComPalavraOriginalNaoVazia = [palavra for palavra in self.palavras if not StringUtil.isEmpty(palavra.palavraOriginal)]
+        self._palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
+
 
     def to_json(self):
         return self.__dict__

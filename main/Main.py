@@ -4,13 +4,16 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+
+import sparql
+import json
 import nlu
 from servicos import Palavras as palavras
 from bean.Frase import Frase
-import json
 
 # fraseTexto = "quais doutorandos estão trabalhando na CWI?"
 fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
+# fraseTexto = "quem é Alencar?"
 
 print("\nFrase a ser analisada: " + fraseTexto + "\n")
 
@@ -26,13 +29,14 @@ frase = Frase.fraseFromJson(jsonFrase)
 fraseProcessada = nlu.processarFrase(frase)
 
 # print(fraseProcessada)
-for palavra in frase.palavras:
-    palavra.getSinonimos()
+# for palavra in frase.palavras:
+#     palavra.getSinonimos()
+#     palavra.print()
 
-for info in fraseProcessada:
-    print(str(info) + ": " + str(fraseProcessada[info]))
+# for info in fraseProcessada:
+#     print(str(info) + ": " + str(fraseProcessada[info]))
 
-
+sparql.consular(fraseProcessada)
 
 
 # print(json.dumps(frase, ensure_ascii=False, indent=2))

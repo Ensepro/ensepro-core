@@ -4,3 +4,6 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+
+from .Sparql import consular
+

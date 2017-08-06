@@ -5,6 +5,7 @@
 
 """
 from bean.Palavra import Palavra
+from .StringUtil import isEmpty
 
 def palavrasFromJson(jsonFrase):
     """
@@ -33,6 +34,10 @@ def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex : list):
                 break
 
     return palavrasResultantes
+
+
+def removePalavrasSemPalavraOriginal(palavras: list):
+    return [palavra for palavra in palavras if not isEmpty(palavra.palavraOriginal)]
 
 
 

@@ -29,7 +29,7 @@ def getTipoFrase(frase):
         tipo = buscarTipo(textoFrase)
         if(tipo is not None):
             return {
-                    "numero_palavra": palavra.numero -5,
+                    "numero_palavra": palavra.numero - 4,
                     "tipo": tipo
                    }
     return None
