@@ -40,20 +40,32 @@ class Frase(object):
             self._obterPalavrasRelevantes()
         return self._palavrasRelevantes
 
-    # TODO revisar as regex que são necessárias
-    # também verificar se não é melhor utilizar somente uma regex com OR'sm assim evitando um for para percorrer e verificar com cada uma.
+    # TODO revisar as regex que são necessárias. Tentar separar o código em trechos menores (se possível)
+    # também verificar se não é melhor utilizar somente uma regex com OR's assim evitando um for para percorrer e verificar com cada uma.
     # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$
     def _obterPalavrasRelevantes(self):
-        self._palavrasRelevantes = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self,
-                                    [
-                                        re.compile("v-"),
-                                        re.compile("^H:n$"),
-                                        re.compile("^DN:adj$"),
-                                        re.compile("^H:prop$"),
-                                        re.compile("^S:n$"),
-                                        re.compile("^Cs:n$"),
-                                        re.compile("^DP:n$")
-                                    ])
+        regexs =    [
+                        re.compile("v-"),
+                        re.compile("^H:n$"),
+                        re.compile("^DN:adj$"),
+                        re.compile("^H:prop$"),
+                        re.compile("^S:n$"),
+                        re.compile("^Cs:n$"),
+                        re.compile("^DP:n$")
+                    ]
+
+        palavrasMatchingRegex = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
+
+        #Remove palavras que não devem ser consideradas relevantes
+        #1. Palavras que fazem parte do tipo da frase
+        #2. Palavras que possuem palavraOriginal vazia.
+        self._palavrasRelevantes = [palavra for palavra in palavrasMatchingRegex
+                                if not StringUtil.isEmpty(palavra.palavraOriginal)
+                                   and palavra.numero > self.obterTipoFrase()["numero_palavra"]
+                             ]
+
+
+
 
 
     def possuiLocucaoVerbal(self):

@@ -29,7 +29,7 @@ class Palavra(object):
         self.sinonimos["eng"] = wn.getSinonimos(self.palavraCanonica, "eng")
         self.sinonimos["por"] = wn.getSinonimos(self.palavraCanonica, "por")
 
-        print(self.sinonimos)
+        # print(self.sinonimos)
         return self.getSinonimos()
 
 

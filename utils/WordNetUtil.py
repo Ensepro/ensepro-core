@@ -6,8 +6,11 @@
 """
 
 from nltk.corpus import wordnet as wn
-
+from utils import StringUtil
 def getSinonimos(word, _lang):
+    if(StringUtil.isEmpty(word) or StringUtil.isEmpty(_lang)):
+        return list()
+
     sinonimos = set()
     lemmasDaPalavra = wn.lemmas(word, lang=_lang)
     for lemma in lemmasDaPalavra:
@@ -18,4 +21,4 @@ def getSinonimos(word, _lang):
             sinonimo = synsetLemmaName[synsetLemmaName.index(".") + 1:] + "." + synsetLemma.name()
             sinonimos.add(sinonimo)
 
-    return sinonimos
+    return list(sinonimos)

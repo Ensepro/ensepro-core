@@ -26,7 +26,13 @@ frase = Frase.fraseFromJson(jsonFrase)
 fraseProcessada = nlu.processarFrase(frase)
 
 # print(fraseProcessada)
-# for palavra in frase.palavras:
-#     palavra.getSinonimos()
+for palavra in frase.palavras:
+    palavra.getSinonimos()
 
-print(json.dumps(frase, indent=4, sort_keys=True))
+for info in fraseProcessada:
+    print(str(info) + ": " + str(fraseProcessada[info]))
+
+
+
+
+# print(json.dumps(frase, ensure_ascii=False, indent=2))

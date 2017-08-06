@@ -20,20 +20,13 @@ def palavrasFromJson(jsonFrase):
 
 def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex : list):
     """
-    Este método irá verificar se as tags inicias das palavras da frase batem com os regex passados.
+    Este método irá verificar se as tags inicias das palavras da frase batem com algum dos regex passados por parâmetro.
     :param frase: é o objeto Frase do qual as palavras serão filtradas.
     :param tagsRegex: Lista de regexs que serão utilizadas para validar a tagInicial das palavras.
     :return: Lista de palavras que a sua tagInicial foi validada por alguma regex
     """
     palavrasResultantes = []
-    palavras = frase.obterPalavrasComPalavraOriginalNaoVazia()
-
-    #FIXME: verificar uma maneira de não fazer o FOR abaixo
-    #Obtem todas as palavras após as quais determinam o tipo, pois estas só são relevantes para verificar o tipo
-    # e não serão mais necessárias para a análise.
-    palavras = [palavra for palavra in palavras if palavra.numero > frase.obterTipoFrase()["numero_palavra"]]
-
-    for palavra in palavras:
+    for palavra in frase.palavras:
         for tagRegex in tagsRegex:
             if(tagRegex.search(palavra.tagInicial) is not None):
                 palavrasResultantes.append(palavra)
