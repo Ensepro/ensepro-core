@@ -49,7 +49,7 @@ debug = True
 try:
 
     if debug:
-        print(MENSAGEM_CARREGANDO.replace("?", configFile))
+        print(MENSAGEM_CARREGANDO.format(fromFile=configFile))
 
     configuracoes = _loadConfigs(configFile)
 

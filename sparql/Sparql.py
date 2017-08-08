@@ -92,7 +92,7 @@ def _criarTarefasParaSinonimos(palavra : Palavra):
     for lang in sinonimos:
         for word in sinonimos[lang]:
             for queryKey in queries:
-                task = _criarTarefa(word, palavra.palavraCanonica, queries[queryKey], queryKey, lang)
+                task = _criarTarefa(word.split(".")[2], palavra.palavraCanonica, queries[queryKey], queryKey, lang)
                 tasks.append(task)
 
     return tasks
@@ -124,7 +124,7 @@ def consular(fraseProcessada):
     with futures.ThreadPoolExecutor(10) as executor:
         executor.map(_worker, tarefas)
 
-    with open("../__ignorar/temp.json", 'a', encoding="utf8") as out:
+    with open("../__ignorar/sparql_consulta.json", 'w', encoding="utf8") as out:
         out.write(json.dumps(triplas, ensure_ascii=False, indent=2))
 
 

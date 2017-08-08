@@ -12,7 +12,8 @@ from servicos import Palavras as palavras
 from bean.Frase import Frase
 
 # fraseTexto = "quais doutorandos estão trabalhando na CWI?"
-fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
+# fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
+fraseTexto = "tem algum doutorando no SemanTIC?"
 # fraseTexto = "quem é Alencar?"
 
 print("\nFrase a ser analisada: " + fraseTexto + "\n")
@@ -26,17 +27,14 @@ if(not fraseAnalisada.ok):
 jsonFrase = json.loads(fraseAnalisada.content)
 frase = Frase.fraseFromJson(jsonFrase)
 
+for palavra in frase.palavras:
+    palavra.getSinonimos()
+
 fraseProcessada = nlu.processarFrase(frase)
 
-# print(fraseProcessada)
-# for palavra in frase.palavras:
-#     palavra.getSinonimos()
-#     palavra.print()
-
-# for info in fraseProcessada:
-#     print(str(info) + ": " + str(fraseProcessada[info]))
+with open("../__ignorar/frase.json", 'w', encoding="utf8") as out:
+    out.write(json.dumps(frase, ensure_ascii=False, indent=4))
 
 sparql.consular(fraseProcessada)
 
 
-# print(json.dumps(frase, ensure_ascii=False, indent=2))

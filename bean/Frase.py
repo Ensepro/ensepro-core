@@ -42,7 +42,7 @@ class Frase(object):
 
     # TODO revisar as regex que são necessárias. Tentar separar o código em trechos menores (se possível)
     # também verificar se não é melhor utilizar somente uma regex com OR's assim evitando um for para percorrer e verificar com cada uma.
-    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$
+    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$|^Cs:prop$
     def _obterPalavrasRelevantes(self):
         regexs =    [
                         re.compile("v-"),
