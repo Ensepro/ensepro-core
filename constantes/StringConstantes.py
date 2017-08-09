@@ -9,3 +9,6 @@ UTF_8 = "utf-8"
 BREAK_LINE = "\n"
 TAB = "\t"
 
+FILE_READ_ONLY = 'r'
+FILE_WRITE_ONLY = 'w'
+

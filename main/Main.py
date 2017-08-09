@@ -8,16 +8,16 @@
 import sparql
 import json
 import nlu
-from servicos import Palavras as palavras
+from servicos import PalavrasService as palavras
 from bean.Frase import Frase
 
 # fraseTexto = "quais doutorandos estão trabalhando na CWI?"
+fraseTexto = "qual é a idade de Alencar?"
 # fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
-fraseTexto = "tem algum doutorando no SemanTIC?"
-# fraseTexto = "quem é Alencar?"
+# fraseTexto = "tem algum doutorando no SemanTIC?"
+# fraseTexto = "há algum projeto sobre Web Semântica?"
 
 print("\nFrase a ser analisada: " + fraseTexto + "\n")
-
 
 fraseAnalisada = palavras.analisarFrase(fraseTexto)
 

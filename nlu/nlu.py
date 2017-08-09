@@ -6,7 +6,7 @@
 """
 
 from bean.Frase import Frase
-
+from constantes.NLUConstantes import *
 
 def processarFrase(frase : Frase):
     fraseTipo = frase.obterTipoFrase()
@@ -15,10 +15,10 @@ def processarFrase(frase : Frase):
     vozAtiva = frase.isVozAtiva()
 
     return {
-            "tipo_frase": fraseTipo,
-            "palavras_relevantes": palavrasRelevantes,
-            "locucao_verbal": possuiLocucaoVerbal,
-            "voz_ativa": vozAtiva
+            TIPO_FRASE: fraseTipo,
+            PALAVRAS_RELEVANTES: palavrasRelevantes,
+            LOCUCAO_VERBAL: possuiLocucaoVerbal,
+            VOZ_ATIVA: vozAtiva
             }
 
 

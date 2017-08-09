@@ -6,29 +6,36 @@
 """
 
 import configuracoes
+from constantes.TipoFrasesConstantes import *
 
-tipos = configuracoes.getTipoFrases()
+
+# TODO
+def _normalizarTipos():
+    """
+
+    :param tipos:
+    :return:
+    """
+    pass
+
 
 def getTipoFrase(frase):
     """
-    Obtem o tipo de uma frase. Caso o tipo não for determinado, o retorno será None.
+    Obtém o tipo de uma frase. Caso o tipo não for determinado, o retorno será None.
     :param frase:
     :return:
     """
     palavras = frase.obterPalavrasComPalavraOriginalNaoVazia()
-    tipo = tipos
+    tipo = _tipos
 
     for i in range(len(palavras)):
         if palavras[i].palavraOriginal in tipo:
             tipo = tipo[palavras[i].palavraOriginal]
             continue
 
-        return {
-                "numero_palavra": palavras[i-1].numero,
-                "tipo": tipo["tipo"]
-               }
+        return {NUMERO_PALAVRA: palavras[i - 1].numero, TIPO_PALAVRA: tipo["tipo"]
+                }
 
 
-
-
-
+_tipos = configuracoes.getTipoFrases()
+_normalizarTipos()

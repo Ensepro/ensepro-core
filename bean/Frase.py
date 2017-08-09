@@ -9,6 +9,7 @@ import tipofrases
 import re
 from utils import FraseUtil
 from utils import StringUtil
+from constantes.TipoFrasesConstantes import NUMERO_PALAVRA
 from conversores import MakeJsonSerializable
 
 
@@ -42,7 +43,7 @@ class Frase(object):
 
     # TODO revisar as regex que são necessárias. Tentar separar o código em trechos menores (se possível)
     # também verificar se não é melhor utilizar somente uma regex com OR's assim evitando um for para percorrer e verificar com cada uma.
-    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$|^Cs:prop$
+    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$|^Cs:prop$|^DP:prop$
     def _obterPalavrasRelevantes(self):
         regexs =    [
                         re.compile("v-"),
@@ -52,7 +53,8 @@ class Frase(object):
                         re.compile("^S:n$"),
                         re.compile("^Cs:n$"),
                         re.compile("^DP:n$"),
-                        re.compile("^Cs:prop$")
+                        re.compile("^Cs:prop$"),
+                        re.compile("^DP:prop$")
                     ]
 
         _palavrasRelevantesTemp = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
@@ -62,7 +64,7 @@ class Frase(object):
         #2. Palavras que possuem palavraOriginal vazia.
         self._palavrasRelevantes = [palavra for palavra in _palavrasRelevantesTemp
                                 if not StringUtil.isEmpty(palavra.palavraOriginal)
-                                   and palavra.numero > self.obterTipoFrase()["numero_palavra"]
+                                   and palavra.numero > self.obterTipoFrase()[NUMERO_PALAVRA]
                              ]
 
 
@@ -78,12 +80,19 @@ class Frase(object):
             self._possuiLocucaoVerbal_()
         return self._possuiLocucaoVerbal
 
+    # TODO verificar o nome dos atributos "possui", "palavra1" e "palavra2"
     def _possuiLocucaoVerbal_(self):
         regex = re.compile("v-")
         size = len(self.obterPalavrasRelevantes()) - 1
         for i in range(size):
             if(regex.search(self._palavrasRelevantes[i].tagInicial) is not None and regex.search(self._palavrasRelevantes[i+1].tagInicial) is not None):
-                self._possuiLocucaoVerbal = {"possui": True, "palavra1": self._palavrasRelevantes[i], "palavra2": self._palavrasRelevantes[i+1]}
+                self._possuiLocucaoVerbal = {
+                                            "possui": True,
+                                            "palavra1": self._palavrasRelevantes[i],
+                                            "palavra2": self._palavrasRelevantes[i+1]
+                                            }
+                pass
+        self._possuiLocucaoVerbal = {"possui":False}
 
 
     def isVozAtiva(self):

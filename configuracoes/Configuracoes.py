@@ -6,18 +6,18 @@
 """
 import json
 from constantes.StringConstantes import UTF_8
+from constantes.StringConstantes import FILE_READ_ONLY
 from constantes.ConfiguracoesConstantes import *
 
-def _loadConfigs(fromFile):
+def _carregarConfiguracoes():
     """
-    Carrega as configurações do arquivo 'fromFile' (deve estar no formato json)
-    :param fromFile:
+    Carrega as configurações do arquivo ARQUIVO_CONFIGURACAO (deve estar no formato json)
     :return:
     """
-    return json.loads(open(fromFile, 'r', encoding=UTF_8).read())
+    return json.loads(open(ARQUIVO_CONFIGURACAO, FILE_READ_ONLY, encoding=UTF_8).read())
 
 def getValue(path):
-    value = configuracoes
+    value = _configuracoes
     _path = path.split("/")
     for key in _path:
         value = value[key]
@@ -41,17 +41,19 @@ def getPathArquivoFrases():
 def getSparqlQueries():
     return getValue(CONFIG_QUERIES_SPARQL.format(nome_servidor=SERVIDOR_VIRTUOSO))
 
+def getUrlService(nomeServicor, nomeServico):
+    return getServidorEndpoint(nomeServicor) + getServico(nomeServicor, nomeServico)
 
 
-configFile = "../configuracoes/configuracoes.json"
-debug = True
+# ----------------------------------------------------------------------------------------------------------------------- #
+debug = False
 
 try:
 
     if debug:
-        print(MENSAGEM_CARREGANDO.format(fromFile=configFile))
+        print(MENSAGEM_CARREGANDO.format(fromFile=ARQUIVO_CONFIGURACAO))
 
-    configuracoes = _loadConfigs(configFile)
+    _configuracoes = _carregarConfiguracoes()
 
     if debug:
         print(MENSAGEM_CARREGAMENTO_SUCESSO)
@@ -60,3 +62,4 @@ except Exception as e:
     print(MENSAGEM_CARREGAMENTO_ERRO)
     if debug:
         print(e)
+    raise e
