@@ -6,35 +6,52 @@
 """
 
 import sparql
+import configuracoes
 import json
 import nlu
 from servicos import PalavrasService as palavras
 from bean.Frase import Frase
+from utils import StringUtil
+from constantes.StringConstantes import UTF_8
+from constantes.StringConstantes import FILE_READ_ONLY
+from constantes.StringConstantes import BREAK_LINE
+from constantes.NLUConstantes import TIPO_FRASE
 
-# fraseTexto = "quais doutorandos estão trabalhando na CWI?"
-fraseTexto = "qual é a idade de Alencar?"
-# fraseTexto = "quais são as tecnologias que foram produzidas pelo SemanTIC?"
-# fraseTexto = "tem algum doutorando no SemanTIC?"
-# fraseTexto = "há algum projeto sobre Web Semântica?"
 
-print("\nFrase a ser analisada: " + fraseTexto + "\n")
+frases = open(configuracoes.getPathArquivoFrases(), FILE_READ_ONLY, encoding=UTF_8).read().split(BREAK_LINE)
+frases = [frase for frase in frases if not frase.startswith("#") and not StringUtil.isEmpty(frase)]
 
-fraseAnalisada = palavras.analisarFrase(fraseTexto)
+for fraseTexto in frases:
 
-if(not fraseAnalisada.ok):
-    raise Exception("Falha na chamada do serviço de analise da frase(status_code="+str(fraseAnalisada.status_code)+")")
+    print("\nFrase a ser analisada: " + fraseTexto)
 
-jsonFrase = json.loads(fraseAnalisada.content)
-frase = Frase.fraseFromJson(jsonFrase)
+    fraseAnalisada = palavras.analisarFrase(fraseTexto)
 
-for palavra in frase.palavras:
-    palavra.getSinonimos()
+    if(not fraseAnalisada.ok):
+        raise Exception("Falha na chamada do serviço de analise da frase(status_code="+str(fraseAnalisada.status_code)+")")
 
-fraseProcessada = nlu.processarFrase(frase)
+    jsonFrase = json.loads(fraseAnalisada.content)
+    frase = Frase.fraseFromJson(jsonFrase)
 
-with open("../__ignorar/frase.json", 'w', encoding="utf8") as out:
-    out.write(json.dumps(frase, ensure_ascii=False, indent=4))
+    # i = 0
+    # for palavra in frase.obterPalavrasComPalavraOriginalNaoVazia():
+    #     if i > 3:
+    #         break
+    #     print(palavra.palavraOriginal + "=" + palavra.palavraCanonica)
+    #     i+=1
 
-sparql.consular(fraseProcessada)
+    # frase.obterTipoFrase()
+    # break
+    # for palavra in frase.obterPalavrasComPalavraOriginalNaoVazia():
+    #     palavra.getSinonimos()
+
+    fraseProcessada = nlu.processarFrase(frase)
+
+    print("Tipo: "+str(fraseProcessada[TIPO_FRASE]))
+
+    # with open("../__ignorar/frase.json", 'w', encoding="utf8") as out:
+    #     out.write(json.dumps(frase, ensure_ascii=False, indent=4))
+
+    # sparql.consular(fraseProcessada)
 
 

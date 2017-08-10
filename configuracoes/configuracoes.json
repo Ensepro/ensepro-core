@@ -1,5 +1,5 @@
 {
-    "frases": "../../frases/frases.txt",
+    "frases": "../arquivos/frases/frases.txt",
     "servidores": {
         "virtuoso": {
             "endpoint": "http://127.0.0.1:8890",
@@ -15,42 +15,33 @@
         "palavras": {
             "endpoint": "http://127.0.0.1:5001",
             "servicos": {
-                "analisar_frase": "/palavras/analisar/{0}"
+                "analisar_frase": "/palavras/analisar?frase={}"
             }
         }
     },
     "tipos_frases": {
         "quem": {
             "tipo": "quem",
-            "são": {
-                "tipo": "quem_sao"
-            },
-            "é": {
+            "ser": {
                 "tipo": "quem_sao"
             }
         },
         "que": {
             "tipo": "que_quais"
         },
-        "quais": {
-            "tipo": "que_quais"
-        },
         "qual": {
-            "tipo": "qual",
-            "são": {
-                "tipo": "qual_sao"
-            },
-            "é": {
+            "tipo": "que_quais",
+            "ser": {
                 "tipo": "qual_e"
             }
         },
-        "há": {
+        "haver": {
             "tipo": "ha_existe_tem_algum"
         },
-        "existe": {
+        "existir": {
             "tipo": "ha_existe_tem_algum"
         },
-        "tem": {
+        "ter": {
             "algum": {
                 "tipo": "ha_existe_tem_algum"
             }
@@ -59,48 +50,48 @@
             "tipo": "alguem"
         },
         "onde": {
-            "é": {
+            "ser": {
                 "tipo": "onde_e"
             }
         },
         "o": {
             "que": {
-                "é": {
+                "ser": {
                     "tipo": "o_que_e"
                 }
             }
         },
-        "liste": {
+        "listar": {
             "tipo": "consulta"
         },
-        "busque": {
+        "buscar": {
             "tipo": "consulta"
         },
-        "ache": {
+        "achar": {
             "tipo": "consulta"
         },
-        "encontre": {
+        "encontrar": {
             "tipo": "consulta"
         },
-        "descubra": {
+        "descobrir": {
             "tipo": "consulta"
         },
-        "mostre": {
+        "mostrar": {
             "tipo": "consulta"
         },
-        "nomeie": {
+        "nomear": {
             "tipo": "consulta"
         },
-        "localize": {
+        "localizar": {
             "tipo": "consulta"
         },
-        "obtenha": {
+        "obter": {
             "tipo": "consulta"
         },
-        "recupere": {
+        "recuperar": {
             "tipo": "consulta"
         },
-        "consiga": {
+        "conseguir": {
             "tipo": "consulta"
         }
     }

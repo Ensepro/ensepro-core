@@ -10,9 +10,9 @@ from constantes.NLUConstantes import *
 
 def processarFrase(frase : Frase):
     fraseTipo = frase.obterTipoFrase()
-    palavrasRelevantes = frase.obterPalavrasRelevantes()
     possuiLocucaoVerbal = frase.possuiLocucaoVerbal()
     vozAtiva = frase.isVozAtiva()
+    palavrasRelevantes = frase.obterPalavrasRelevantes()
 
     return {
             TIPO_FRASE: fraseTipo,

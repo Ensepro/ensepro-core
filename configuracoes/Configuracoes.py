@@ -44,7 +44,6 @@ def getSparqlQueries():
 def getUrlService(nomeServicor, nomeServico):
     return getServidorEndpoint(nomeServicor) + getServico(nomeServicor, nomeServico)
 
-
 # ----------------------------------------------------------------------------------------------------------------------- #
 debug = False
 

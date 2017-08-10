@@ -8,16 +8,7 @@
 import configuracoes
 from constantes.TipoFrasesConstantes import *
 
-
-# TODO
-def _normalizarTipos():
-    """
-
-    :param tipos:
-    :return:
-    """
-    pass
-
+TIPO_KEY = "tipo"
 
 def getTipoFrase(frase):
     """
@@ -29,13 +20,14 @@ def getTipoFrase(frase):
     tipo = _tipos
 
     for i in range(len(palavras)):
-        if palavras[i].palavraOriginal in tipo:
-            tipo = tipo[palavras[i].palavraOriginal]
+        if palavras[i].palavraCanonica in tipo:
+            tipo = tipo[palavras[i].palavraCanonica]
             continue
 
-        return {NUMERO_PALAVRA: palavras[i - 1].numero, TIPO_PALAVRA: tipo["tipo"]
-                }
+        return {
+                NUMERO_PALAVRA: palavras[i - 1].numero,
+                TIPO_PALAVRA: tipo[TIPO_KEY] if TIPO_KEY in tipo else None
+               }
 
 
 _tipos = configuracoes.getTipoFrases()
-_normalizarTipos()

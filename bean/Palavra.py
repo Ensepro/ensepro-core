@@ -14,8 +14,8 @@ class Palavra(object):
         palavra = args[0]
         self.numero = palavra["numero"]
         self.nivel = palavra["nivel"]
-        self.palavraOriginal = palavra["palavraOriginal"]
-        self.palavraCanonica = palavra["palavraCanonica"]
+        self.palavraOriginal = palavra["palavraOriginal"].lower()
+        self.palavraCanonica = palavra["palavraCanonica"].lower()
         self.tags = palavra["tags"]
         self.tagInicial = palavra["tagInicial"]
         self.sinonimos = None
