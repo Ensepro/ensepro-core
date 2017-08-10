@@ -9,6 +9,7 @@ import tipofrases
 import re
 from utils import FraseUtil
 from utils import StringUtil
+from constantes.TipoFrasesConstantes import NUMERO_PALAVRA
 from conversores import MakeJsonSerializable
 
 
@@ -42,7 +43,7 @@ class Frase(object):
 
     # TODO revisar as regex que são necessárias. Tentar separar o código em trechos menores (se possível)
     # também verificar se não é melhor utilizar somente uma regex com OR's assim evitando um for para percorrer e verificar com cada uma.
-    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$
+    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$|^Cs:prop$|^DP:prop$
     def _obterPalavrasRelevantes(self):
         regexs =    [
                         re.compile("v-"),
@@ -51,17 +52,19 @@ class Frase(object):
                         re.compile("^H:prop$"),
                         re.compile("^S:n$"),
                         re.compile("^Cs:n$"),
-                        re.compile("^DP:n$")
+                        re.compile("^DP:n$"),
+                        re.compile("^Cs:prop$"),
+                        re.compile("^DP:prop$")
                     ]
 
-        palavrasMatchingRegex = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
+        _palavrasRelevantesTemp = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
 
         #Remove palavras que não devem ser consideradas relevantes
         #1. Palavras que fazem parte do tipo da frase
         #2. Palavras que possuem palavraOriginal vazia.
-        self._palavrasRelevantes = [palavra for palavra in palavrasMatchingRegex
+        self._palavrasRelevantes = [palavra for palavra in _palavrasRelevantesTemp
                                 if not StringUtil.isEmpty(palavra.palavraOriginal)
-                                   and palavra.numero > self.obterTipoFrase()["numero_palavra"]
+                                   and palavra.numero > self.obterTipoFrase()[NUMERO_PALAVRA]
                              ]
 
 
@@ -77,12 +80,19 @@ class Frase(object):
             self._possuiLocucaoVerbal_()
         return self._possuiLocucaoVerbal
 
+    # TODO verificar o nome dos atributos "possui", "palavra1" e "palavra2"
     def _possuiLocucaoVerbal_(self):
         regex = re.compile("v-")
         size = len(self.obterPalavrasRelevantes()) - 1
         for i in range(size):
             if(regex.search(self._palavrasRelevantes[i].tagInicial) is not None and regex.search(self._palavrasRelevantes[i+1].tagInicial) is not None):
-                self._possuiLocucaoVerbal = {"possui": True, "palavra1": self._palavrasRelevantes[i], "palavra2": self._palavrasRelevantes[i+1]}
+                self._possuiLocucaoVerbal = {
+                                            "possui": True,
+                                            "palavra1": self._palavrasRelevantes[i],
+                                            "palavra2": self._palavrasRelevantes[i+1]
+                                            }
+                pass
+        self._possuiLocucaoVerbal = {"possui":False}
 
 
     def isVozAtiva(self):
@@ -113,7 +123,8 @@ class Frase(object):
         return self._palavrasComPalavraOriginalNaoVazia
 
     def _obterPalavrasComPalavraOriginalNaoVazia(self):
-        self._palavrasComPalavraOriginalNaoVazia = [palavra for palavra in self.palavras if not StringUtil.isEmpty(palavra.palavraOriginal)]
+        self._palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
+
 
     def to_json(self):
         return self.__dict__

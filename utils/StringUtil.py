@@ -8,18 +8,7 @@ import unicodedata
 
 
 def isEmpty(string):
-    temp = (string is None or string == '' or string.replace(" ", "") == '')
-    return temp
-
-#TODO: refazer este método
-def removeStrings(strings, fromString, toString):
-    for string in strings:
-        fromString = fromString.replace(string, toString)
-    return fromString
-
-#TODO: renomar para um nome melhor
-def getElementosIguaisDeDuasListas(lista1, lista2):
-    return list(set(lista1).intersection(lista2))
+    return (string is None or string == '' or string.replace(" ", "") == '')
 
 #TODO: revisar
 def removeAcentuacao(texto):

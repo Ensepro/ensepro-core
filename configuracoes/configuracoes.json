@@ -1,9 +1,11 @@
 {
-    "frases":"../../frases/frases.txt",
+    "frases": "../../frases/frases.txt",
     "servidores": {
         "virtuoso": {
-            "endpoint": "http://127.0.0.1:8890/sparql",
-            "servicos":{},
+            "endpoint": "http://127.0.0.1:8890",
+            "servicos": {
+                "consulta_sparql": "/sparql"
+            },
             "queries": {
                 "subject": "/arquivos/queries_sparql/subject.sparql",
                 "predicate": "/arquivos/queries_sparql/predicate.sparql",
@@ -12,56 +14,94 @@
         },
         "palavras": {
             "endpoint": "http://127.0.0.1:5001",
-            "servicos":{
-                "analisar_frase": "/palavras/analisar/{frase}"
+            "servicos": {
+                "analisar_frase": "/palavras/analisar/{0}"
             }
         }
     },
-    "tipo_frases": {
-        "quem_sao": [
-            "quem são",
-            "quem é"
-        ],
-        "quem": [
-            "quem"
-        ],
-        "que_quais": [
-            "que",
-            "quais"
-        ],
-        "qual_e": [
-            "qual"
-        ],
-        "quais_sao": [
-            "quais são"
-        ],
-        "ha_existe_tem_algum": [
-            "há",
-            "tem algum",
-            "existe"
-        ],
-        "alguem": [
-            "alguém"
-        ],
-        "onde_e": [
-            "onde é"
-        ],
-        "o_que_e": [
-            "o que é",
-            "o_que é"
-        ],
-        "consulta": [
-            "liste",
-            "busque",
-            "ache",
-            "encontre",
-            "descubra",
-            "mostre",
-            "nomeie",
-            "localize",
-            "obtenha",
-            "recupere",
-            "consiga"
-        ]
+    "tipos_frases": {
+        "quem": {
+            "tipo": "quem",
+            "são": {
+                "tipo": "quem_sao"
+            },
+            "é": {
+                "tipo": "quem_sao"
+            }
+        },
+        "que": {
+            "tipo": "que_quais"
+        },
+        "quais": {
+            "tipo": "que_quais"
+        },
+        "qual": {
+            "tipo": "qual",
+            "são": {
+                "tipo": "qual_sao"
+            },
+            "é": {
+                "tipo": "qual_e"
+            }
+        },
+        "há": {
+            "tipo": "ha_existe_tem_algum"
+        },
+        "existe": {
+            "tipo": "ha_existe_tem_algum"
+        },
+        "tem": {
+            "algum": {
+                "tipo": "ha_existe_tem_algum"
+            }
+        },
+        "alguém": {
+            "tipo": "alguem"
+        },
+        "onde": {
+            "é": {
+                "tipo": "onde_e"
+            }
+        },
+        "o": {
+            "que": {
+                "é": {
+                    "tipo": "o_que_e"
+                }
+            }
+        },
+        "liste": {
+            "tipo": "consulta"
+        },
+        "busque": {
+            "tipo": "consulta"
+        },
+        "ache": {
+            "tipo": "consulta"
+        },
+        "encontre": {
+            "tipo": "consulta"
+        },
+        "descubra": {
+            "tipo": "consulta"
+        },
+        "mostre": {
+            "tipo": "consulta"
+        },
+        "nomeie": {
+            "tipo": "consulta"
+        },
+        "localize": {
+            "tipo": "consulta"
+        },
+        "obtenha": {
+            "tipo": "consulta"
+        },
+        "recupere": {
+            "tipo": "consulta"
+        },
+        "consiga": {
+            "tipo": "consulta"
+        }
     }
 }
