@@ -1,11 +1,9 @@
 """
 @project ensepro
-@since 20/07/2017
+@since 10/08/2017
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-
-import sparql
 import configuracoes
 import json
 import nlu
@@ -22,7 +20,11 @@ frases = open(configuracoes.getPathArquivoFrases(), FILE_READ_ONLY, encoding=UTF
 frases = [frase for frase in frases if not frase.startswith("#") and not StringUtil.isEmpty(frase)]
 
 frasesAgrupadas = {}
+i = 0
 for fraseTexto in frases:
+    i+=1
+    print(i)
+
     fraseAnalisada = palavras.analisarFrase(fraseTexto)
 
     if(not fraseAnalisada.ok):
@@ -38,9 +40,24 @@ for fraseTexto in frases:
 
     fraseProcessada = nlu.processarFrase(frase)
 
-    with open("../__ignorar/frase.json", 'w', encoding="utf8") as out:
-        out.write(json.dumps(frase, ensure_ascii=False, indent=4))
+    # print("Tipo: "+str(fraseProcessada[TIPO_FRASE]))
 
-    break
+    if str(fraseProcessada[TIPO_FRASE]["tipo_palavra"]) not in frasesAgrupadas:
+        frasesAgrupadas[str(fraseProcessada[TIPO_FRASE]["tipo_palavra"])] = []
+
+    frasesAgrupadas[str(fraseProcessada[TIPO_FRASE]["tipo_palavra"])].append(fraseTexto)
+
+    # with open("../__ignorar/frase.json", 'w', encoding="utf8") as out:
+    #     out.write(json.dumps(frase, ensure_ascii=False, indent=4))
 
     # sparql.consular(fraseProcessada)
+
+
+
+print("===============================================================================")
+for tipo in frasesAgrupadas:
+    print("Tipo: " + str(tipo) + "")
+    print("-----------------------------------------------------------------------------")
+    for fraseF in frasesAgrupadas[tipo]:
+        print("Frase: "+str(fraseF))
+    print("===============================================================================")
