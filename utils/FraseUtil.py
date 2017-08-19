@@ -5,7 +5,9 @@
 
 """
 from bean.Palavra import Palavra
+from utils import StringUtil
 from .StringUtil import isEmpty
+
 
 def palavrasFromJson(jsonFrase):
     """
@@ -19,7 +21,7 @@ def palavrasFromJson(jsonFrase):
     return palavras
 
 
-def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex : list):
+def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex: list):
     """
     Este método irá verificar se as tags inicias das palavras da frase batem com algum dos regex passados por parâmetro.
     :param frase: é o objeto Frase do qual as palavras serão filtradas.
@@ -29,7 +31,7 @@ def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex : list):
     palavrasResultantes = []
     for palavra in frase.palavras:
         for tagRegex in tagsRegex:
-            if(tagRegex.search(palavra.tagInicial) is not None):
+            if StringUtil.regexExistIn(tagRegex, palavra.tagInicial):
                 palavrasResultantes.append(palavra)
                 break
 
@@ -38,6 +40,3 @@ def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex : list):
 
 def removePalavrasSemPalavraOriginal(palavras: list):
     return [palavra for palavra in palavras if not isEmpty(palavra.palavraOriginal)]
-
-
-

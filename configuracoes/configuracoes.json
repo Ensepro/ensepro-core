@@ -13,9 +13,9 @@
             }
         },
         "palavras": {
-            "endpoint": "http://127.0.0.1:5001",
+            "endpoint": "http://127.0.0.1:8099",
             "servicos": {
-                "analisar_frase": "/palavras/analisar?frase={}"
+                "analisar_frase": "/palavras/analisar/?frase={}"
             }
         }
     },

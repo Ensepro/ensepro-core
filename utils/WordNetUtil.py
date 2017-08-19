@@ -8,8 +8,9 @@
 from nltk.corpus import wordnet as wn
 from utils import StringUtil
 
+
 def getSinonimos(word, _lang):
-    if(StringUtil.isEmpty(word) or StringUtil.isEmpty(_lang)):
+    if (StringUtil.isEmpty(word) or StringUtil.isEmpty(_lang)):
         return list()
 
     sinonimos = set()

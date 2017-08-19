@@ -5,8 +5,6 @@
 
 """
 
-
-
 PALAVRAS_RELEVANTES = "palavras_relevantes"
 TIPO_FRASE = "tipo_frase"
 LOCUCAO_VERBAL = "locucao_verbal"

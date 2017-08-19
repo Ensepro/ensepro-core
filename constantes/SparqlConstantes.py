@@ -5,7 +5,6 @@
 
 """
 
-
 RELATIVE_PATH = "../"
 
 SPARQL_NOME_SERVICO = "consulta_sparql"
@@ -17,4 +16,3 @@ LANG = "lang"
 TIPO_CONSULTA = "tipo_consulta"
 QUERY = "query"
 QUERY_ELEMENTO = "WORD"
-

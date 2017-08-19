@@ -8,8 +8,8 @@
 from conversores import MakeJsonSerializable
 from utils import WordNetUtil as wn
 
-class Palavra(object):
 
+class Palavra(object):
     def __init__(self, *args, **kwargs):
         palavra = args[0]
         self.numero = palavra["numero"]
@@ -19,7 +19,6 @@ class Palavra(object):
         self.tags = palavra["tags"]
         self.tagInicial = palavra["tagInicial"]
         self.sinonimos = None
-
 
     def getSinonimos(self):
         if (self.sinonimos is not None):
@@ -32,8 +31,6 @@ class Palavra(object):
         # print(self.sinonimos)
         return self.getSinonimos()
 
-
-
     def print(self):
         print(self.numero)
         print(self.nivel)
@@ -42,7 +39,6 @@ class Palavra(object):
         print(self.tags)
         print(self.tagInicial)
         print(self.sinonimos)
-
 
     def to_json(self):
         return self.__dict__

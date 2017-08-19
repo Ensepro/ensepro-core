@@ -11,10 +11,9 @@ import configuracoes
 nomeServidor = "palavras"
 nomeServico = "analisar_frase"
 
-def analisarFrase(frase : str):
+
+def analisarFrase(frase: str):
     response = requests.get(
-                    configuracoes.getUrlService(nomeServidor, nomeServico).format(frase)
-                )
+        configuracoes.getUrlService(nomeServidor, nomeServico).format(frase)
+    )
     return response
-
-
