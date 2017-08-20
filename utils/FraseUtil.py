@@ -39,4 +39,9 @@ def obterPalavrasComTagInicialMatchingAnyRegex(frase, tagsRegex: list):
 
 
 def removePalavrasSemPalavraOriginal(palavras: list):
+    """
+    Remove as palavras que tem a palavraOriginal vazia.
+    :param palavras:
+    :return:
+    """
     return [palavra for palavra in palavras if not isEmpty(palavra.palavraOriginal)]

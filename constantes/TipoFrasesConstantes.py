@@ -7,3 +7,4 @@
 
 NUMERO_PALAVRA = "numero_palavra"
 TIPO_FRASE = "tipo_frase"
+TIPO_KEY = "tipo"

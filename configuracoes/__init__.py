@@ -13,3 +13,6 @@ from .Configuracoes import getServico
 from .Configuracoes import getValue
 from .Configuracoes import getSparqlQueries
 from .Configuracoes import getUrlService
+from .Configuracoes import getRegexPalavraRelevante
+from .Configuracoes import getRegexPalavraVerbo
+from .Configuracoes import getRegexVozPassiva

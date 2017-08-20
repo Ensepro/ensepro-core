@@ -1,5 +1,10 @@
 {
-    "frases": "../arquivos/frases/frases.txt",
+    "frases": {
+        "arquivo_frases": "../arquivos/frases/frases.txt",
+        "regex_palavra_relevante": ":(adj|n|prop)$",
+        "regex_palavra_verbo": "v-",
+        "regex_voz_passiva": "^fApass:pp$"
+    },
     "servidores": {
         "virtuoso": {
             "endpoint": "http://127.0.0.1:8890",

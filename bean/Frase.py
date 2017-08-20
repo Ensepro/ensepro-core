@@ -6,11 +6,10 @@
 """
 
 import tipofrases
-import re
 from utils import FraseUtil
 from utils import StringUtil
 from constantes.TipoFrasesConstantes import NUMERO_PALAVRA
-from constantes.FraseConstantes import INDICE_VALIDA_QUESTAO
+from constantes.FraseConstantes import *
 from conversores import MakeJsonSerializable
 
 
@@ -33,35 +32,28 @@ class Frase(object):
 
     def obterPalavrasRelevantes(self):
         """
-        Obtém as palavras relevantes da frase para esta ser analisada.
+        Retorna uma lista com as palavras relevantes da frase.
         :return:
         """
         if (self._palavrasRelevantes is None):
             self._obterPalavrasRelevantes()
         return self._palavrasRelevantes
 
-    # TODO revisar as regex que são necessárias. Tentar separar o código em trechos menores (se possível)
-    # também verificar se não é melhor utilizar somente uma regex com OR's assim evitando um for para percorrer e verificar com cada uma.
-    # Ex: v-|^H:n$|^DN:adj$"|^H:prop$|^S:n$|^Cs:n$|^DP:n$|^Cs:prop$|^DP:prop$
     def _obterPalavrasRelevantes(self):
-        regexs = [
-            re.compile("v-"),
-            re.compile("^H:n$"),
-            re.compile("^DN:adj$"),
-            re.compile("^H:prop$"),
-            re.compile("^S:n$"),
-            re.compile("^Cs:n$"),
-            re.compile("^DP:n$"),
-            re.compile("^Cs:prop$"),
-            re.compile("^DP:prop$")
-        ]
-
-        _palavrasRelevantesTemp = FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regexs)
+        """
+        Cria a lista de palavras relevantes
+        """
 
         # Remove palavras que não devem ser consideradas relevantes
-        self._palavrasRelevantes = [palavra for palavra in _palavrasRelevantesTemp if self._isPalavraRelevante(palavra)]
+        self._palavrasRelevantes = [palavra for palavra in self.palavras if self._isPalavraRelevante(palavra)]
 
     def _isPalavraRelevante(self, palavra):
+        """
+        Verifica se a palavra é uma palavra relevante ou não.
+        :param palavra: Palavra a ser verificada.
+        :return: True ou False
+        """
+
         # 1. Palavras que possuem palavraOriginal vazia.
         if StringUtil.isEmpty(palavra.palavraOriginal):
             return False
@@ -70,16 +62,19 @@ class Frase(object):
         if palavra.numero <= self.obterTipoFrase()[NUMERO_PALAVRA]:
             return False
 
-        # 3. Quando a frase estiver a voz passiva, o verbo 'ser' deve ser ignorado.
+        # 3. tagInicial da palavra deve bater com a regex de palavras relevantes
+        if not StringUtil.regexExistIn(REGEX_PALAVRA_RELEVANTE, palavra.tagInicial):
+            return False
+
+        # 4. Quando a frase estiver a voz passiva, o verbo 'ser' deve ser ignorado.
         if not self.isVozAtiva():
             if palavra.palavraCanonica == "ser":
                 return False
 
-        # 4. Quando houver locução verbal, o verbo auxiliar deve ser desconsiderado.
-        if self.possuiLocucaoVerbal()["possui"]:
-            # TODO rever ação
-            regexAux = re.compile("aux")
-            if StringUtil.regexExistIn(regexAux, palavra.tagInicial):
+        # 5. Quando houver locução verbal, o(s) verbo(s) auxiliar(es) deve ser desconsiderado.
+        # O verbo relevante SEMPRE será o último.
+        if self.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI]:
+            if (palavra in self.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS][:-1]):
                 return False
 
         return True
@@ -90,21 +85,28 @@ class Frase(object):
         :return:
         """
         if (self._possuiLocucaoVerbal is None):
-            self._possuiLocucaoVerbal_()
+            self._verificarLocucaoVerbal()
         return self._possuiLocucaoVerbal
 
-    # TODO verificar o nome dos atributos "possui", "palavra1" e "palavra2"
-    def _possuiLocucaoVerbal_(self):
-        regex = re.compile("v-")
+    def _verificarLocucaoVerbal(self):
+        """
+        Verifica se existe locução verbal, se existir, cria uma lista com os verbos da locução verbal.
+        :return:
+        """
+        verbos = set()
         size = len(self.obterPalavrasComPalavraOriginalNaoVazia()) - 1
-        self._possuiLocucaoVerbal = {"possui": False}
+        self._possuiLocucaoVerbal = {LOCUCAO_VERBAL_POSSUI: False}
+
         for i in range(size):
-            if (StringUtil.regexExistIn(regex, self._palavrasComPalavraOriginalNaoVazia[i].tagInicial) and StringUtil.regexExistIn(regex, self._palavrasComPalavraOriginalNaoVazia[i + 1].tagInicial)):
-                self._possuiLocucaoVerbal = {"possui": True,
-                                             "palavra1": self._palavrasComPalavraOriginalNaoVazia[i],
-                                             "palavra2": self._palavrasComPalavraOriginalNaoVazia[i + 1]
-                                             }
-                break
+            if self.obterPalavrasComPalavraOriginalNaoVazia()[i].isVerbo() and self.obterPalavrasComPalavraOriginalNaoVazia()[i+1].isVerbo():
+                verbos.add(self.obterPalavrasComPalavraOriginalNaoVazia()[i])
+                verbos.add(self.obterPalavrasComPalavraOriginalNaoVazia()[i+1])
+
+        if len(verbos) > 0:
+            self._possuiLocucaoVerbal = {
+                                            LOCUCAO_VERBAL_POSSUI: True,
+                                            LOCUCAO_VERBAL_VERBOS: list(verbos)
+                                        }
 
     def isVozAtiva(self):
         """
@@ -116,15 +118,15 @@ class Frase(object):
         return self._vozAtiva
 
     def _isVozAtiva(self):
-        regex = [re.compile("^fApass:pp$")]
-        self._vozAtiva = len(FraseUtil.obterPalavrasComTagInicialMatchingAnyRegex(self, regex)) == 0
-
-
-        # <Métodos considerando lista como árore>
+        """
+        Se existir uma tagInicial que tem o padrão da REGEX_VOZ_PASSIVA então a frase está na voz passiva.
+        :return:
+        """
+        self._vozAtiva = len([palavra for palavra in self.palavras if StringUtil.regexExistIn(REGEX_VOZ_PASSIVA, palavra.tagInicial)]) == 0
 
     def obterPalavrasComPalavraOriginalNaoVazia(self):
         """
-        Este método irá retornar somente as palavras que possuem PALAVRA ORIGINAL.
+        Este método irá retornar somente as palavras que possuem PALAVRA ORIGINAL não vazia.
         :param frase:
         :return:
         """
@@ -136,6 +138,10 @@ class Frase(object):
         self._palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
 
     def isQuestao(self):
+        """
+        Retorna se a frase é uma questão ou não.
+        :return: True ou False
+        """
         return self.palavras[INDICE_VALIDA_QUESTAO].tagInicial.startswith("QUE")
 
     def to_json(self):

@@ -23,6 +23,9 @@ frases = [frase for frase in frases if not frase.startswith("#") and not StringU
 frasesAgrupadasPorTipo = {}
 frasesAgrupadasPorLocucaoVerbal = {}
 frasesAgrupadasPorVoz = {}
+
+listaFrases = []
+
 i = 0
 for fraseTexto in frases:
     i += 1
@@ -35,6 +38,13 @@ for fraseTexto in frases:
 
     jsonFrase = json.loads(fraseAnalisada.content)
     frase = Frase.fraseFromJson(jsonFrase)
+
+    listaFrases.append(
+        {
+            "fraseTexto": fraseTexto,
+            "frase": frase
+        }
+    )
 
     fraseProcessada = nlu.processarFrase(frase)
 
@@ -92,3 +102,20 @@ for tipo in frasesAgrupadasPorVoz:
     for fraseF in frasesAgrupadasPorVoz[tipo]:
         print("Frase: " + str(fraseF))
     print("===============================================================================")
+
+
+
+print("\n\n")
+
+for frase in listaFrases:
+    print("\n----------------------------------------------")
+    print(frase["fraseTexto"])
+    print(frase["frase"].obterPalavrasRelevantes())
+
+
+
+
+
+
+
+

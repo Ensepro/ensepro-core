@@ -47,13 +47,15 @@ for fraseTexto in frases:
         palavrasRelevantes += palavra.palavraOriginal + " -- "
 
 
-        print("Frase "+str(FRASE_ID)+": " + fraseTexto)
-        # print("Palavras Relevantes:|>  " + palavrasRelevantes)
-        # print("-------------------------------------------------------------------------------------------\n")
+    print("Frase "+str(FRASE_ID)+": " + fraseTexto)
+    print("Palavras Relevantes:|>  " + str(palavrasRelevantes))
+    print("Voz Ativa:|>  " + str(frase.isVozAtiva()))
+    print("Locução Verbal:|>  " + str(frase.possuiLocucaoVerbal()))
+    print("-------------------------------------------------------------------------------------------\n")
 
 
-        with open("../__ignorar/frase" + str(FRASE_ID) + ".json", 'w', encoding=UTF_8) as out:
-            out.write(json.dumps(frase, ensure_ascii=False, indent=4))
+    with open("../__ignorar/frase" + str(FRASE_ID) + ".json", 'w', encoding=UTF_8) as out:
+        out.write(json.dumps(frase, ensure_ascii=False, indent=4))
 
 
 

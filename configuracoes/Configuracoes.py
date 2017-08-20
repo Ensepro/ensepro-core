@@ -46,6 +46,17 @@ def getPathArquivoFrases():
     return getValue(CONFIG_ARQUIVO_FRASES)
 
 
+def getRegexPalavraRelevante():
+    return getValue(CONFIG_REGEX_PALAVRA_RELEVENTE)
+
+
+def getRegexPalavraVerbo():
+    return getValue(CONFIG_REGEX_PALAVRA_VERBO)
+
+def getRegexVozPassiva():
+    return getValue(CONFIG_REGEX_VOZ_PASSIVA)
+
+
 def getSparqlQueries():
     return getValue(CONFIG_QUERIES_SPARQL.format(nome_servidor=SERVIDOR_VIRTUOSO))
 

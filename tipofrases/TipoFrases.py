@@ -8,9 +8,6 @@
 import configuracoes
 from constantes.TipoFrasesConstantes import *
 
-TIPO_KEY = "tipo"
-
-
 def getTipoFrase(frase):
     """
     Obtém o tipo de uma frase. Caso o tipo não for determinado, o retorno será None.
@@ -26,7 +23,7 @@ def getTipoFrase(frase):
             continue
 
         return {
-                NUMERO_PALAVRA: palavras[i - 1].numero,
+                NUMERO_PALAVRA: palavras[i - 1].numero if TIPO_KEY in tipo else -1,
                 TIPO_FRASE: tipo[TIPO_KEY] if TIPO_KEY in tipo else None
         }
 

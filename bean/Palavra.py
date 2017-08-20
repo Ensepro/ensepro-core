@@ -5,8 +5,10 @@
 
 """
 
+from constantes.FraseConstantes import REGEX_PALAVRA_VERBO
 from conversores import MakeJsonSerializable
 from utils import WordNetUtil as wn
+from utils import StringUtil
 
 
 class Palavra(object):
@@ -21,6 +23,10 @@ class Palavra(object):
         self.sinonimos = None
 
     def getSinonimos(self):
+        """
+        Obtém os sinônimos da palavra.
+        :return:
+        """
         if (self.sinonimos is not None):
             return self.sinonimos if len(self.sinonimos) > 0 else None
 
@@ -28,20 +34,24 @@ class Palavra(object):
         self.sinonimos["eng"] = wn.getSinonimos(self.palavraCanonica, "eng")
         self.sinonimos["por"] = wn.getSinonimos(self.palavraCanonica, "por")
 
-        # print(self.sinonimos)
         return self.getSinonimos()
 
-    def print(self):
-        print(self.numero)
-        print(self.nivel)
-        print(self.palavraOriginal)
-        print(self.palavraCanonica)
-        print(self.tags)
-        print(self.tagInicial)
-        print(self.sinonimos)
+
+    def isVerbo(self):
+        """
+        Retorna se a frase é um verbo ou não.
+        :return:
+        """
+        return StringUtil.regexExistIn(REGEX_PALAVRA_VERBO, self.tagInicial)
 
     def to_json(self):
         return self.__dict__
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "[\"" + self.tagInicial + "\" |> \"" + self.palavraOriginal + "\"]"
 
     def __hash__(self):
         return self.numero
