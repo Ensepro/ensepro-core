@@ -121,12 +121,19 @@ def consular(fraseProcessada, FRASE_ID):
 
 
     print("CONSULTA_SPARQL - executando tasks...")
+
+    print("CONSULTA_SPARQL - salvando tasks em arquivo json...")
+    with open("../__ignorar/sparql_tasks_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
+        out.write(json.dumps(tarefas, ensure_ascii=False, indent=2))
+    print("CONSULTA_SPARQL - tasks salvas.")
+
     # Run tasks.
+    # TODO verificar quantidade de threads a serem utilizadas.
     with futures.ThreadPoolExecutor(10) as executor:
         executor.map(_worker, tarefas)
 
-    print("CONSULTA_SPARQL - tasks executadas")
 
+    print("CONSULTA_SPARQL - tasks executadas")
     print("CONSULTA_SPARQL - salvando resultados em arquivo json")
 
     with open("../__ignorar/sparql_consulta_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:

@@ -19,14 +19,7 @@ class Sinonimo(object):
     def to_json(self):
         return self.__dict__
 
-    # TODO review
     def __eq__(self, other):
-        # if self.numero != other.numero:
-        #    return False
-        if self.classeGramatical != other.classeGramatical:
-            return False
-        if self.distanciaSemantica != other.distanciaSemantica:
-            return False
         return self.sinonimo == other.sinonimo
 
     def __hash__(self):
