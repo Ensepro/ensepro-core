@@ -8,8 +8,13 @@
 from nltk.corpus import wordnet as wn
 from utils import StringUtil
 
-
 def getSinonimos(word, _lang):
+    """
+    Execute a consulta de sinônimos na wordnet.
+    :param word:
+    :param _lang:
+    :return: Lista de string com os sinônimos retornados pela wordnet. A string estará no formato "^(a|v|n).([0-9][0-9])\..*$"
+    """
     if (StringUtil.isEmpty(word) or StringUtil.isEmpty(_lang)):
         return list()
 

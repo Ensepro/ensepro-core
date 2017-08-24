@@ -19,7 +19,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 
 triplas = {}
 queries = {}
-
+EXECUTION_NUMBER = 1
 
 def _loadQueries():
     fileQueries = configuracoes.getSparqlQueries()
@@ -93,9 +93,9 @@ def _criarTarefasParaSinonimos(palavra: Palavra):
     sinonimos = palavra.getSinonimos()
     tasks = []
     for lang in sinonimos:
-        for word in sinonimos[lang]:
+        for sinonimo in sinonimos[lang]:
             for queryKey in queries:
-                task = _criarTarefa(word, palavra.palavraCanonica, queries[queryKey], queryKey, lang)
+                task = _criarTarefa(sinonimo.sinonimo, palavra.palavraCanonica, queries[queryKey], queryKey, lang)
                 tasks.append(task)
 
     return tasks
@@ -110,15 +110,26 @@ def _criarTarefas(palavrasRelevantes: list):
     return tasks
 
 
-def consular(fraseProcessada):
+def consular(fraseProcessada, FRASE_ID):
+    global triplas
+    triplas = {}
+    print("CONSULTA_SPARQL - criando tasks...")
+
     tarefas = _criarTarefas(fraseProcessada[PALAVRAS_RELEVANTES])
 
+    print("CONSULTA_SPARQL - tasks criadas.[" + str(len(tarefas)) + "]")
+
+
+    print("CONSULTA_SPARQL - executando tasks...")
     # Run tasks.
     with futures.ThreadPoolExecutor(10) as executor:
         executor.map(_worker, tarefas)
 
-    with open("../__ignorar/sparql_consulta.json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
-        out.write(json.dumps(triplas, ensure_ascii=False, indent=2))
+    print("CONSULTA_SPARQL - tasks executadas")
 
+    print("CONSULTA_SPARQL - salvando resultados em arquivo json")
+
+    with open("../__ignorar/sparql_consulta_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
+        out.write(json.dumps(triplas, ensure_ascii=False, indent=2))
 
 _loadQueries()

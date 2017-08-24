@@ -6,9 +6,14 @@
 """
 
 from constantes.FraseConstantes import REGEX_PALAVRA_VERBO
+from constantes.FraseConstantes import REGEX_PALAVRA_ADJETIVO
+from constantes.FraseConstantes import REGEX_PALAVRA_PREPOSICAO
+from constantes.FraseConstantes import REGEX_PALAVRA_SUBSTANTIVO
 from conversores import MakeJsonSerializable
 from utils import WordNetUtil as wn
 from utils import StringUtil
+from utils import SinonimoUtil
+from utils import PalavraUtil
 
 
 class Palavra(object):
@@ -30,19 +35,38 @@ class Palavra(object):
         if (self.sinonimos is not None):
             return self.sinonimos if len(self.sinonimos) > 0 else None
 
-        self.sinonimos = {}
-        self.sinonimos["eng"] = wn.getSinonimos(self.palavraCanonica, "eng")
-        self.sinonimos["por"] = wn.getSinonimos(self.palavraCanonica, "por")
+        _sinonimos = {}
+        _sinonimos["eng"] = wn.getSinonimos(self.palavraCanonica, "eng")
+        _sinonimos["por"] = wn.getSinonimos(self.palavraCanonica, "por")
+
+        self.criarSinonimosObjetos(_sinonimos)
 
         return self.getSinonimos()
 
 
+    def criarSinonimosObjetos(self, _sinonimos):
+        self.sinonimos = {}
+        numero = 1
+        for lang in _sinonimos:
+            self.sinonimos[lang] = []
+            for _sinonimo in _sinonimos[lang]:
+                sinonimoTemp = SinonimoUtil.stringToSinonimo(_sinonimo, numero)
+                if PalavraUtil.isMesmaClasseGramatical(self, sinonimoTemp):
+                    self.sinonimos[lang].append(sinonimoTemp)
+                    numero += 1
+
     def isVerbo(self):
-        """
-        Retorna se a frase é um verbo ou não.
-        :return:
-        """
         return StringUtil.regexExistIn(REGEX_PALAVRA_VERBO, self.tagInicial)
+
+    def isAdjetivo(self):
+        return StringUtil.regexExistIn(REGEX_PALAVRA_ADJETIVO, self.tagInicial)
+
+    def isSubstantivo(self):
+        return StringUtil.regexExistIn(REGEX_PALAVRA_SUBSTANTIVO, self.tagInicial)
+
+    def isPreposicao(self):
+        return StringUtil.regexExistIn(REGEX_PALAVRA_PREPOSICAO, self.tagInicial)
+
 
     def to_json(self):
         return self.__dict__

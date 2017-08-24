@@ -53,6 +53,15 @@ def getRegexPalavraRelevante():
 def getRegexPalavraVerbo():
     return getValue(CONFIG_REGEX_PALAVRA_VERBO)
 
+def getRegexPalavraAdjetivo():
+    return getValue(CONFIG_REGEX_PALAVRA_ADJETIVO)
+
+def getRegexPalavraSubstantivo():
+    return getValue(CONFIG_REGEX_PALAVRA_SUBSTANTIVO)
+
+def getRegexPalavraPreposicao():
+    return getValue(CONFIG_REGEX_PALAVRA_PREPOSICAO)
+
 def getRegexVozPassiva():
     return getValue(CONFIG_REGEX_VOZ_PASSIVA)
 
