@@ -51,9 +51,15 @@ class Palavra(object):
             self.sinonimos[lang] = []
             for _sinonimo in _sinonimos[lang]:
                 sinonimoTemp = SinonimoUtil.stringToSinonimo(_sinonimo, numero)
-                if PalavraUtil.isMesmaClasseGramatical(self, sinonimoTemp):
+
+                isMesmaClasseGramatical = PalavraUtil.isMesmaClasseGramatical(self, sinonimoTemp)
+                naoExiste = sinonimoTemp not in self.sinonimos[lang]
+                diferenteDaPalavra = sinonimoTemp.sinonimo != self.palavraCanonica
+
+                if isMesmaClasseGramatical and naoExiste and diferenteDaPalavra:
                     self.sinonimos[lang].append(sinonimoTemp)
                     numero += 1
+
 
     def isVerbo(self):
         return StringUtil.regexExistIn(REGEX_PALAVRA_VERBO, self.tagInicial)
