@@ -19,7 +19,7 @@ def getSinonimos(word, _lang):
         return list()
 
     sinonimos = set()
-    lemmasDaPalavra = wn.lemmas(word, lang=_lang)
+    lemmasDaPalavra = wn.lemmas(word, lang="por") # TODO REVIEW remover string fixa e colocar em alguma propriedade ou constante.
     for lemma in lemmasDaPalavra:
         synsetNome = lemma.synset().name()
         synsetLemmas = wn.synset(synsetNome).lemmas(_lang)
