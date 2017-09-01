@@ -65,10 +65,11 @@ def getRegexPalavraPreposicao():
 def getRegexVozPassiva():
     return getValue(CONFIG_REGEX_VOZ_PASSIVA)
 
-
 def getSparqlQueries():
     return getValue(CONFIG_QUERIES_SPARQL.format(nome_servidor=SERVIDOR_VIRTUOSO))
 
+def getSinonimosLinguagens():
+    return getValue(CONFIG_SINONIMOS_LINGUAGENS)
 
 def getUrlService(nomeServicor, nomeServico):
     return getServidorEndpoint(nomeServicor) + getServico(nomeServicor, nomeServico)

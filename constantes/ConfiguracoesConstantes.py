@@ -5,6 +5,8 @@
 
 """
 
+LINGUAGEM_FRASES = "por" #português
+
 # Caminho do arquivo de configuração
 ARQUIVO_CONFIGURACAO = "../configuracoes/configuracoes.json"
 
@@ -16,6 +18,7 @@ SERVIDOR_PALAVRAS = "palavras"
 CONFIG_FRASES = "frases"
 CONFIG_TIPO_FRASES = "tipos_frases"
 CONFIG_SERVIDORES = "servidores"
+CONFIG_SINONIMOS = "sinonimos"
 
 #Arquivo que contém as frases
 CONFIG_ARQUIVO_FRASES = CONFIG_FRASES + "/arquivo_frases"
@@ -35,6 +38,9 @@ CONFIG_SERVICOS = CONFIG_SERVIDORES + "/{nome_servidor}/servicos"
 CONFIG_SERVICO = CONFIG_SERVICOS + "/{nome_servico}"
 CONFIG_QUERIES_SPARQL = CONFIG_SERVIDORES + "/{nome_servidor}/queries"
 
+
+#Sinonimos
+CONFIG_SINONIMOS_LINGUAGENS = CONFIG_SINONIMOS + "/linguagens"
 
 
 # Mensagens

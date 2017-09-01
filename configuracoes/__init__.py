@@ -19,3 +19,4 @@ from .Configuracoes import getRegexVozPassiva
 from .Configuracoes import getRegexPalavraAdjetivo
 from .Configuracoes import getRegexPalavraPreposicao
 from .Configuracoes import getRegexPalavraSubstantivo
+from .Configuracoes import getSinonimosLinguagens

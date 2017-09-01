@@ -14,6 +14,7 @@ from utils import WordNetUtil as wn
 from utils import StringUtil
 from utils import SinonimoUtil
 from utils import PalavraUtil
+import configuracoes
 
 
 class Palavra(object):
@@ -36,13 +37,14 @@ class Palavra(object):
             return self.sinonimos if len(self.sinonimos) > 0 else None
 
         _sinonimos = {}
-        _sinonimos["eng"] = wn.getSinonimos(self.palavraCanonica, "eng")
-        _sinonimos["por"] = wn.getSinonimos(self.palavraCanonica, "por")
+
+        sinonimosLinguagens = configuracoes.getSinonimosLinguagens()
+        for lang in sinonimosLinguagens:
+            _sinonimos[lang] = wn.getSinonimos(self.palavraCanonica, lang)
 
         self.criarSinonimosObjetos(_sinonimos)
 
-        return self.getSinonimos()
-
+        return self.sinonimos
 
     def criarSinonimosObjetos(self, _sinonimos):
         self.sinonimos = {}
@@ -60,7 +62,6 @@ class Palavra(object):
                     self.sinonimos[lang].append(sinonimoTemp)
                     numero += 1
 
-
     def isVerbo(self):
         return StringUtil.regexExistIn(REGEX_PALAVRA_VERBO, self.tagInicial)
 
@@ -72,7 +73,6 @@ class Palavra(object):
 
     def isPreposicao(self):
         return StringUtil.regexExistIn(REGEX_PALAVRA_PREPOSICAO, self.tagInicial)
-
 
     def to_json(self):
         return self.__dict__

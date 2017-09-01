@@ -5,6 +5,7 @@
 
 """
 import json
+import queue
 import configuracoes
 from concurrent import futures
 from bean.Palavra import Palavra
@@ -14,11 +15,15 @@ from constantes.StringConstantes import UTF_8
 from constantes.StringConstantes import BREAK_LINE
 from constantes.StringConstantes import FILE_READ_ONLY
 from constantes.StringConstantes import FILE_WRITE_ONLY
+from constantes.ConfiguracoesConstantes import LINGUAGEM_FRASES
 from constantes.ConfiguracoesConstantes import SERVIDOR_VIRTUOSO
+from utils.StringUtil import hasAccentuation
+from utils.StringUtil import removeAccentuation
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 triplas = {}
 queries = {}
+
 EXECUTION_NUMBER = 1
 
 def _loadQueries():
@@ -31,8 +36,6 @@ def _loadQueries():
     return queries
 
 
-# TODO REVIEW verificar se é necessário fazer este método ser THREAD-SAFE.
-# LIST.APPEND é THREAD-SAFe
 def _salvarResultado(_triplas, dadosPalavra):
     if dadosPalavra[PALAVRA_PAI] not in triplas:
         triplas[dadosPalavra[PALAVRA_PAI]] = {}
@@ -48,7 +51,6 @@ def _salvarResultado(_triplas, dadosPalavra):
 
 
 def _worker(task):
-    # print(task)
     # prepara SPARQLWrapper
     _sparql = SPARQLWrapper(configuracoes.getUrlService(SERVIDOR_VIRTUOSO, SPARQL_NOME_SERVICO))
     _sparql.setQuery(task[QUERY])
@@ -65,8 +67,9 @@ def _worker(task):
         tripla = [result["s"]["value"], result["p"]["value"], result["o"]["value"]]
         _triplas.append(tripla)
 
-    # Salva as triplas resultantes
-    _salvarResultado(_triplas, task[DADOS_PALAVRA])
+    # Adiciona na queue para ser salvo mais tarde
+    queueToSave.put({"triplas": _triplas, "dados": task[DADOS_PALAVRA]})
+
 
 
 def _criarTarefa(palavra: str, palavraPai: str, query: str, tipo_consulta: str, lang: str):
@@ -83,8 +86,12 @@ def _criarTarefa(palavra: str, palavraPai: str, query: str, tipo_consulta: str, 
 def _criarTarefasParaPalavra(palavra: Palavra):
     tasks = []
     for key in queries:
-        task = _criarTarefa(palavra.palavraCanonica, palavra.palavraCanonica, queries[key], key, "por")
+        task = _criarTarefa(palavra.palavraCanonica, palavra.palavraCanonica, queries[key], key, LINGUAGEM_FRASES)
         tasks.append(task)
+        if hasAccentuation(palavra.palavraCanonica):
+            task = _criarTarefa(removeAccentuation(palavra.palavraCanonica), palavra.palavraCanonica, queries[key], key, LINGUAGEM_FRASES)
+            tasks.append(task)
+
 
     return tasks
 
@@ -97,6 +104,12 @@ def _criarTarefasParaSinonimos(palavra: Palavra):
             for queryKey in queries:
                 task = _criarTarefa(sinonimo.sinonimo, palavra.palavraCanonica, queries[queryKey], queryKey, lang)
                 tasks.append(task)
+                if hasAccentuation(sinonimo.sinonimo):
+                    task = _criarTarefa(removeAccentuation(sinonimo.sinonimo), palavra.palavraCanonica, queries[queryKey], queryKey, lang)
+                    tasks.append(task)
+
+
+
 
     return tasks
 
@@ -112,12 +125,14 @@ def _criarTarefas(palavrasRelevantes: list):
 
 def consular(fraseProcessada, FRASE_ID):
     global triplas
+    global queueToSave
     triplas = {}
+    queueToSave = queue.Queue()
     print("CONSULTA_SPARQL - criando tasks...")
 
     tarefas = _criarTarefas(fraseProcessada[PALAVRAS_RELEVANTES])
 
-    print("CONSULTA_SPARQL - tasks criadas.[" + str(len(tarefas)) + "]")
+    print("CONSULTA_SPARQL - [" + str(len(tarefas)) + "] tasks criadas.")
 
 
 
@@ -130,11 +145,16 @@ def consular(fraseProcessada, FRASE_ID):
     print("CONSULTA_SPARQL - executando tasks...")
     # Run tasks.
     # TODO verificar quantidade de threads a serem utilizadas.
-    with futures.ThreadPoolExecutor(10) as executor:
+    with futures.ThreadPoolExecutor(8) as executor:
         executor.map(_worker, tarefas)
 
-
     print("CONSULTA_SPARQL - tasks executadas")
+
+    print("CONSULTA_SPARQL - Processando resultados..")
+    while(not queueToSave.empty()):
+        toSave = queueToSave.get()
+        _salvarResultado(toSave["triplas"], toSave["dados"])
+
     print("CONSULTA_SPARQL - salvando resultados em arquivo json")
 
     with open("../__ignorar/sparql_consulta_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:

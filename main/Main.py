@@ -28,20 +28,20 @@ else:
     frases = [frase for frase in frases if not frase.startswith("#") and not StringUtil.isEmpty(frase)]
 
 
-FRASE_ID = 0
+FRASE_ID = 1
 print("-------------------------------------------------------------------------------------------\n")
 frasesAgrupadas = {}
 for fraseTexto in frases:
     FRASE_ID += 1
-    print("Frase: "+fraseTexto)
+    print("MAIN - Frase: "+fraseTexto)
 
-    print("Executando analise do Palavras...")
+    print("MAIN - Executando analise do Palavras...")
     fraseAnalisada = palavras.analisarFrase(fraseTexto)
 
     if (not fraseAnalisada.ok):
         raise Exception("Falha na chamada do serviço de analise da frase(status_code=" + str(fraseAnalisada.status_code) + ")")
 
-    print("Frase analisada pelo Palavras.")
+    print("MAIN - Frase analisada pelo Palavras.")
     jsonFrase = fraseAnalisada.json()
     frase = Frase.fraseFromJson(jsonFrase)
 
@@ -49,14 +49,14 @@ for fraseTexto in frases:
     if (not frase.isQuestao()):
         tipoFrase = frase.obterTipoFrase()[TIPO_FRASE]
         if (tipoFrase != "consulta"):
-            print("Frase não é uma pergunta e nem do tipo 'consulta'!")
+            print("MAIN - Frase não é uma pergunta e nem do tipo 'consulta'!")
             continue
 
-    print("Executante NLU")
+    print("MAIN - Executando NLU")
     fraseProcessada = nlu.processarFrase(frase)
 
 
-    print("Preparando print...")
+    print("MAIN - Preparando print...")
     palavrasRelevantes = ""
     for palavra in fraseProcessada[PALAVRAS_RELEVANTES]:
         palavrasRelevantes += palavra.palavraOriginal + " -- "
@@ -70,11 +70,11 @@ for fraseTexto in frases:
     print("-------------------------------------------------------------------------------------------\n")
 
 
-    print("Executante consulta sparql....")
+    print("MAIN - Executante consulta sparql....")
     sparql.consular(fraseProcessada, FRASE_ID)
 
-    print("Consulta sparql finalizada.")
-    print("Salvando informações em arquivo json....")
+    print("MAIN - Consulta sparql finalizada.")
+    print("MAIN - Salvando informações em arquivo json....")
 
 
     fraseToJson = {}
@@ -85,7 +85,7 @@ for fraseTexto in frases:
         out.write(json.dumps(fraseToJson, ensure_ascii=False, indent=4, sort_keys=True))
 
     print("-------------------------------------------------------------------------------------------\n")
-    # if(FRASE_ID >= 2):
-    #     break
+    # if(FRASE_ID >= 3):
+    #      break
 
 

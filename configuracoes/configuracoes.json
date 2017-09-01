@@ -8,6 +8,9 @@
         "regex_palavra_verbo": "v-",
         "regex_voz_passiva": "^fApass:pp$"
     },
+    "sinonimos":{
+        "linguagens": ["por", "eng"]
+    },
     "servidores": {
         "virtuoso": {
             "endpoint": "http://127.0.0.1:8890",

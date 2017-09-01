@@ -7,6 +7,10 @@
 import unicodedata
 
 
+isascii = lambda word: len(word) == len(word.encode())
+
+
+
 def regexExistIn(regex, string):
     return regex.search(string) is not None
 
@@ -16,8 +20,11 @@ def isEmpty(string):
 
 
 # TODO: revisar
-def removeAcentuacao(texto):
+def removeAccentuation(texto):
     return ''.join((c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn'))
+
+def hasAccentuation(word):
+    return not isascii(word)
 
 
 # TODO: comentar e renomear variáveis

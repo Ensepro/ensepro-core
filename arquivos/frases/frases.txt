@@ -3,8 +3,9 @@
 #---------------------------------------------------------------------------------------------------------------------------
 
 #Eu vou estar fazendo algo?
-
-
+Onde estão os leões?
+Que alunos do Pipca trabalham no projeto CNJ Acadêmico patrocinados pela Capes?
+#Qual é o nome de Dom Pedro I?
 
 #---------------------------------------------------------------------------------------------------------------------------
 #1.0 Consultas Básicas
