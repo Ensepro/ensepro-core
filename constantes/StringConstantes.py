@@ -11,3 +11,4 @@ TAB = "\t"
 
 FILE_READ_ONLY = 'r'
 FILE_WRITE_ONLY = 'w'
+FILE_WRITE_READ = 'w+'

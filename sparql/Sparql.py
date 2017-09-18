@@ -13,10 +13,11 @@ from constantes.SparqlConstantes import *
 from constantes.NLUConstantes import PALAVRAS_RELEVANTES
 from constantes.StringConstantes import UTF_8
 from constantes.StringConstantes import BREAK_LINE
+from constantes.StringConstantes import FILE_WRITE_READ
 from constantes.StringConstantes import FILE_READ_ONLY
-from constantes.StringConstantes import FILE_WRITE_ONLY
 from constantes.ConfiguracoesConstantes import LINGUAGEM_FRASES
 from constantes.ConfiguracoesConstantes import SERVIDOR_VIRTUOSO
+from constantes.ConfiguracoesConstantes import SAVE_FILES_TO
 from utils.StringUtil import hasAccentuation
 from utils.StringUtil import removeAccentuation
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -26,10 +27,11 @@ queries = {}
 
 EXECUTION_NUMBER = 1
 
+
 def _loadQueries():
     fileQueries = configuracoes.getSparqlQueries()
     for key in fileQueries:
-        query = open(RELATIVE_PATH + fileQueries[key], FILE_READ_ONLY, encoding=UTF_8).read()
+        query = open(fileQueries[key], FILE_READ_ONLY, encoding=UTF_8).read()
         query = query.replace(BREAK_LINE, " ")
         queries[key] = query
 
@@ -71,7 +73,6 @@ def _worker(task):
     queueToSave.put({"triplas": _triplas, "dados": task[DADOS_PALAVRA]})
 
 
-
 def _criarTarefa(palavra: str, palavraPai: str, query: str, tipo_consulta: str, lang: str):
     task = {}
     task[QUERY] = query.replace(QUERY_ELEMENTO, palavra)
@@ -92,7 +93,6 @@ def _criarTarefasParaPalavra(palavra: Palavra):
             task = _criarTarefa(removeAccentuation(palavra.palavraCanonica), palavra.palavraCanonica, queries[key], key, LINGUAGEM_FRASES)
             tasks.append(task)
 
-
     return tasks
 
 
@@ -107,9 +107,6 @@ def _criarTarefasParaSinonimos(palavra: Palavra):
                 if hasAccentuation(sinonimo.sinonimo):
                     task = _criarTarefa(removeAccentuation(sinonimo.sinonimo), palavra.palavraCanonica, queries[queryKey], queryKey, lang)
                     tasks.append(task)
-
-
-
 
     return tasks
 
@@ -134,13 +131,10 @@ def consular(fraseProcessada, FRASE_ID):
 
     print("CONSULTA_SPARQL - [" + str(len(tarefas)) + "] tasks criadas.")
 
-
-
     print("CONSULTA_SPARQL - salvando tasks em arquivo json...")
-    with open("../__ignorar/sparql_tasks_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
+    with open(SAVE_FILES_TO + "frase" + str(FRASE_ID) + "_sparql_tasks.json", FILE_WRITE_READ, encoding=UTF_8) as out:
         out.write(json.dumps(tarefas, ensure_ascii=False, indent=2))
     print("CONSULTA_SPARQL - tasks salvas.")
-
 
     print("CONSULTA_SPARQL - executando tasks...")
     # Run tasks.
@@ -151,13 +145,14 @@ def consular(fraseProcessada, FRASE_ID):
     print("CONSULTA_SPARQL - tasks executadas")
 
     print("CONSULTA_SPARQL - Processando resultados..")
-    while(not queueToSave.empty()):
+    while (not queueToSave.empty()):
         toSave = queueToSave.get()
         _salvarResultado(toSave["triplas"], toSave["dados"])
 
     print("CONSULTA_SPARQL - salvando resultados em arquivo json")
 
-    with open("../__ignorar/sparql_consulta_" + str(FRASE_ID) + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
+    with open(SAVE_FILES_TO + "frase" + str(FRASE_ID) + "_sparql_consulta.json", FILE_WRITE_READ, encoding=UTF_8) as out:
         out.write(json.dumps(triplas, ensure_ascii=False, indent=2))
+
 
 _loadQueries()

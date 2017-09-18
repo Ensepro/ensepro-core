@@ -8,8 +8,11 @@
         "regex_palavra_verbo": "v-",
         "regex_voz_passiva": "^fApass:pp$"
     },
-    "sinonimos":{
-        "linguagens": ["por", "eng"]
+    "sinonimos": {
+        "linguagens": [
+            "por",
+            "eng"
+        ]
     },
     "servidores": {
         "virtuoso": {
@@ -18,9 +21,9 @@
                 "consulta_sparql": "/sparql"
             },
             "queries": {
-                "subject": "/arquivos/queries_sparql/subject.sparql",
-                "predicate": "/arquivos/queries_sparql/predicate.sparql",
-                "object": "/arquivos/queries_sparql/object.sparql"
+                "subject": "../arquivos/queries_sparql/subject.sparql",
+                "predicate": "../arquivos/queries_sparql/predicate.sparql",
+                "object": "../arquivos/queries_sparql/object.sparql"
             }
         },
         "palavras": {

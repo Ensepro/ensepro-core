@@ -13,27 +13,44 @@ import sparql
 from servicos import PalavrasService as palavras
 from bean.Frase import Frase
 from utils import StringUtil
+from utils import FraseTreeUtil
+from constantes.ConfiguracoesConstantes import SAVE_FILES_TO
 from constantes.StringConstantes import UTF_8
 from constantes.StringConstantes import FILE_READ_ONLY
+from constantes.StringConstantes import FILE_WRITE_ONLY
 from constantes.StringConstantes import BREAK_LINE
 from constantes.NLUConstantes import PALAVRAS_RELEVANTES
 from constantes.TipoFrasesConstantes import TIPO_FRASE
 
-# print(sys.argv)
+"""
+-m "{frase}"  -> frase a ser analisada  
+-tree         -> cria um arquivo com a árvore desenhada.
+"""
+
 frases = []
-if len(sys.argv) > 1:
-    frases = sys.argv[1:]
-else:
+params = {}
+
+
+def loadParams():
+    params["frase"] = "-m" in sys.argv
+    if (params["frase"]):
+        params["frase"] = sys.argv[sys.argv.index("-m") + 1]
+
+    params["tree"] = "-tree" in sys.argv
+
+
+loadParams()
+if not params["frase"]:
     frases = open(configuracoes.getPathArquivoFrases(), FILE_READ_ONLY, encoding=UTF_8).read().split(BREAK_LINE)
     frases = [frase for frase in frases if not frase.startswith("#") and not StringUtil.isEmpty(frase)]
 
-
-FRASE_ID = 1
+FRASE_ID = 0
 print("-------------------------------------------------------------------------------------------\n")
 frasesAgrupadas = {}
 for fraseTexto in frases:
     FRASE_ID += 1
-    print("MAIN - Frase: "+fraseTexto)
+    FRASE_NAME = "frase" + str(FRASE_ID)
+    print("MAIN - Frase: " + fraseTexto)
 
     print("MAIN - Executando analise do Palavras...")
     fraseAnalisada = palavras.analisarFrase(fraseTexto)
@@ -45,7 +62,6 @@ for fraseTexto in frases:
     jsonFrase = fraseAnalisada.json()
     frase = Frase.fraseFromJson(jsonFrase)
 
-
     if (not frase.isQuestao()):
         tipoFrase = frase.obterTipoFrase()[TIPO_FRASE]
         if (tipoFrase != "consulta"):
@@ -55,20 +71,17 @@ for fraseTexto in frases:
     print("MAIN - Executando NLU")
     fraseProcessada = nlu.processarFrase(frase)
 
-
     print("MAIN - Preparando print...")
     palavrasRelevantes = ""
     for palavra in fraseProcessada[PALAVRAS_RELEVANTES]:
         palavrasRelevantes += palavra.palavraOriginal + " -- "
 
-
     print("\n-------------------------------------------------------------------------------------------")
-    print("Frase "+str(FRASE_ID)+": " + fraseTexto)
+    print("Frase " + str(FRASE_ID) + ": " + fraseTexto)
     print("Palavras Relevantes:|>  " + str(palavrasRelevantes))
     print("Voz Ativa:|>  " + str(frase.isVozAtiva()))
     print("Locução Verbal:|>  " + str(frase.possuiLocucaoVerbal()))
     print("-------------------------------------------------------------------------------------------\n")
-
 
     print("MAIN - Executante consulta sparql....")
     sparql.consular(fraseProcessada, FRASE_ID)
@@ -76,16 +89,18 @@ for fraseTexto in frases:
     print("MAIN - Consulta sparql finalizada.")
     print("MAIN - Salvando informações em arquivo json....")
 
-
     fraseToJson = {}
     fraseToJson["fraseOriginal"] = fraseTexto
     fraseToJson["objetoFrase"] = frase
 
-    with open("../__ignorar/frase" + str(FRASE_ID) + ".json", 'w', encoding=UTF_8) as out:
+    with open(SAVE_FILES_TO + FRASE_NAME + ".json", FILE_WRITE_ONLY, encoding=UTF_8) as out:
         out.write(json.dumps(fraseToJson, ensure_ascii=False, indent=4, sort_keys=True))
 
+    if (params["tree"]):
+        print("MAIN - Gerando árvore...")
+        FraseTreeUtil.printTreeFormat(frase, SAVE_FILES_TO + FRASE_NAME + "_tree.txt")
+        print("MAIN - Árvore gerada.")
+
     print("-------------------------------------------------------------------------------------------\n")
-    # if(FRASE_ID >= 3):
+    # if(FRASE_ID >= 1):
     #      break
-
-

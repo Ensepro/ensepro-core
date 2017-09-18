@@ -5,8 +5,6 @@
 
 """
 
-RELATIVE_PATH = "../"
-
 SPARQL_NOME_SERVICO = "consulta_sparql"
 
 DADOS_PALAVRA = "dados_palavra"
