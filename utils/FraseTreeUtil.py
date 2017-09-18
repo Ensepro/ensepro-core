@@ -31,10 +31,13 @@ def printTreeFormat(frase: Frase, fileName: str):
     Printa a árvore de forma "bonitinha" utilizando o método pretty_print() da classe nltk.Tree
     :return: None
     """
-    tree = getTree(frase)
-    file = open(fileName, FILE_WRITE_READ, encoding=UTF_8)
-    tree.pretty_print(stream=file)
-    file.close()
+    try:
+        tree = getTree(frase)
+        file = open(fileName, FILE_WRITE_READ, encoding=UTF_8)
+        tree.pretty_print(stream=file)
+        file.close()
+    except ValueError:
+        print("Erro ao criar a árvore.")
 
 
 def isNoTerminal(frase: Frase, numero: int):

@@ -11,7 +11,7 @@ SAVE_FILES_TO = ENSEPRO_PATH + "__ignorar/"
 LINGUAGEM_FRASES = "por"  # português
 
 # Caminho do arquivo de configuração
-ARQUIVO_CONFIGURACAO = "../configuracoes/configuracoes.json"
+ARQUIVO_CONFIGURACAO = ENSEPRO_PATH + "configuracoes/configuracoes.json"
 
 # Servidores
 SERVIDOR_VIRTUOSO = "virtuoso"

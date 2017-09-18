@@ -34,7 +34,7 @@ params = {}
 def loadParams():
     params["frase"] = "-m" in sys.argv
     if (params["frase"]):
-        params["frase"] = sys.argv[sys.argv.index("-m") + 1]
+        frases.append(sys.argv[sys.argv.index("-m") + 1])
 
     params["tree"] = "-tree" in sys.argv
 
