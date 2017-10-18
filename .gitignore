@@ -2,3 +2,4 @@
 /.idea
 /__ignorar
 **/__pycache__
+\#*

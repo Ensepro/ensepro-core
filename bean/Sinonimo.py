@@ -19,6 +19,9 @@ class Sinonimo(object):
     def to_json(self):
         return self.__dict__
 
+    def __str__(self):
+        return self.sinonimo
+
     def __eq__(self, other):
         return self.sinonimo == other.sinonimo
 

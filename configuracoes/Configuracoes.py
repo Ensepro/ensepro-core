@@ -10,7 +10,7 @@ from constantes.StringConstantes import FILE_READ_ONLY
 from constantes.ConfiguracoesConstantes import *
 
 
-def _carregarConfiguracoes():
+def __carregarConfiguracoes():
     """
     Carrega as configurações do arquivo ARQUIVO_CONFIGURACAO (deve estar no formato json)
     :return:
@@ -18,8 +18,19 @@ def _carregarConfiguracoes():
     return json.loads(open(ARQUIVO_CONFIGURACAO, FILE_READ_ONLY, encoding=UTF_8).read())
 
 
+def init():
+    global __configuracoes
+
+    try:
+        __configuracoes = __carregarConfiguracoes()
+
+    except Exception as e:
+        raise e
+
+init()
+
 def getValue(path):
-    value = _configuracoes
+    value = __configuracoes
     _path = path.split("/")
     for key in _path:
         value = value[key]
@@ -29,26 +40,20 @@ def getValue(path):
 def getServidorEndpoint(servidor):
     return getValue(CONFIG_ENDPOINT.format(nome_servidor=servidor))
 
-
 def getServicos(servidor):
     return getValue(CONFIG_SERVICOS.format(nome_servidor=servidor))
-
 
 def getServico(servidor, nomeServico):
     return getValue(CONFIG_SERVICO.format(nome_servidor=servidor, nome_servico=nomeServico))
 
-
 def getTipoFrases():
     return getValue(CONFIG_TIPO_FRASES)
-
 
 def getPathArquivoFrases():
     return getValue(CONFIG_ARQUIVO_FRASES)
 
-
 def getRegexPalavraRelevante():
     return getValue(CONFIG_REGEX_PALAVRA_RELEVENTE)
-
 
 def getRegexPalavraVerbo():
     return getValue(CONFIG_REGEX_PALAVRA_VERBO)
@@ -65,31 +70,17 @@ def getRegexPalavraPreposicao():
 def getRegexVozPassiva():
     return getValue(CONFIG_REGEX_VOZ_PASSIVA)
 
-def getSparqlQueries():
-    return getValue(CONFIG_QUERIES_SPARQL.format(nome_servidor=SERVIDOR_VIRTUOSO))
-
 def getSinonimosLinguagens():
     return getValue(CONFIG_SINONIMOS_LINGUAGENS)
 
-def getUrlService(nomeServicor, nomeServico):
-    return getServidorEndpoint(nomeServicor) + getServico(nomeServicor, nomeServico)
+def getPortaServidor(nomeServidor):
+    return getValue(CONFIG_PORTA.format(nome_servidor=nomeServidor))
 
+def getLog():
+    return getValue(CONFIG_LOG)
 
-# ----------------------------------------------------------------------------------------------------------------------- #
-debug = False
+def getElasticSearchSettings():
+    return getValue(CONFIG_SETTINGS.format(nome_servidor=SERVIDOR_ELASTIC_SEARCH))
 
-try:
-
-    if debug:
-        print(MENSAGEM_CARREGANDO.format(fromFile=ARQUIVO_CONFIGURACAO))
-
-    _configuracoes = _carregarConfiguracoes()
-
-    if debug:
-        print(MENSAGEM_CARREGAMENTO_SUCESSO)
-
-except Exception as e:
-    print(MENSAGEM_CARREGAMENTO_ERRO)
-    if debug:
-        print(e)
-    raise e
+def getUrlService(nomeServidor, nomeServico):
+    return getServidorEndpoint(nomeServidor) +":"+ getPortaServidor(nomeServidor) + getServico(nomeServidor, nomeServico)
