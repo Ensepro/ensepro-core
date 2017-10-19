@@ -5,7 +5,6 @@
 
 """
 import nlu
-import json
 from constantes.ConfiguracoesConstantes import SAVE_FILES_TO
 from constantes.TipoFrasesConstantes import TIPO_FRASE
 from constantes.FraseConstantes import LOCUCAO_VERBAL_POSSUI, LOCUCAO_VERBAL_VERBOS
@@ -15,8 +14,6 @@ from utils import FraseTreeUtil
 from bean.Frase import Frase
 from utils import ElasticSearchUtil
 from utils.JsonUtil import save_to_json
-
-
 
 
 class Ensepro(object):
