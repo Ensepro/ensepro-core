@@ -6,14 +6,17 @@
 """
 
 
-QUERY = {
-            "size": 10000,
-            "query": {
-                "regexp": {
+from utils.StringUtil import remove_accentuation, has_accentuation
 
+QUERY = {
+            "query": {
+                "query_string" : {
+                    "fields" : [],
+                    "query" : ""
                 }
             }
         }
+
 
 
 class QueryBuilder(object):
@@ -32,7 +35,9 @@ class QueryBuilder(object):
             self.fields.remove(field)
 
     def add_value(self, value):
-        self.values.append(value)
+        if(has_accentuation(value)):
+            value = remove_accentuation(value)
+        self.values.append(value.lower())
         return self
 
     def remove_value(self, field):
@@ -47,20 +52,24 @@ class QueryBuilder(object):
         self.fields.clear()
         return self
 
-    def __createRegex(self):
-        val = ""
-        for value in self.values[:2]:
-            val += "|.*{}.*".format(value)
+    def __format_values(self):
 
-        return val[1:]+"|.*fernando_correia_dias.*"
+        format = "*{}* OR "
+
+
+        val = ""
+        for value in self.values:
+            val += format.format(value)
+
+        return val[:-4]
 
     def buildQuery(self):
-        #TODO REVIEW ao utilizar a query de regex, com muitas condições, o ES não consegue determinar os resultados finais
-        # Devido a muitos estados
-        QUERY["query"]["regexp"][self.fields[0]] =  self.__createRegex()
+        formated_values = self.__format_values()
 
-        return str(QUERY).replace("'", "\"")
+        QUERY["query"]["query_string"]["fields"] = self.fields
+        QUERY["query"]["query_string"]["query"] = formated_values
 
+        return QUERY
 
     def __str__(self):
         return "QueryBuilder{fields="+str(self.fields)+", values="+str(self.values)+"}"

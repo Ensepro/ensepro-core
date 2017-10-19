@@ -6,9 +6,11 @@
 """
 import json
 import configuracoes
+
 from elasticsearch import Elasticsearch
 from es.QueryBuilder import QueryBuilder
 from utils.LogUtil import error, debug, info
+from utils.JsonUtil import save_to_json
 from constantes.ElasticSerachConstantes import *
 from constantes.NLUConstantes import PALAVRAS_RELEVANTES
 from constantes.ConfiguracoesConstantes import CONFIG_ENDPOINT, CONFIG_PORTA, CONFIG_SETTINGS, SERVIDOR_ELASTIC_SEARCH, SAVE_FILES_TO
@@ -27,7 +29,7 @@ initElasticSearch()
 
 def consultar(frase_processada, frase_id):
     qb = QueryBuilder()
-    qb.add_field("subject.concept")
+    qb.add_field("subject.concept").add_field("predicate.concept").add_field("object.concept")
 
     for palavra_relevante in frase_processada[PALAVRAS_RELEVANTES]:
         qb.add_value(palavra_relevante.palavraCanonica)
@@ -46,7 +48,21 @@ def consultar(frase_processada, frase_id):
 
     results = ES.search(index=ES_SETTINGS[INDEX_NAME], doc_type=ES_SETTINGS[INDEX_TYPE], body=query)
 
-    info("ElasticSearchUtil - query executada, salvando resultado em arquivo json.")
+    info("ElasticSearchUtil - query executada... salvando resultado em arquivo json.")
 
-    with open(SAVE_FILES_TO.format(fileName="frase{}_es_result.json".format(frase_id)), "w+", encoding="utf-8") as result_file:
-        result_file.write(json.dumps(results, ensure_ascii=False, indent=4, sort_keys=False))
+    save_to_json("frase{}_resultados_completo.json".format(frase_id), results)
+    save_to_json("frase{}_resultados_resumidos.json".format(frase_id), __resumirResultados(results))
+
+
+
+
+def __resumirResultados(resultado):
+    resultado = resultado["hits"]["hits"]
+
+    resultadoResumido = []
+
+    for result in resultado:
+        resultadoResumido.append(result["_source"])
+
+    return resultadoResumido
+

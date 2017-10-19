@@ -11,7 +11,7 @@ from utils.StringUtil import isEmpty
 from constantes.StringConstantes import UTF_8
 from constantes.StringConstantes import FILE_READ_ONLY
 from constantes.StringConstantes import BREAK_LINE
-from main.ensepro import Ensepro
+from main.Ensepro import Ensepro
 
 """
 -m "{frase}"  -> frase a ser analisada  
@@ -21,9 +21,6 @@ from main.ensepro import Ensepro
 frases = []
 params = {}
 ensepro = Ensepro()
-
-
-
 
 
 def loadParams():
@@ -36,10 +33,12 @@ def loadParams():
     ensepro.addParam("tree", "-tree" in sys.argv)
 
 
+
+
 def carregarFrases():
     with open(configuracoes.getPathArquivoFrases(), FILE_READ_ONLY, encoding=UTF_8) as frases:
         for frase in frases:
-            frase = frase.replace("\n", "")
+            frase = frase.replace(BREAK_LINE, "")
             if frase.startswith("#") or isEmpty(frase):
                 continue
 

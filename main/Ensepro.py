@@ -7,14 +7,14 @@
 import nlu
 import json
 from constantes.ConfiguracoesConstantes import SAVE_FILES_TO
-from constantes.StringConstantes import FILE_WRITE_ONLY
 from constantes.TipoFrasesConstantes import TIPO_FRASE
+from constantes.FraseConstantes import LOCUCAO_VERBAL_POSSUI, LOCUCAO_VERBAL_VERBOS
 from servicos import PalavrasService as palavras
-from constantes.StringConstantes import UTF_8
 from utils.LogUtil import error, debug, info
 from utils import FraseTreeUtil
 from bean.Frase import Frase
 from utils import ElasticSearchUtil
+from utils.JsonUtil import save_to_json
 
 
 
@@ -59,11 +59,13 @@ class Ensepro(object):
     def __printDadosFrase(self, frase : Frase):
         debug("Dados da frase: \n\t"
              "Frase: {fraseTexto}\n\t"
+             "Tipo: {tipoFrase}\n\t"
              "Palavras Relevantes: {relevantes}\n\t"
              "Voz Ativa: {voz}\n\t"
              "Locução Verbal: {locucao}\n"
                 .format(
                     fraseTexto=self.__frases[frase.id-1],
+                    tipoFrase=frase.obterTipoFrase()[TIPO_FRASE],
                     relevantes=str(frase.obterPalavrasRelevantes()),
                     voz=str(frase.isVozAtiva()),
                     locucao=str(frase.possuiLocucaoVerbal())
@@ -76,10 +78,19 @@ class Ensepro(object):
         toJson = {}
         toJson["fraseOriginal"] = self.__frases[frase.id-1]
         toJson["frase"] = frase
+        #a= [ x for x in range(10) ]
 
-        with open(SAVE_FILES_TO.format(fileName="frase{}.json".format(frase.id)), FILE_WRITE_ONLY, encoding=UTF_8) as out:
-            out.write(json.dumps(toJson, ensure_ascii=False, indent=4, sort_keys=True))
+        simpleJson = {}
+        simpleJson["1.fraseOriginal"] = self.__frases[frase.id-1]
+        simpleJson["2.tipo"] = frase.obterTipoFrase()[TIPO_FRASE]
+        simpleJson["3.palavrasRelevantes"] = [palavra.palavraOriginal for palavra in frase.obterPalavrasRelevantes()]
+        simpleJson["4.voz"] = "Ativa" if frase.isVozAtiva() else "Passiva"
+        simpleJson["5.locucaoVerbal"] = frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS] if frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI] else False
 
+
+
+        save_to_json("frase{}_dados_completo.json".format(frase.id), toJson)
+        save_to_json("frase{}_dados_resumido.json".format(frase.id), simpleJson)
 
     def executar(self):
         numFrases = len(self.__frases)
