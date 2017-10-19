@@ -33,7 +33,7 @@ class Ensepro(object):
         :param frase: Frase no formato de texto
         :return: Frase
         """
-        debug("Ensepro - Analisando frase: [{id} - \"{frase}\"]".format(id=id, frase=frase))
+        debug("Frase{id} - Ensepro - Executando Palavras".format(id=id))
 
         fraseAnalisada = palavras.analisarFrase(frase)
         if (fraseAnalisada.ok):
@@ -47,7 +47,7 @@ class Ensepro(object):
         raise Exception(msg)
 
     def processarFrase(self, frase):
-        debug("Ensepro - executando NLU para frase [id={}]".format(frase.id))
+        info("Frase{id} - Ensepro - executando NLU para frase".format(id=frase.id))
         return nlu.processarFrase(frase)
 
     def __isFraseValida(self, frase: Frase):
@@ -71,7 +71,7 @@ class Ensepro(object):
 
 
     def __salvarFrase(self, frase : Frase):
-        info("Ensepro - salvando dados da frase em arquivo json.")
+        info("Frase{id} - Ensepro - salvando dados da frase em arquivo json.".format(id=frase.id))
         toJson = {}
         toJson["fraseOriginal"] = self.__frases[frase.id-1]
         toJson["frase"] = frase
@@ -82,9 +82,7 @@ class Ensepro(object):
         simpleJson["2.tipo"] = frase.obterTipoFrase()[TIPO_FRASE]
         simpleJson["3.palavrasRelevantes"] = [palavra.palavraOriginal for palavra in frase.obterPalavrasRelevantes()]
         simpleJson["4.voz"] = "Ativa" if frase.isVozAtiva() else "Passiva"
-        simpleJson["5.locucaoVerbal"] = frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS] if frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI] else False
-
-
+        simpleJson["5.locucaoVerbal"] = [palavra.palavraOriginal for palavra in frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS]] if frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI] else False
 
         save_to_json("frase{}_dados_completo.json".format(frase.id), toJson)
         save_to_json("frase{}_dados_resumido.json".format(frase.id), simpleJson)
@@ -94,6 +92,8 @@ class Ensepro(object):
         info("Enspero - iniciando processamento das frases[{}].".format(numFrases))
 
         for index in range(numFrases):
+            info("Frase{id} - Ensepro - processando frase[{id}]: {frase}".format(id=index+1, frase=self.__frases[index]))
+
             frase = self.analisarFrase(self.__frases[index], (index) + 1)
 
             if not self.__isFraseValida(frase):
@@ -106,11 +106,12 @@ class Ensepro(object):
             self.__salvarFrase(frase)
 
             if (self.__params["tree"]):
-                info("Ensepro - criando árvore gráfica da frase.")
+                info("Frase{id} - Ensepro - criando árvore gráfica da frase.".format(id=frase.id))
                 FraseTreeUtil.printTreeFormat(frase, SAVE_FILES_TO.format(fileName="frase{}_tree.txt.json".format(frase.id)))
 
 
             ElasticSearchUtil.consultar(fraseProcessada, frase.id)
+            info("Frase{id} - Ensepro - Frase processada com sucesso.".format(id=frase.id))
 
 
 

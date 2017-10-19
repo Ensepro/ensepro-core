@@ -28,27 +28,31 @@ def initElasticSearch():
 initElasticSearch()
 
 def consultar(frase_processada, frase_id):
+    info("Frase{id} - ElasticSearch - Iniciando consulta ao ElasticSearch".format(id=frase_id))
+
     qb = QueryBuilder()
     qb.add_field("subject.concept").add_field("predicate.concept").add_field("object.concept")
 
     for palavra_relevante in frase_processada[PALAVRAS_RELEVANTES]:
         qb.add_value(palavra_relevante.palavraCanonica)
 
-        info("ElasticSearchUil - buscando sinonimos da palavra '{}'".format(palavra_relevante.palavraCanonica))
+        debug("Frase{id} - ElasticSearch - buscando sinonimos da palavra '{palavra}'".format(id=frase_id, palavra=palavra_relevante.palavraCanonica))
         sinonimos = palavra_relevante.getSinonimos()
-        info("ElasticSearchUil - busca finalizada.")
         for lang in sinonimos:
             for sinonimo in sinonimos[lang]:
                 qb.add_value(sinonimo.sinonimo)
 
-    debug("QueryBuilder - dados: {}".format(str(qb)))
+    debug("Frase{id} - QueryBuilder - dados: {qb}".format(id=frase_id, qb=str(qb)))
 
     query = qb.buildQuery()
-    debug("ElasticSearchUtil - executando query: {}".format(query))
+    info("Frase{id} - ElasticSearch - Query construída.".format(id=frase_id))
+
+    info("Frase{id} - ElasticSearch - Executando query.".format(id=frase_id))
+    debug("Frase{id} - query={query}".format(id=id, query=query))
 
     results = ES.search(index=ES_SETTINGS[INDEX_NAME], doc_type=ES_SETTINGS[INDEX_TYPE], body=query)
 
-    info("ElasticSearchUtil - query executada... salvando resultado em arquivo json.")
+    info("Frase{id} - ElasticSearchUtil - query executada... salvando resultado em arquivo json.".format(id=frase_id))
 
     save_to_json("frase{}_resultados_completo.json".format(frase_id), results)
     save_to_json("frase{}_resultados_resumidos.json".format(frase_id), __resumirResultados(results))
