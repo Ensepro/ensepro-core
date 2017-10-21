@@ -51,7 +51,7 @@ class Ensepro(object):
         return nlu.processarFrase(frase)
 
     def __isFraseValida(self, frase: Frase):
-        return frase.isQuestao() or frase.obterTipoFrase()[TIPO_FRASE] == "consulta"
+        return frase.isQuestao() or frase.isConsulta()
 
     def __printDadosFrase(self, frase : Frase):
         debug("Dados da frase: \n\t"
@@ -97,6 +97,7 @@ class Ensepro(object):
             frase = self.analisarFrase(self.__frases[index], (index) + 1)
 
             if not self.__isFraseValida(frase):
+                info("Frase{id} - Ensepro - frase inválida!")
                 continue
 
             fraseProcessada = self.processarFrase(frase)

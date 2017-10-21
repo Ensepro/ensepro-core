@@ -8,7 +8,7 @@
 import tipofrases
 from utils import FraseUtil
 from utils import StringUtil
-from constantes.TipoFrasesConstantes import NUMERO_PALAVRA
+from constantes.TipoFrasesConstantes import NUMERO_PALAVRA, TIPO_FRASE
 from constantes.FraseConstantes import *
 from conversores import MakeJsonSerializable
 
@@ -145,6 +145,11 @@ class Frase(object):
         :return: True ou False
         """
         return self.palavras[INDICE_VALIDA_QUESTAO].tagInicial.startswith("QUE")
+
+    def isConsulta(self):
+        if self.obterTipoFrase():
+            return self.obterTipoFrase()[TIPO_FRASE] == "consulta"
+        return False
 
     def to_json(self):
         return self.__dict__
