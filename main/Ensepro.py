@@ -111,7 +111,7 @@ class Ensepro(object):
                 FraseTreeUtil.printTreeFormat(frase, SAVE_FILES_TO.format(fileName="frase{}_tree.txt.json".format(frase.id)))
 
 
-            ElasticSearchUtil.consultar(fraseProcessada, frase.id)
+            ElasticSearchUtil.search(fraseProcessada, frase.id)
             info("Frase{id} - Ensepro - Frase processada com sucesso.".format(id=frase.id))
 
 

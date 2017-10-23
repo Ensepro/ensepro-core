@@ -4,7 +4,6 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-import json
 import configuracoes
 
 from elasticsearch import Elasticsearch
@@ -15,7 +14,7 @@ from constantes.ElasticSerachConstantes import *
 from constantes.NLUConstantes import PALAVRAS_RELEVANTES
 from constantes.ConfiguracoesConstantes import CONFIG_ENDPOINT, CONFIG_PORTA, CONFIG_SETTINGS, SERVIDOR_ELASTIC_SEARCH, SAVE_FILES_TO
 
-def initElasticSearch():
+def init():
     es_host = configuracoes.getValue(CONFIG_ENDPOINT.format(nome_servidor=SERVIDOR_ELASTIC_SEARCH))
     es_port = configuracoes.getValue(CONFIG_PORTA.format(nome_servidor=SERVIDOR_ELASTIC_SEARCH))
     # TODO adicionar questão de usuário e senha
@@ -25,9 +24,9 @@ def initElasticSearch():
     ES = Elasticsearch([{'host': es_host, 'port': es_port}])
 
 
-initElasticSearch()
+init()
 
-def consultar(frase_processada, frase_id):
+def search(frase_processada, frase_id):
     info("Frase{id} - ElasticSearch - Iniciando consulta ao ElasticSearch".format(id=frase_id))
 
 
@@ -41,19 +40,17 @@ def consultar(frase_processada, frase_id):
         qb.add_field(field)
 
     for palavra_relevante in frase_processada[PALAVRAS_RELEVANTES]:
-        for field in fields:
-            qb.add_value(field, palavra_relevante.palavraCanonica)
+        qb.add_value_to_all_fields(palavra_relevante.palavraCanonica)
 
         debug("Frase{id} - ElasticSearch - buscando sinonimos da palavra '{palavra}'".format(id=frase_id, palavra=palavra_relevante.palavraCanonica))
         sinonimos = palavra_relevante.getSinonimos()
         for lang in sinonimos:
             for sinonimo in sinonimos[lang]:
-                for field in fields:
-                    qb.add_value(field, sinonimo.sinonimo)
+                qb.add_value_to_all_fields(sinonimo.sinonimo)
 
     debug("Frase{id} - QueryBuilder - dados: {qb}".format(id=frase_id, qb=str(qb)))
 
-    query = qb.buildQuery()
+    query = qb.build_query()
     info("Frase{id} - ElasticSearch - Query construída.".format(id=frase_id))
     debug("Frase{id} - ElasticSearch - query={query}".format(id=frase_id, query=query))
 
@@ -69,7 +66,7 @@ def consultar(frase_processada, frase_id):
 
 
 
-def __resumirResultados(resultado):
+def __resumir_resultados(resultado):
     resultado = resultado["hits"]["hits"]
 
     resultadoResumido = []

@@ -42,6 +42,11 @@ class QueryBuilder(object):
         if field in self.values:
             self.values.pop(field, None)
 
+    def add_value_to_all_fields(self, value):
+        value = self.__normalize(value)
+        for field in self.values:
+            self.values[field].append(value)
+
     def add_value(self, field, value):
         field = self.__normalize(field)
         value = self.__normalize(value)
@@ -88,7 +93,7 @@ class QueryBuilder(object):
         #remove last " AND" from string
         return query[:-4]
 
-    def buildQuery(self):
+    def build_query(self):
         if not self.values:
             error("QueryBuilder - Falha ao criar query. Fields e Values não pode estar vazio.")
             return None
