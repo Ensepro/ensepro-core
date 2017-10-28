@@ -22,7 +22,7 @@ def getTree(frase: Frase):
     Méotodo que cria uma ávore(nltk.Tree) com a estrura de árvore retornados do Palavras. Nós contém o seguinte formato: "(<TagInicial>'|'<numero>'| '<PalavraOriginal>)"
     :return: Um objeto da classe nltk.Tree
     """
-    formatToParse = "(" + _montaArvore(frase, -1, "", frase.palavras, 0) + ")"
+    formatToParse = "(" + __montaArvore(frase, -1, "", frase.palavras, 0) + ")"
     return Tree.fromstring(formatToParse)
 
 
@@ -46,7 +46,7 @@ def isNoTerminal(frase: Frase, numero: int):
     :param numero: Número(id) da palavra a ser verificada.
     :return: <True> se for um nó terminal. <False> caso não for um nó terminal.
     """
-    indicePalavra = _buscarIndicePorNumero(frase, numero)
+    indicePalavra = __buscarIndicePorNumero(frase, numero)
     if (indicePalavra == -1):
         print("Palavra com numero=" + str(numero) + " não encontrado!")
         return False
@@ -72,7 +72,7 @@ def isNoNaoTerminal(self, numero: int):
     return not self.isNoTerminal(numero)
 
 
-def _montaArvore(frase: Frase, nivelAnterior, arvore, lista, i):
+def __montaArvore(frase: Frase, nivelAnterior, arvore, lista, i):
     """
 
     :param nivelAnterior: Nível da palavra i-1
@@ -90,24 +90,24 @@ def _montaArvore(frase: Frase, nivelAnterior, arvore, lista, i):
             arvore = arvore + "(" + lista[i].tagInicial + "|" + str(lista[i].numero) + "| " + lista[i].palavraOriginal + ")"
         else:
             arvore = arvore + "(" + lista[i].tagInicial + "|" + str(lista[i].numero) + "| " + lista[i].palavraOriginal + ""
-        return _montaArvore(frase, thisNivel, arvore, lista, i + 1)
+        return __montaArvore(frase, thisNivel, arvore, lista, i + 1)
 
     if (thisNivel == nivelAnterior):
         if ((i + 1) < len(lista) and int(lista[i + 1].nivel) > thisNivel):
             arvore = arvore + " (" + lista[i].tagInicial + "|" + str(lista[i].numero) + "| " + lista[i].palavraOriginal + ""
         else:
             arvore = arvore + " (" + lista[i].tagInicial + "|" + str(lista[i].numero) + "| " + lista[i].palavraOriginal + ")"
-        return _montaArvore(frase, thisNivel, arvore, lista, i + 1)
+        return __montaArvore(frase, thisNivel, arvore, lista, i + 1)
 
     if (thisNivel < nivelAnterior):
         arvore = arvore + (")" * (nivelAnterior - thisNivel))
-        return _montaArvore(frase, thisNivel, arvore, lista, i)
+        return __montaArvore(frase, thisNivel, arvore, lista, i)
 
 
 # </Métodos considerando lista como árore>
 
 
-def _buscarIndicePorNumero(frase: Frase, numero: int):
+def __buscarIndicePorNumero(frase: Frase, numero: int):
     """
 
     :param numero: Número(id) da palavra a ser buscada

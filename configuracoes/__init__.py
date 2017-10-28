@@ -11,7 +11,6 @@ from .Configuracoes import getPathArquivoFrases
 from .Configuracoes import getServicos
 from .Configuracoes import getServico
 from .Configuracoes import getValue
-from .Configuracoes import getSparqlQueries
 from .Configuracoes import getUrlService
 from .Configuracoes import getRegexPalavraRelevante
 from .Configuracoes import getRegexPalavraVerbo
@@ -20,3 +19,6 @@ from .Configuracoes import getRegexPalavraAdjetivo
 from .Configuracoes import getRegexPalavraPreposicao
 from .Configuracoes import getRegexPalavraSubstantivo
 from .Configuracoes import getSinonimosLinguagens
+from .Configuracoes import getPortaServidor
+from .Configuracoes import getLog
+from .Configuracoes import getElasticSearchSettings

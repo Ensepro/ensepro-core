@@ -6,7 +6,7 @@
 """
 
 ENSEPRO_PATH = "../"
-SAVE_FILES_TO = ENSEPRO_PATH + "__ignorar/"
+SAVE_FILES_TO = ENSEPRO_PATH + "__ignorar/{fileName}"
 
 LINGUAGEM_FRASES = "por"  # português
 
@@ -14,14 +14,15 @@ LINGUAGEM_FRASES = "por"  # português
 ARQUIVO_CONFIGURACAO = ENSEPRO_PATH + "configuracoes/configuracoes.json"
 
 # Servidores
-SERVIDOR_VIRTUOSO = "virtuoso"
 SERVIDOR_PALAVRAS = "palavras"
+SERVIDOR_ELASTIC_SEARCH = "elastic_search"
 
 # Chaves primarias
 CONFIG_FRASES = "frases"
 CONFIG_TIPO_FRASES = "tipos_frases"
 CONFIG_SERVIDORES = "servidores"
 CONFIG_SINONIMOS = "sinonimos"
+CONFIG_LOG = "log"
 
 # Arquivo que contém as frases
 CONFIG_ARQUIVO_FRASES = CONFIG_FRASES + "/arquivo_frases"
@@ -39,6 +40,8 @@ CONFIG_ENDPOINT = CONFIG_SERVIDORES + "/{nome_servidor}/endpoint"
 CONFIG_SERVICOS = CONFIG_SERVIDORES + "/{nome_servidor}/servicos"
 CONFIG_SERVICO = CONFIG_SERVICOS + "/{nome_servico}"
 CONFIG_QUERIES_SPARQL = CONFIG_SERVIDORES + "/{nome_servidor}/queries"
+CONFIG_PORTA = CONFIG_SERVIDORES + "/{nome_servidor}/porta"
+CONFIG_SETTINGS = CONFIG_SERVIDORES + "/{nome_servidor}/settings"
 
 # Sinonimos
 CONFIG_SINONIMOS_LINGUAGENS = CONFIG_SINONIMOS + "/linguagens"

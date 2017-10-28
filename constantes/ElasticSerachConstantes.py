@@ -1,9 +1,9 @@
 """
 @project ensepro
-@since 20/07/2017
+@since 18/10/2017
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
 
-from .Sparql import consular
-
+INDEX_NAME = "index_name"
+INDEX_TYPE = "index_type"

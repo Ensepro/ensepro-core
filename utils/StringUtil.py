@@ -20,10 +20,10 @@ def isEmpty(string):
 
 
 # TODO: revisar
-def removeAccentuation(texto):
+def remove_accentuation(texto):
     return ''.join((c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn'))
 
-def hasAccentuation(word):
+def has_accentuation(word):
     return not isascii(word)
 
 

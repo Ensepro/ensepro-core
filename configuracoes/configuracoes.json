@@ -15,21 +15,19 @@
         ]
     },
     "servidores": {
-        "virtuoso": {
-            "endpoint": "http://127.0.0.1:8890",
-            "servicos": {
-                "consulta_sparql": "/sparql"
-            },
-            "queries": {
-                "subject": "../arquivos/queries_sparql/subject.sparql",
-                "predicate": "../arquivos/queries_sparql/predicate.sparql",
-                "object": "../arquivos/queries_sparql/object.sparql"
-            }
-        },
         "palavras": {
-            "endpoint": "http://127.0.0.1:8099",
+            "endpoint": "http://127.0.0.1",
+            "porta":"8099",
             "servicos": {
                 "analisar_frase": "/palavras/analisar/?frase={}"
+            }
+        },
+        "elastic_search":{
+            "endpoint": "127.0.0.1",
+            "porta":"9200",
+            "settings":{
+                "index_name": "triples",
+                "index_type": "triple"
             }
         }
     },
@@ -108,5 +106,6 @@
         "conseguir": {
             "tipo": "consulta"
         }
-    }
+    },
+    "log" : "error"
 }

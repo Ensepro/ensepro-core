@@ -8,46 +8,48 @@
 import tipofrases
 from utils import FraseUtil
 from utils import StringUtil
-from constantes.TipoFrasesConstantes import NUMERO_PALAVRA
+from constantes.TipoFrasesConstantes import NUMERO_PALAVRA, TIPO_FRASE
 from constantes.FraseConstantes import *
 from conversores import MakeJsonSerializable
 
 
 class Frase(object):
+
     def __init__(self, *args, **kwargs):
         self.palavras = args[0]
-        self._palavrasComPalavraOriginalNaoVazia = None
-        self._tipo = None
-        self._palavrasRelevantes = None
-        self._possuiLocucaoVerbal = None
-        self._vozAtiva = None
+        self.id = args[1]
+        self.__palavrasComPalavraOriginalNaoVazia = None
+        self.__tipo = None
+        self.__palavrasRelevantes = None
+        self.__possuiLocucaoVerbal = None
+        self.__vozAtiva = None
 
     def obterTipoFrase(self):
-        if (self._tipo is None):
-            self._obterTipoFrase()
-        return self._tipo
+        if (self.__tipo is None):
+            self.__obterTipoFrase()
+        return self.__tipo
 
-    def _obterTipoFrase(self):
-        self._tipo = tipofrases.getTipoFrase(self)
+    def __obterTipoFrase(self):
+        self.__tipo = tipofrases.getTipoFrase(self)
 
     def obterPalavrasRelevantes(self):
         """
         Retorna uma lista com as palavras relevantes da frase.
         :return:
         """
-        if (self._palavrasRelevantes is None):
-            self._obterPalavrasRelevantes()
-        return self._palavrasRelevantes
+        if (self.__palavrasRelevantes is None):
+            self.__obterPalavrasRelevantes()
+        return self.__palavrasRelevantes
 
-    def _obterPalavrasRelevantes(self):
+    def __obterPalavrasRelevantes(self):
         """
         Cria a lista de palavras relevantes
         """
 
         # Remove palavras que não devem ser consideradas relevantes
-        self._palavrasRelevantes = [palavra for palavra in self.palavras if self._isPalavraRelevante(palavra)]
+        self.__palavrasRelevantes = [palavra for palavra in self.palavras if self.__isPalavraRelevante(palavra)]
 
-    def _isPalavraRelevante(self, palavra):
+    def __isPalavraRelevante(self, palavra):
         """
         Verifica se a palavra é uma palavra relevante ou não.
         :param palavra: Palavra a ser verificada.
@@ -84,18 +86,18 @@ class Frase(object):
         Verifica se a frase possui locução verbal.
         :return:
         """
-        if (self._possuiLocucaoVerbal is None):
-            self._verificarLocucaoVerbal()
-        return self._possuiLocucaoVerbal
+        if (self.__possuiLocucaoVerbal is None):
+            self.__verificarLocucaoVerbal()
+        return self.__possuiLocucaoVerbal
 
-    def _verificarLocucaoVerbal(self):
+    def __verificarLocucaoVerbal(self):
         """
         Verifica se existe locução verbal, se existir, cria uma lista com os verbos da locução verbal.
         :return:
         """
         verbos = set()
         size = len(self.obterPalavrasComPalavraOriginalNaoVazia()) - 1
-        self._possuiLocucaoVerbal = {LOCUCAO_VERBAL_POSSUI: False}
+        self.__possuiLocucaoVerbal = {LOCUCAO_VERBAL_POSSUI: False}
 
         for i in range(size):
             if self.obterPalavrasComPalavraOriginalNaoVazia()[i].isVerbo() and self.obterPalavrasComPalavraOriginalNaoVazia()[i+1].isVerbo():
@@ -103,7 +105,7 @@ class Frase(object):
                 verbos.add(self.obterPalavrasComPalavraOriginalNaoVazia()[i+1])
 
         if len(verbos) > 0:
-            self._possuiLocucaoVerbal = {
+            self.__possuiLocucaoVerbal = {
                                             LOCUCAO_VERBAL_POSSUI: True,
                                             LOCUCAO_VERBAL_VERBOS: list(verbos)
                                         }
@@ -113,16 +115,16 @@ class Frase(object):
         Verifica se a frase está na voz ATIVA ou PASSIVA.
         :return:
         """
-        if (self._vozAtiva is None):
-            self._isVozAtiva()
-        return self._vozAtiva
+        if (self.__vozAtiva is None):
+            self.__isVozAtiva()
+        return self.__vozAtiva
 
-    def _isVozAtiva(self):
+    def __isVozAtiva(self):
         """
         Se existir uma tagInicial que tem o padrão da REGEX_VOZ_PASSIVA então a frase está na voz passiva.
         :return:
         """
-        self._vozAtiva = len([palavra for palavra in self.palavras if StringUtil.regexExistIn(REGEX_VOZ_PASSIVA, palavra.tagInicial)]) == 0
+        self.__vozAtiva = len([palavra for palavra in self.palavras if StringUtil.regexExistIn(REGEX_VOZ_PASSIVA, palavra.tagInicial)]) == 0
 
     def obterPalavrasComPalavraOriginalNaoVazia(self):
         """
@@ -130,12 +132,12 @@ class Frase(object):
         :param frase:
         :return:
         """
-        if (self._palavrasComPalavraOriginalNaoVazia is None):
-            self._obterPalavrasComPalavraOriginalNaoVazia()
-        return self._palavrasComPalavraOriginalNaoVazia
+        if (self.__palavrasComPalavraOriginalNaoVazia is None):
+            self.__obterPalavrasComPalavraOriginalNaoVazia()
+        return self.__palavrasComPalavraOriginalNaoVazia
 
-    def _obterPalavrasComPalavraOriginalNaoVazia(self):
-        self._palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
+    def __obterPalavrasComPalavraOriginalNaoVazia(self):
+        self.__palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
 
     def isQuestao(self):
         """
@@ -144,10 +146,15 @@ class Frase(object):
         """
         return self.palavras[INDICE_VALIDA_QUESTAO].tagInicial.startswith("QUE")
 
+    def isConsulta(self):
+        if self.obterTipoFrase():
+            return self.obterTipoFrase()[TIPO_FRASE] == "consulta"
+        return False
+
     def to_json(self):
         return self.__dict__
 
     @classmethod
-    def fraseFromJson(cls, jsonFrase):
+    def fraseFromJson(cls, jsonFrase, fraseId):
         palavras = FraseUtil.palavrasFromJson(jsonFrase)
-        return cls(palavras)
+        return cls(palavras, fraseId)
