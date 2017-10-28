@@ -14,10 +14,12 @@ def processarFrase(frase: Frase):
     possuiLocucaoVerbal = frase.possuiLocucaoVerbal()
     vozAtiva = frase.isVozAtiva()
     palavrasRelevantes = frase.obterPalavrasRelevantes()
+    adjuntosComplementos = frase.getAdjuntosComplementos()
 
     return {
         TIPO_FRASE: fraseTipo,
         PALAVRAS_RELEVANTES: palavrasRelevantes,
         LOCUCAO_VERBAL: possuiLocucaoVerbal,
-        VOZ_ATIVA: vozAtiva
+        VOZ_ATIVA: vozAtiva,
+        ADJUNTO_COMPLEMENTO: adjuntosComplementos
     }

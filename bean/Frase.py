@@ -7,6 +7,8 @@
 
 import tipofrases
 from utils import FraseUtil
+from utils.FraseUtil import get_dn, get_nucluo
+from utils.FraseTreeUtil import get_sub_tree, get_up_tree
 from utils import StringUtil
 from constantes.TipoFrasesConstantes import NUMERO_PALAVRA, TIPO_FRASE
 from constantes.FraseConstantes import *
@@ -23,6 +25,7 @@ class Frase(object):
         self.__palavrasRelevantes = None
         self.__possuiLocucaoVerbal = None
         self.__vozAtiva = None
+        self.__adjuntos_complementos = None
 
     def obterTipoFrase(self):
         if (self.__tipo is None):
@@ -138,6 +141,46 @@ class Frase(object):
 
     def __obterPalavrasComPalavraOriginalNaoVazia(self):
         self.__palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
+
+
+    def getAdjuntosComplementos(self):
+        if self.__adjuntos_complementos is None:
+            self.__adjuntos_complementos = []
+            self.__getAdjuntosComplementos(self)
+
+        return self.__adjuntos_complementos
+
+    def __getAdjuntosComplementos(self, frase):
+        dn = get_dn(frase)
+        if not dn:
+            return
+        nivel_superior = get_up_tree(frase, dn)
+
+        if not nivel_superior:
+            return
+
+        nivel_superior_tree = get_sub_tree(frase, nivel_superior)
+        frase_nivel_superior = Frase(nivel_superior_tree, frase.id)
+
+        if not frase_nivel_superior:
+            return
+
+        nivel_dn_tree = get_sub_tree(frase, dn)
+        frase_nivel_dn = Frase(nivel_dn_tree, frase.id)
+
+        if not frase_nivel_dn:
+            return
+
+        adjunto = get_nucluo(frase_nivel_superior)
+        complemento = get_nucluo(frase_nivel_dn)
+
+        self.__adjuntos_complementos.append({
+            "adjunto": adjunto,
+            "complemento": complemento
+        })
+
+        self.__getAdjuntosComplementos(frase_nivel_dn)
+
 
     def isQuestao(self):
         """

@@ -59,13 +59,15 @@ class Ensepro(object):
              "Tipo: {tipoFrase}\n\t"
              "Palavras Relevantes: {relevantes}\n\t"
              "Voz Ativa: {voz}\n\t"
-             "Locução Verbal: {locucao}\n"
+             "Locução Verbal: {locucao}\n\t"
+             "Complementos Nominais: {complementos_nominais}\n"
                 .format(
                     fraseTexto=self.__frases[frase.id-1],
                     tipoFrase=frase.obterTipoFrase()[TIPO_FRASE],
                     relevantes=str(frase.obterPalavrasRelevantes()),
                     voz=str(frase.isVozAtiva()),
-                    locucao=str(frase.possuiLocucaoVerbal())
+                    locucao=str(frase.possuiLocucaoVerbal()),
+                    complementos_nominais=frase.getAdjuntosComplementos()
                 )
             )
 
@@ -90,12 +92,12 @@ class Ensepro(object):
     def executar(self):
         numFrases = len(self.__frases)
         info("Enspero - iniciando processamento das frases[{}].".format(numFrases))
-
+        frases = []
         for index in range(numFrases):
             info("Frase{id} - Ensepro - processando frase[{id}]: {frase}".format(id=index+1, frase=self.__frases[index]))
 
             frase = self.analisarFrase(self.__frases[index], (index) + 1)
-
+            frases.append(frase)
             if not self.__isFraseValida(frase):
                 info("Frase{id} - Ensepro - frase inválida!")
                 continue
@@ -113,6 +115,8 @@ class Ensepro(object):
 
             ElasticSearchUtil.search(fraseProcessada, frase.id)
             info("Frase{id} - Ensepro - Frase processada com sucesso.".format(id=frase.id))
+
+        return frases
 
 
 

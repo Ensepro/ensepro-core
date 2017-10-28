@@ -45,3 +45,26 @@ def removePalavrasSemPalavraOriginal(palavras: list):
     :return:
     """
     return [palavra for palavra in palavras if not isEmpty(palavra.palavraOriginal)]
+
+
+
+__nucleos = ["H:n", "H:prop", "DP:prop", "DN:adj"]
+__DNs = ["DN:adj", "DN:np", "DN:pp"]
+
+def get_nucluo(frase):
+
+    for nucleo in __nucleos:
+        for palavra in frase.palavras:
+            if nucleo in palavra.tagInicial:
+                return palavra
+
+    return None
+
+def get_dn(frase):
+
+    for dn in __DNs:
+        for palavra in frase.palavras[1:]:
+            if dn in palavra.tagInicial:
+                return palavra
+
+    return None
