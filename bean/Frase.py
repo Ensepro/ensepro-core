@@ -175,7 +175,7 @@ class Frase(object):
         complemento = get_nucluo(frase_nivel_dn)
 
         self.__adjuntos_complementos.append({
-            "adjunto": adjunto,
+            "nome": adjunto,
             "complemento": complemento
         })
 

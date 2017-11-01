@@ -21,5 +21,5 @@ def processarFrase(frase: Frase):
         PALAVRAS_RELEVANTES: palavrasRelevantes,
         LOCUCAO_VERBAL: possuiLocucaoVerbal,
         VOZ_ATIVA: vozAtiva,
-        ADJUNTO_COMPLEMENTO: adjuntosComplementos
+        NOME_COMPLEMENTO: adjuntosComplementos
     }

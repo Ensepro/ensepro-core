@@ -74,20 +74,30 @@ class Ensepro(object):
 
     def __salvarFrase(self, frase : Frase):
         info("Frase{id} - Ensepro - salvando dados da frase em arquivo json.".format(id=frase.id))
-        toJson = {}
-        toJson["fraseOriginal"] = self.__frases[frase.id-1]
-        toJson["frase"] = frase
+        to_json = {}
+        to_json["fraseOriginal"] = self.__frases[frase.id-1]
+        to_json["frase"] = frase
         #a= [ x for x in range(10) ]
 
-        simpleJson = {}
-        simpleJson["1.fraseOriginal"] = self.__frases[frase.id-1]
-        simpleJson["2.tipo"] = frase.obterTipoFrase()[TIPO_FRASE]
-        simpleJson["3.palavrasRelevantes"] = [palavra.palavraOriginal for palavra in frase.obterPalavrasRelevantes()]
-        simpleJson["4.voz"] = "Ativa" if frase.isVozAtiva() else "Passiva"
-        simpleJson["5.locucaoVerbal"] = [palavra.palavraOriginal for palavra in frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS]] if frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI] else False
+        simple_json = {}
+        simple_json["1.fraseOriginal"] = self.__frases[frase.id-1]
+        simple_json["2.tipo"] = frase.obterTipoFrase()[TIPO_FRASE]
+        simple_json["3.palavrasRelevantes"] = [palavra.palavraOriginal for palavra in frase.obterPalavrasRelevantes()]
+        simple_json["4.voz"] = "Ativa" if frase.isVozAtiva() else "Passiva"
+        simple_json["5.locucaoVerbal"] = [palavra.palavraOriginal for palavra in frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_VERBOS]] if frase.possuiLocucaoVerbal()[LOCUCAO_VERBAL_POSSUI] else False
 
-        save_to_json("frase{}_dados_completo.json".format(frase.id), toJson)
-        save_to_json("frase{}_dados_resumido.json".format(frase.id), simpleJson)
+        complemento_nominal_to_json = []
+        for nome_complemento in frase.getAdjuntosComplementos():
+            complemento_nominal_to_json.append({
+                "complemento": nome_complemento["complemento"].palavraOriginal,
+                "nome": nome_complemento["nome"].palavraOriginal
+            })
+
+
+        simple_json["6.complementos_nominais"] = complemento_nominal_to_json
+
+        save_to_json("frase{}_dados_completo.json".format(frase.id), to_json)
+        save_to_json("frase{}_dados_resumido.json".format(frase.id), simple_json)
 
     def executar(self):
         numFrases = len(self.__frases)
