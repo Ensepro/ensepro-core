@@ -25,7 +25,7 @@ class Frase(object):
         self.__palavrasRelevantes = None
         self.__possuiLocucaoVerbal = None
         self.__vozAtiva = None
-        self.__adjuntos_complementos = None
+        self.__complementos_nominais = None
 
     def obterTipoFrase(self):
         if (self.__tipo is None):
@@ -144,42 +144,17 @@ class Frase(object):
 
 
     def getAdjuntosComplementos(self):
-        if self.__adjuntos_complementos is None:
-            self.__adjuntos_complementos = []
-            self.__getAdjuntosComplementos(self)
+        if self.__complementos_nominais is None:
+            self.__getAdjuntosComplementos()
 
-        return self.__adjuntos_complementos
+        return self.__complementos_nominais
 
-    def __getAdjuntosComplementos(self, frase):
-        dn = get_dn(frase)
-        if not dn:
-            return
-        nivel_superior = get_up_tree(frase, dn)
+    def __getAdjuntosComplementos(self):
 
-        if not nivel_superior:
-            return
+        from complemento_nominal.complemento_nominal import complementos_nominais
 
-        nivel_superior_tree = get_sub_tree(frase, nivel_superior)
-        frase_nivel_superior = Frase(nivel_superior_tree, frase.id)
+        self.__complementos_nominais = complementos_nominais(self)
 
-        if not frase_nivel_superior:
-            return
-
-        nivel_dn_tree = get_sub_tree(frase, dn)
-        frase_nivel_dn = Frase(nivel_dn_tree, frase.id)
-
-        if not frase_nivel_dn:
-            return
-
-        adjunto = get_nucluo(frase_nivel_superior)
-        complemento = get_nucluo(frase_nivel_dn)
-
-        self.__adjuntos_complementos.append({
-            "nome": adjunto,
-            "complemento": complemento
-        })
-
-        self.__getAdjuntosComplementos(frase_nivel_dn)
 
 
     def isQuestao(self):

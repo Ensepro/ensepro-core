@@ -90,13 +90,13 @@ def isNoTerminal(frase, numero: int):
     return False
 
 
-def isNoNaoTerminal(self, numero: int):
+def isNoNaoTerminal(frase, numero: int):
     """
     Verifica se uma palavra é um nó não terminal.
     :param numero: Número(id) da palavra a ser verificada.
     :return: <True> se for um nó não terminal. <False> caso for um nó não terminal.
     """
-    return not self.isNoTerminal(numero)
+    return not isNoTerminal(frase, numero)
 
 
 def __montaArvore(frase, nivelAnterior, arvore, lista, i):

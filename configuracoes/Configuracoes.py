@@ -50,7 +50,7 @@ def getTipoFrases():
     return getValue(CONFIG_TIPO_FRASES)
 
 def getPathArquivoFrases():
-    return getValue(CONFIG_ARQUIVO_FRASES)
+    return ENSEPRO_PATH + getValue(CONFIG_ARQUIVO_FRASES)
 
 def getRegexPalavraRelevante():
     return getValue(CONFIG_REGEX_PALAVRA_RELEVENTE)
