@@ -1,6 +1,6 @@
 {
     "frases": {
-        "arquivo_frases": "../arquivos/frases/frases.txt",
+        "arquivo_frases": "arquivos/frases/frases.txt",
         "regex_palavra_relevante": ":(adj|n|prop)$",
         "regex_palavra_adjetivo": ":adj$",
         "regex_palavra_substantivo": ":n$",
@@ -17,15 +17,15 @@
     "servidores": {
         "palavras": {
             "endpoint": "http://127.0.0.1",
-            "porta":"8099",
+            "porta": "8099",
             "servicos": {
                 "analisar_frase": "/palavras/analisar/?frase={}"
             }
         },
-        "elastic_search":{
+        "elastic_search": {
             "endpoint": "127.0.0.1",
-            "porta":"9200",
-            "settings":{
+            "porta": "9200",
+            "settings": {
                 "index_name": "triples",
                 "index_type": "triple"
             }
@@ -107,5 +107,5 @@
             "tipo": "consulta"
         }
     },
-    "log" : "error"
+    "log": "error"
 }

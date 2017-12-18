@@ -7,6 +7,8 @@
 
 import tipofrases
 from utils import FraseUtil
+from utils.FraseUtil import get_dn, get_nucluo
+from utils.FraseTreeUtil import get_sub_tree, get_up_tree
 from utils import StringUtil
 from constantes.TipoFrasesConstantes import NUMERO_PALAVRA, TIPO_FRASE
 from constantes.FraseConstantes import *
@@ -23,6 +25,7 @@ class Frase(object):
         self.__palavrasRelevantes = None
         self.__possuiLocucaoVerbal = None
         self.__vozAtiva = None
+        self.__complementos_nominais = None
 
     def obterTipoFrase(self):
         if (self.__tipo is None):
@@ -138,6 +141,21 @@ class Frase(object):
 
     def __obterPalavrasComPalavraOriginalNaoVazia(self):
         self.__palavrasComPalavraOriginalNaoVazia = FraseUtil.removePalavrasSemPalavraOriginal(self.palavras)
+
+
+    def getAdjuntosComplementos(self):
+        if self.__complementos_nominais is None:
+            self.__getAdjuntosComplementos()
+
+        return self.__complementos_nominais
+
+    def __getAdjuntosComplementos(self):
+
+        from complemento_nominal.complemento_nominal import complementos_nominais
+
+        self.__complementos_nominais = complementos_nominais(self)
+
+
 
     def isQuestao(self):
         """

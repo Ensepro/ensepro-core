@@ -47,6 +47,10 @@ class QueryBuilder(object):
         for field in self.values:
             self.values[field].append(value)
 
+    def add_list_value(self, field, list_values):
+        for value in list_values:
+            self.add_value(field, value)
+
     def add_value(self, field, value):
         field = self.__normalize(field)
         value = self.__normalize(value)
