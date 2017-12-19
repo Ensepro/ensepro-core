@@ -9,20 +9,21 @@ from bean.Frase import Frase
 
 
 def complementos_nominais(frase):
-    lista = []
+    complementos_nominais = []
     for palavra in frase.palavras:
         execute = DNs[palavra.tagInicial] if palavra.tagInicial in DNs else None
         if(execute):
             element = execute(frase, palavra)
-            lista.append(element)
+            complementos_nominais.append(element)
 
-    return lista
+    return complementos_nominais
 
 
 def dn_adj(frase, palavra):
-    complemento = palavra
     arvore_que_estou = get_arvore_que_estou(frase, palavra)
     nome = find_nucleo_arvore(arvore_que_estou)
+
+    complemento = palavra
 
     return build_response(nome, complemento)
 
@@ -30,20 +31,24 @@ def dn_prop(frase, palavra):
     return dn_adj(frase, palavra)
 
 def dn_np(frase, palavra):
-    minha_arvore = get_minha_arvore(frase, palavra)
-    minha_arvore_nucleo = find_nucleo_arvore(minha_arvore)
-
     arvore_que_estou = get_arvore_que_estou(frase, palavra)
     arvore_que_estou_nucleo = find_nucleo_arvore(arvore_que_estou)
+    nome = arvore_que_estou_nucleo
 
-    return build_response(arvore_que_estou_nucleo, minha_arvore_nucleo)
+    minha_arvore = get_minha_arvore(frase, palavra)
+    minha_arvore_nucleo = find_nucleo_arvore(minha_arvore)
+    complemento = minha_arvore_nucleo
+
+    return build_response(nome, complemento)
 
 def dn_pp(frase, palavra):
     arvore_que_estou = get_arvore_que_estou(frase, palavra)
     arvore_que_estou_nucleo = find_nucleo_arvore(arvore_que_estou)
-    arvore_no_nao_terminal_nucleo = get_nucleo_sub_arvores(arvore_que_estou)
+    nome = arvore_que_estou_nucleo
 
-    return build_response(arvore_que_estou_nucleo, arvore_no_nao_terminal_nucleo)
+    complemento = get_nucleo_sub_arvores(arvore_que_estou)
+
+    return build_response(nome, complemento)
 
 
 NUCLEOS = ["H:n", "H:prop"]
