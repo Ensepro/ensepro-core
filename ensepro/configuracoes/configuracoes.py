@@ -5,19 +5,30 @@
 
 """
 import json
-from ensepro.commons.commons import FILE_READ_ONLY, UTF_8
-
-ARQUIVO_CONFIGURACOES = "./configs.json"
+from ensepro.constantes import ConfiguracoesConstantes, StringConstantes
 
 
 def __carregar_configuracoes():
     global __configs
-    __configs = json.loads(open(ARQUIVO_CONFIGURACOES, FILE_READ_ONLY, encoding=UTF_8).read())
+    __configs = json.loads(open(
+            file=ConfiguracoesConstantes.ARQUIVO_CONFIGURACOES,
+            mode=StringConstantes.FILE_READ_ONLY,
+            encoding=StringConstantes.UTF_8
+    ).read())
 
 
-def get_config(path):
+def __get_config(path):
     value = __configs
     _path = path.split(".")
     for key in _path:
         value = value[key]
     return value
+
+
+def get_config(path, params=None):
+    if params:
+        path.format(params)
+    return __get_config(path)
+
+
+__carregar_configuracoes()

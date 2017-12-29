@@ -1,6 +1,6 @@
 {
     "frases": {
-        "arquivo_frases": "arquivos/frases/frases.txt",
+        "arquivo": "arquivos/frases/frases.txt",
         "regex": {
             "palavra_relevante": ":(adj|n|prop)$",
             "palavra_adjetivo": ":adj$",

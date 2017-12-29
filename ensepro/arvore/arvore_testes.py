@@ -6,7 +6,6 @@
 """
 
 from ensepro.arvore.arvore import Arvore
-from ensepro.arvore.arvore import Node
 from nltk.tree import Tree
 
 arvore = Arvore()
