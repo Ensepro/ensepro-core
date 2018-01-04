@@ -21,7 +21,7 @@
             "endpoint": "http://127.0.0.1",
             "porta": "8099",
             "servicos": {
-                "analisar_frase": "/palavras/analisar/?frase={}"
+                "analisar_frase": "/palavras/analisar/?frase={frase}"
             }
         },
         "elastic_search": {

@@ -4,3 +4,5 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+
+from .configuracoes import get_config

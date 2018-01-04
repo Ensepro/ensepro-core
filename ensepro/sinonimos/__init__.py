@@ -5,4 +5,5 @@
 
 """
 
-from . import palavras_service
+from .sinonimos import get_sinonimos
+from .sinonimo import Sinonimo

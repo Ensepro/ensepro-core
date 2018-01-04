@@ -33,8 +33,6 @@ def loadParams():
     ensepro.addParam("tree", "-tree" in sys.argv)
 
 
-
-
 def carregarFrases():
     with open(configuracoes.getPathArquivoFrases(), FILE_READ_ONLY, encoding=UTF_8) as frases:
         for frase in frases:
@@ -44,7 +42,7 @@ def carregarFrases():
 
             ensepro.addFrase(frase)
 
-loadParams()
 
+loadParams()
 
 ensepro.executar()

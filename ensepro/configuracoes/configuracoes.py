@@ -1,6 +1,6 @@
 """
 @project ensepro
-@since 18/12/2017
+@since 04/01/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
@@ -25,10 +25,24 @@ def __get_config(path):
     return value
 
 
-def get_config(path, params=None):
-    if params:
-        path.format(params)
-    return __get_config(path)
+def get_config(path: str, path_params=None, config_params=None) -> str:
+    """
+    Obtém a configuração (<i>path</i>) do arquivo de configuração.
+    :param path: caminho da configuração no arquivo json, separada por ponto('.').
+    :param path_params: mapa com os parametros necessários para preencher o caminho da configuração.
+    :param config_params: mapa com os parametros necessários para completar a configuração obtida
+    :return:
+    """
+    # TODO: #ADD_LOG
+    if path_params:
+        path = path.format_map(path_params)
+
+    config = __get_config(path)
+
+    if config_params:
+        return config.format_map(config_params)
+
+    return config
 
 
 __carregar_configuracoes()

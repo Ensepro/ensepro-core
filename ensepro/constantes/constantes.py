@@ -6,6 +6,10 @@
 """
 
 
+class SinonimosConstantes:
+    LEMMAS_LANG = "por"
+
+
 class StringConstantes:
     UTF_8 = "utf-8"
     BREAK_LINE = "\n"
@@ -24,7 +28,7 @@ class ConfiguracoesConstantes:
     SERVIDOR_ELASTIC_SEARCH = "elastic_search"
 
     # Primeiro nivel
-    LOG = "log"
+    LOG = "logger"
     FRASES = "frases"
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
@@ -54,3 +58,13 @@ class ConfiguracoesConstantes:
 
     # Sinonimos
     SINONIMOS_LINGUAGENS = SINONIMOS + ".linguagens"
+
+
+class PalavrasServidorConstantes:
+    SERVIDOR_NOME = "palavras"
+
+    ANALISAR_FRASE_PARAM = "frase"
+    SERVICO_ANALISAR_FRASE = ConfiguracoesConstantes.SERVICO.format(
+            servidor=SERVIDOR_NOME,
+            nome_servico="analisar_frase"
+    )
