@@ -49,6 +49,9 @@ class ConfiguracoesConstantes:
     REGEX_PALAVRA_PREPOSICAO = REGEX + ".palavra_preposicao"
     REGEX_PALAVRA_SUBSTANTIVO = REGEX + ".palavra_substantivo"
 
+    # Lista de verbos de ligação
+    VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
+    
     # Serviços
     PORTA = SERVIDOR + ".porta"
     ENDPOINT = SERVIDOR + ".endpoint"

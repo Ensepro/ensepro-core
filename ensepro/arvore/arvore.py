@@ -4,6 +4,10 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+
+from nltk.tree import Tree
+
+
 class Arvore:
 
     def __init__(self):
@@ -14,6 +18,7 @@ class Arvore:
         return self.__nodes
 
     def adicionar_node(self, id, value, id_pai=None):
+        # TODO: #ADD_LOG
         node = Node(id, value)
 
         if id_pai:
@@ -24,6 +29,9 @@ class Arvore:
         self[id] = node
         return node
 
+    def to_nltk_tree(self, brackets="[]") -> Tree:
+        return Tree.fromstring(str(self), brackets=brackets)
+
     def __getitem__(self, key):
         return self.__nodes[key]
 
@@ -33,10 +41,10 @@ class Arvore:
     def __str__(self):
         to_string = ""
         for node in self.__nodes.values():
-            if(not node.pai):
+            if (not node.pai):
                 to_string += str(node)
 
-        return "( {})".format(to_string)
+        return "[ {}]".format(to_string)
 
 
 class Node:
@@ -44,7 +52,7 @@ class Node:
         self.__id = id
         self.__valor = value
         self.__pai = pai
-        self.__nivel = (pai.nivel+1) if pai else 0
+        self.__nivel = (pai.nivel + 1) if pai else 0
         self.__filhos = []
 
     @property
@@ -88,4 +96,4 @@ class Node:
             return "{} ".format(str_pai)
 
         str_filhos = self.__str_filhos()
-        return "( {0} {1}) ".format(str_pai, str_filhos)
+        return "[ {0} {1}] ".format(str_pai, str_filhos)
