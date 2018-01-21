@@ -32,11 +32,11 @@ class ConfiguracoesConstantes:
     FRASES = "frases"
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
-    TIPO_FRASES = "tipos_frases"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
     SERVIDOR = SERVIDORES + ".{servidor}"
+    LOG_MODULOS = LOG + ".modulos"
 
     # Arquivo que contém as frases
     ARQUIVO_FRASES = FRASES + ".arquivo"
@@ -51,7 +51,7 @@ class ConfiguracoesConstantes:
 
     # Lista de verbos de ligação
     VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
-    
+
     # Serviços
     PORTA = SERVIDOR + ".porta"
     ENDPOINT = SERVIDOR + ".endpoint"
@@ -71,3 +71,40 @@ class PalavrasServidorConstantes:
             servidor=SERVIDOR_NOME,
             nome_servico="analisar_frase"
     )
+
+
+class LoggerConstantes:
+    # Keys
+    LOGGER = ConfiguracoesConstantes.LOG
+    MODULOS = ConfiguracoesConstantes.LOG_MODULOS
+    NIVEL_LOG = ".nivel"
+
+    # Arquivo que será salvo os logs
+    NOME_DO_ARQUIVO = LOGGER + ".nome_arquivo"
+
+    # Formato que a informação do log será exibida
+    FORMATO = LOGGER + ".formato"
+
+    # Lista de modulos
+    MODULO_NLU = "nlu"
+    MODULO_ARVORE = "arvore"
+    MODULO_SINONIMOS = "sinonimos"
+    MODULO_TIPO_FRASES = "nlu.tipo_frases"
+    MODULO_CONFIGURACOES = "configuracoes"
+    MODULO_COMPLEMENTOS_NOMINAIS = "nlu.complementos_nominais"
+
+    # Nivel de logs por modulo
+    NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG
+
+    # Valor para utilizar no logging.getLogger
+    GET_LOGGER_MODULO = "ensepro.{modulo}"
+
+    # Default logger
+
+    @classmethod
+    def get_logger(cls, modulo):
+        import logging
+        from ensepro import configuracoes
+        logger = logging.getLogger(cls.GET_LOGGER_MODULO.format(modulo=modulo))
+        logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
+        return logger

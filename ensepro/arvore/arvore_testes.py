@@ -6,8 +6,11 @@
 """
 
 from ensepro.arvore.arvore import Arvore
-from ensepro.nlu.palavra import Palavra
+from ensepro.classes.palavra import Palavra
+import os
 
+scriptDirectory = os.path.dirname(os.path.realpath(__file__))
+print(scriptDirectory)
 dados_palavra = {
     "tags": ["tag1", "tag2", "tag3"],
     "nivel": "2",

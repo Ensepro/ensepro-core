@@ -36,7 +36,7 @@ class Palavra:
         return str(self) == str(other)
 
     def __str__(self):
-        return ":{0}::{1}:".format(self.tag_inicial, self.palavra_original)
+        return "|{0}|>|{1}|".format(self.tag_inicial, self.palavra_original)
 
     def as_text(self) -> str:
         return \

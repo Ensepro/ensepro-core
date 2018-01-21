@@ -5,7 +5,20 @@
 
 """
 import json
-from ensepro.constantes import ConfiguracoesConstantes, StringConstantes
+import logging
+from ensepro.constantes import ConfiguracoesConstantes, StringConstantes, LoggerConstantes
+
+
+def __init_logger():
+    global logger
+
+    logging.basicConfig(
+            filename=__get_config(LoggerConstantes.NOME_DO_ARQUIVO),
+            level=logging.INFO,
+            format=__get_config(LoggerConstantes.FORMATO)
+    )
+    logger = logging.getLogger(LoggerConstantes.GET_LOGGER_MODULO.format(modulo=LoggerConstantes.MODULO_CONFIGURACOES))
+    logger.setLevel(logging.getLevelName(__get_config(LoggerConstantes.NIVEL_LOG_MODULO.format(modulo=LoggerConstantes.MODULO_CONFIGURACOES))))
 
 
 def __carregar_configuracoes():
@@ -33,7 +46,7 @@ def get_config(path: str, path_params=None, config_params=None) -> str:
     :param config_params: mapa com os parametros necessários para completar a configuração obtida
     :return:
     """
-    # TODO: #ADD_LOG
+    logger.debug("Obtendo configuração: [path=%s, path_params=%s, config_params=%s]", path, path_params, config_params)
     if path_params:
         path = path.format_map(path_params)
 
@@ -42,7 +55,9 @@ def get_config(path: str, path_params=None, config_params=None) -> str:
     if config_params:
         return config.format_map(config_params)
 
+    logger.info("Configuração obtida: [path=%s] = %s", path, config)
     return config
 
 
 __carregar_configuracoes()
+__init_logger()

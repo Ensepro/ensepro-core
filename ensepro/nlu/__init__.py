@@ -5,5 +5,5 @@
 
 """
 
-from . import frase
-from . import palavra
+from .complementos_nominais import complementos_nominais
+from .tipo_frases import tipo_frases

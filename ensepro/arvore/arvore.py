@@ -6,6 +6,9 @@
 """
 
 from nltk.tree import Tree
+from ensepro.constantes.constantes import LoggerConstantes
+
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ARVORE)
 
 
 class Arvore:
@@ -18,7 +21,7 @@ class Arvore:
         return self.__nodes
 
     def adicionar_node(self, id, value, id_pai=None):
-        # TODO: #ADD_LOG
+        logger.debug("Adicionando node: [id=%s, value=%s, id_pai=%s]", id, value, id_pai)
         node = Node(id, value)
 
         if id_pai:
@@ -81,6 +84,7 @@ class Node:
         return not self.__filhos
 
     def adicionar_filho(self, node):
+        logger.debug("Adicionando filho: [pai=%s, filho=%s]", self.id, node)
         self.__filhos.append(node)
 
     def __str_filhos(self):
