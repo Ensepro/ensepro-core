@@ -6,7 +6,7 @@
 """
 
 from nltk.tree import Tree
-from ensepro.constantes.constantes import LoggerConstantes
+from ensepro.constantes import LoggerConstantes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ARVORE)
 
@@ -19,6 +19,14 @@ class Arvore:
     @property
     def nodes(self):
         return self.__nodes
+
+    @property
+    def roots(self):
+        """
+        A(s) raiz(es) da árvore são os nodes que não possuem pais.
+        :return: Todos os nodos que são raizes.
+        """
+        return [node for node in self.nodes.values() if not node.pai]
 
     def adicionar_node(self, id, value, id_pai=None):
         logger.debug("Adicionando node: [id=%s, value=%s, id_pai=%s]", id, value, id_pai)
@@ -33,7 +41,7 @@ class Arvore:
         return node
 
     def to_nltk_tree(self, brackets="[]") -> Tree:
-        return Tree.fromstring(str(self), brackets=brackets)
+        return Tree.fromstring(str(self), brackets=brackets, remove_empty_top_bracketing=True)
 
     def __getitem__(self, key):
         return self.__nodes[key]
@@ -43,9 +51,8 @@ class Arvore:
 
     def __str__(self):
         to_string = ""
-        for node in self.__nodes.values():
-            if (not node.pai):
-                to_string += str(node)
+        for node in self.roots:
+            to_string += str(node)
 
         return "[ {}]".format(to_string)
 
@@ -95,9 +102,9 @@ class Node:
         return str_filhos
 
     def __str__(self):
-        str_pai = str(self.__valor)
+        str_this = str(self.__valor)
         if (self.is_terminal):
-            return "{} ".format(str_pai)
+            return "{} ".format(str_this)
 
         str_filhos = self.__str_filhos()
-        return "[ {0} {1}] ".format(str_pai, str_filhos)
+        return "[ {0} {1}] ".format(str_this, str_filhos)

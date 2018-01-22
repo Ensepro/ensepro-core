@@ -7,12 +7,43 @@
 
 import requests
 import ensepro.configuracoes as configuracoes
-from ensepro.constantes import PalavrasServidorConstantes as ps_consts
+from ensepro.constantes import PalavrasServidorConstantes as ps_consts, LoggerConstantes as logger_consts
+
+logger = logger_consts.get_logger(logger_consts.MODULO_PALAVRAS_SERVICE)
+
+endpoint = configuracoes.get_config(ps_consts.ENDPOINT)
+porta = configuracoes.get_config(ps_consts.PORTA)
+servico_analisar_frase = configuracoes.get_config(ps_consts.SERVICO_ANALISAR_FRASE)
 
 
 def analisar_frase(frase: str):
-    # TODO: #ADD_LOG
-    response = requests.get(
-            configuracoes.get_config(ps_consts.SERVICO_ANALISAR_FRASE, config_params={ps_consts.ANALISAR_FRASE_PARAM: frase})
-    )
+    logger.info("Analisando frase: [frase=%s]", frase)
+
+    url = __build_url([endpoint, ":", porta, servico_analisar_frase])
+    params = {"frase": frase}
+    logger.debug("[url=%s, params=%s]", url, params)
+
+    response = requests.get(url, params=params)
+    logger.info("Frase analisada: [response=%s]", response)
+
+    if (response.ok):
+        logger.debug("Response as json: [response=%s]", response.json())
+    else:
+        exception = Exception("Erro ao analisar frase: [status_code={0}, reason={1}, response_json={2}]" \
+                              "".format(response.status_code, response.reason, response.json()))
+
+        __raise_exception(exception)
+
     return response
+
+
+def __build_url(values):
+    return ''.join(values)
+
+
+def __raise_exception(ex):
+    try:
+        raise ex
+    except Exception as ex:
+        logger.exception(ex)
+        raise ex

@@ -21,7 +21,7 @@ class StringConstantes:
 
 
 class ConfiguracoesConstantes:
-    ARQUIVO_CONFIGURACOES = "./configs.json"
+    ARQUIVO_CONFIGURACOES = "configuracoes/configs.json"
 
     # Servidores
     SERVIDOR_PALAVRAS = "palavras"
@@ -67,6 +67,8 @@ class PalavrasServidorConstantes:
     SERVIDOR_NOME = "palavras"
 
     ANALISAR_FRASE_PARAM = "frase"
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+    PORTA = ConfiguracoesConstantes.PORTA.format(servidor=SERVIDOR_NOME)
     SERVICO_ANALISAR_FRASE = ConfiguracoesConstantes.SERVICO.format(
             servidor=SERVIDOR_NOME,
             nome_servico="analisar_frase"
@@ -79,19 +81,22 @@ class LoggerConstantes:
     MODULOS = ConfiguracoesConstantes.LOG_MODULOS
     NIVEL_LOG = ".nivel"
 
-    # Arquivo que será salvo os logs
+    # Configurações básicas do logger
     NOME_DO_ARQUIVO = LOGGER + ".nome_arquivo"
-
-    # Formato que a informação do log será exibida
+    MODO_DO_ARQUIVO = LOGGER + ".modo_arquivo"
     FORMATO = LOGGER + ".formato"
 
     # Lista de modulos
     MODULO_NLU = "nlu"
+    MODULO_VOZ = MODULO_NLU + ".voz"
     MODULO_ARVORE = "arvore"
+    MODULO_SERVICOS = "servicos"
     MODULO_SINONIMOS = "sinonimos"
-    MODULO_TIPO_FRASES = "nlu.tipo_frases"
+    MODULO_TIPO_FRASES = MODULO_NLU + ".tipo_frases"
     MODULO_CONFIGURACOES = "configuracoes"
-    MODULO_COMPLEMENTOS_NOMINAIS = "nlu.complementos_nominais"
+    MODULO_LOCUCAO_VERBAL = MODULO_NLU + ".locucao_verbal"
+    MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
+    MODULO_COMPLEMENTOS_NOMINAIS = MODULO_NLU + ".complementos_nominais"
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG

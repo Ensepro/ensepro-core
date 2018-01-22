@@ -15,7 +15,8 @@ def __init_logger():
     logging.basicConfig(
             filename=__get_config(LoggerConstantes.NOME_DO_ARQUIVO),
             level=logging.INFO,
-            format=__get_config(LoggerConstantes.FORMATO)
+            format=__get_config(LoggerConstantes.FORMATO),
+            filemode=__get_config(LoggerConstantes.MODO_DO_ARQUIVO),
     )
     logger = logging.getLogger(LoggerConstantes.GET_LOGGER_MODULO.format(modulo=LoggerConstantes.MODULO_CONFIGURACOES))
     logger.setLevel(logging.getLevelName(__get_config(LoggerConstantes.NIVEL_LOG_MODULO.format(modulo=LoggerConstantes.MODULO_CONFIGURACOES))))

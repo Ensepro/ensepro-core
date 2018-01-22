@@ -24,7 +24,7 @@
             "endpoint": "http://127.0.0.1",
             "porta": "8099",
             "servicos": {
-                "analisar_frase": "/palavras/analisar/?frase={frase}"
+                "analisar_frase": "/palavras/analisar/"
             }
         },
         "elastic_search": {
@@ -37,7 +37,8 @@
         }
     },
     "logger": {
-        "nome_arquivo": "../ensepro_log.log",
+        "nome_arquivo": "ensepro_log.log",
+        "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "modulos": {
             "arvore": {
@@ -51,12 +52,21 @@
                 "complementos_nominais": {
                     "nivel": "INFO"
                 },
+                "locucao_verbal": {
+                    "nivel": "INFO"
+                },
                 "tipo_frases": {
+                    "nivel": "INFO"
+                },
+                "voz": {
                     "nivel": "INFO"
                 }
             },
             "servicos": {
-                "nivel": "INFO"
+                "nivel": "INFO",
+                "palavras_service": {
+                    "nivel": "INFO"
+                }
             },
             "sinonimos": {
                 "nivel": "INFO"

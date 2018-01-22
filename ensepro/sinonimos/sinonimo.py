@@ -28,6 +28,9 @@ class Sinonimo:
     def __str__(self):
         return self.sinonimo
 
+    def __repr__(self):
+        return self.__str__()
+
     def as_text(self) -> str:
         return '.'.join([self.synset, self.classe_gramatical, self.distancia_semantica, self.sinonimo])
 

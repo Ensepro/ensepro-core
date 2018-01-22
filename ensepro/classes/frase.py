@@ -4,7 +4,6 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-from enum import Enum
 from ensepro.conversores import make_json_serializable
 
 
@@ -12,11 +11,21 @@ class Frase:
     def __init__(self, id=None, palavras=None):
         self.id = id
         self.palavras = palavras
+        self.__arvore = None
         self.__tipo = None
         self.__locucao_verbal = None
         self.__palavras_relevantes = None
         self.__voz = None
         self.__complementos_nominais = None
+
+    @property
+    def arvore(self):
+        if self.__arvore:
+            return self.__arvore
+
+        from ensepro.conversores import arvore_conversor
+        self.__arvore = arvore_conversor.from_frase(self)
+        return self.__arvore
 
     @property
     def tipo(self):
@@ -28,10 +37,11 @@ class Frase:
 
     @property
     def locucao_verbal(self):
-        # TODO verificar existencia de locucao verbal antes de retornar
-        # if self.__locucao_verbal:
-        #     return self.__locucao_verbal
-        # self.__locucao_verbal = get_locucao_verbal_1234_1234()
+        if self.__locucao_verbal:
+            return self.__locucao_verbal
+
+        from ensepro.nlu import locucao_verbal
+        self.__locucao_verbal = locucao_verbal.get(self)
         return self.__locucao_verbal
 
     @property
@@ -44,22 +54,45 @@ class Frase:
 
     @property
     def voz(self):
-        # TODO determinar se é voz ativa ou passiva antes de retornar
-        # if self.__voz:
-        #     return self.__voz
-        # self.__voz = get_voz(self)
+        if self.__voz:
+            return self.__voz
+
+        from ensepro.nlu import voz
+        self.__voz = voz.get(self)
         return self.__voz
 
     @property
     def complementos_nominais(self):
-        # TODO buscar complementações nominais antes de retornar
-        # if self.__complementos_nominais:
-        #     return self.__complementos_nominais
-        # self.__complementos_nominais = get_complementos_nominais(self)
+        if self.__complementos_nominais:
+            return self.__complementos_nominais
+
+        from ensepro.nlu import complementos_nominais
+        self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
-    def to_json(self):
-        return self.__dict__
+    def get_palavras(self, condicao):
+        """
+        Percorre a lista de palavras da frase validando a condicao passada.
+
+        :param condicao: deve ser um função que recebe uma palavra por parametro e retorna uma valor booleano [def condicao(palavra) -> bool]
+        :return: lista de palavras das quais a função 'condicao' retornou True
+        """
+        if (callable(condicao)):
+            return [palavra for palavra in self.palavras if condicao(palavra)]
+
+        raise TypeError("Parametro 'condição' deve ser uma função.")
+
+    def __to_json__(self):
+        return {
+            "id": self.id,
+            "palavras": [palavra.__to_json__() for palavra in self.palavras],
+            "arvore": str(self.__arvore),
+            "tipo": self.__tipo,
+            "locucao_verbal": self.__locucao_verbal,
+            "palavras_relevantes": [palavra.__to_json__() for palavra in self.__palavras_relevantes] if self.__palavras_relevantes else None,
+            "voz": str(self.__voz),
+            "complementos_nominais": self.__complementos_nominais
+        }
 
     def __hash__(self):
         return hash(str(self))
@@ -73,12 +106,10 @@ class Frase:
             "".format(
                     str(self.id),
                     str(self.palavras),
-                    str(self.tipo),
-                    str(self.locucao_verbal),
-                    str(self.voz)
+                    str(self.__tipo),
+                    str(self.__locucao_verbal),
+                    str(self.__voz)
             )
 
-
-class VozType(Enum):
-    ATIVA = 1
-    PASSIVA = 2
+    def __repr__(self):
+        return self.__str__

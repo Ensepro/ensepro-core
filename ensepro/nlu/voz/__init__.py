@@ -1,8 +1,8 @@
 """
 @project ensepro
-@since 18/12/2017
+@since 21/01/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
 
-from .complementos_nominais import get
+from .voz import get
