@@ -28,22 +28,15 @@ def analisar_frase(frase: str):
 
     if (response.ok):
         logger.debug("Response as json: [response=%s]", response.json())
-    else:
-        exception = Exception("Erro ao analisar frase: [status_code={0}, reason={1}, response_json={2}]" \
-                              "".format(response.status_code, response.reason, response.json()))
+        return response
 
-        __raise_exception(exception)
+    # Se respose não OK, lança exception
+    exception = Exception("Erro ao analisar frase: [status_code={0}, reason={1}, response_text={2}]" \
+                          "".format(response.status_code, response.reason, response.text))
 
-    return response
+    logger.exception(exception, exc_info=False)
+    raise exception
 
 
 def __build_url(values):
     return ''.join(values)
-
-
-def __raise_exception(ex):
-    try:
-        raise ex
-    except Exception as ex:
-        logger.exception(ex)
-        raise ex

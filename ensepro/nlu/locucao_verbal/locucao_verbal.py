@@ -17,7 +17,7 @@ def get(frase):
 
     numero_palavras = len(palavras)
     locucoes = []
-    set_locucao_verbal = set()
+    map_locucao_atual = {}
     palavra_anterior = None
 
     for index in range(numero_palavras):
@@ -25,28 +25,32 @@ def get(frase):
 
         # Se a palavra anterior e a palavra atual forem verbos, existe um locução verbal
         if palavra_anterior and palavra_anterior.is_verbo() and palavra_atual.is_verbo():
-            set_locucao_verbal.add(palavra_atual)
-            set_locucao_verbal.add(palavra_anterior)
+            map_locucao_atual[palavra_anterior.id] = palavra_anterior
+            map_locucao_atual[palavra_atual.id] = palavra_atual
             logger.debug("Locução encontrada: [palavra_atual=%s, palavra_anterior=%s]", palavra_atual, palavra_anterior)
         else:
             # Caso já tenha encontrado um locução verbal, irá adicionar a lista de locuções
-            if set_locucao_verbal:
-                locucoes.append(list(set_locucao_verbal))
+            if map_locucao_atual:
+                locucoes.append(__locucao_to_list(map_locucao_atual))
                 logger.debug("Adicionando locução verbal a lista de locuções: [locucoes=%s]", locucoes)
 
-                set_locucao_verbal = set()
+                map_locucao_atual = {}
 
             palavra_anterior = palavra_atual
 
         index += 1
 
     # Caso a última palavra seja um verbo, está última locução não terá sido adicionada a lista de locuções
-    if set_locucao_verbal:
-        locucoes.append(list(set_locucao_verbal))
+    if map_locucao_atual:
+        locucoes.append(__locucao_to_list(map_locucao_atual))
         logger.debug("Adicionando locução verbal a lista de locuções: [locucoes=%s]", locucoes)
 
     logger.info("Locuções encontradas: [locucoes=%s]", locucoes)
     return locucoes
+
+
+def __locucao_to_list(locucoes_map):
+    return [locucoes_map[id] for id in locucoes_map]
 
 
 def __condicao_palavra_original_nao_vazia(palavra) -> bool:

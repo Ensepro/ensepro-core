@@ -9,7 +9,7 @@ from ensepro.servicos import palavras_service
 from ensepro.conversores import frase_conversor
 
 
-frase = "ser ser ou não ser ser"
+frase = "Você consegue imaginar o que poderia estar errado?"
 
 
 frase_analisada = palavras_service.analisar_frase(frase)
@@ -20,10 +20,10 @@ if (not frase_analisada.ok):
 frase = frase_conversor.from_json(1, frase_analisada.json())
 
 print(frase.id)
-print([str(palavra) for palavra in frase.palavras])
-print(frase.arvore)
+# print([str(palavra) for palavra in frase.palavras])
+# print(frase.arvore)
 # print(frase.tipo)
-print(frase.voz)
+# print(frase.voz)
 print(frase.locucao_verbal)
 # print(frase.complementos_nominais)
 # print(frase)

@@ -59,7 +59,7 @@ class Palavra:
         return "{0}|{1}|".format(self.tag_inicial, self.id)
 
     def __repr__(self):
-        return self.as_text
+        return self.palavra_original
 
     @property
     def as_text(self) -> str:
