@@ -4,13 +4,11 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-
-from ensepro.arvore.arvore import Arvore
+from ensepro.arvore import Arvore
 from ensepro.classes.palavra import Palavra
-import os
 
-scriptDirectory = os.path.dirname(os.path.realpath(__file__))
-print(scriptDirectory)
+
+
 dados_palavra = {
     "tags": ["tag1", "tag2", "tag3"],
     "nivel": "2",

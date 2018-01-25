@@ -42,35 +42,97 @@
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "modulos": {
             "arvore": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             },
             "configuracoes": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             },
             "nlu": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "complementos_nominais": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "locucao_verbal": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "tipo_frases": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG",
+                    "chatterbot_helper": {
+                        "nivel": "DEBUG"
+                    }
                 },
                 "voz": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "servicos": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "palavras_service": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "sinonimos": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             }
+        }
+    },
+    "chatterbot": {
+        "configuracoes": {
+            "name": "TipoFrases",
+            "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
+            "trainer": "chatterbot.trainers.ListTrainer",
+            "logic_adapters": [
+                {
+                    "import_path": "chatterbot.logic.BestMatch",
+                    "statement_comparison_function": "chatterbot.comparisons.levenshtein_distance",
+                    "response_selection_method": "chatterbot.response_selection.get_first_response"
+                },
+                {
+                    "import_path": "chatterbot.logic.LowConfidenceAdapter",
+                    "threshold": 0.20,
+                    "default_response": "desconhecida"
+                }
+            ]
+        },
+        "treinamento": {
+            "alguem": [
+                "alguém M S"
+            ],
+            "algum": [
+                "algum <quant> DET"
+            ],
+            "quanto": [
+                "quanto <clb> <interr> <quant> DET"
+            ],
+            "o_que": [
+                "o_que <clb> <interr> M S"
+            ],
+            "qual": [
+                "qual <clb> <interr> DET M/F",
+                "que <clb> <interr> DET"
+            ],
+            "quem": [
+                "quem <clb> <interr> M/F S"
+            ],
+            "onde": [
+                "onde <clb> <interr>",
+                "aonde <clb> <interr>"
+            ],
+            "consulta": [
+                "listar <vH> <mv>",
+                "buscar <vH> <mv>",
+                "achar <vH> <mv>",
+                "listar <vH> <mv>",
+                "encontrar <vH> <mv>",
+                "descobrir <vH> <mv>",
+                "mostrar <vH> <mv>",
+                "localizar <vH> <mv>",
+                "obter <vH> <mv>",
+                "recuperar <vH> <mv>",
+                "conseguir <vH> <mv>",
+                "nomear <vH> <mv>",
+                "listar <vH> <mv>"
+            ]
         }
     }
 }

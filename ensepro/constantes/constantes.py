@@ -21,7 +21,7 @@ class StringConstantes:
 
 
 class ConfiguracoesConstantes:
-    ARQUIVO_CONFIGURACOES = "configuracoes/configs.json"
+    ARQUIVO_CONFIGURACOES = "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro/configuracoes/configs.json"
 
     # Servidores
     SERVIDOR_PALAVRAS = "palavras"
@@ -32,11 +32,11 @@ class ConfiguracoesConstantes:
     FRASES = "frases"
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
+    CHATTERBOT = "chatterbot"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
     SERVIDOR = SERVIDORES + ".{servidor}"
-    LOG_MODULOS = LOG + ".modulos"
 
     # Arquivo que contém as frases
     ARQUIVO_FRASES = FRASES + ".arquivo"
@@ -78,7 +78,7 @@ class PalavrasServidorConstantes:
 class LoggerConstantes:
     # Keys
     LOGGER = ConfiguracoesConstantes.LOG
-    MODULOS = ConfiguracoesConstantes.LOG_MODULOS
+    MODULOS = LOGGER + ".modulos"
     NIVEL_LOG = ".nivel"
 
     # Configurações básicas do logger
@@ -96,6 +96,7 @@ class LoggerConstantes:
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_NLU + ".locucao_verbal"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
+    MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_NLU + ".complementos_nominais"
 
     # Nivel de logs por modulo
@@ -113,3 +114,15 @@ class LoggerConstantes:
         logger = logging.getLogger(cls.GET_LOGGER_MODULO.format(modulo=modulo))
         logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
         return logger
+
+
+class ChaterbotConstantes:
+    # Keys
+    CONFIGURACOES = ConfiguracoesConstantes.CHATTERBOT + ".configuracoes"
+    TREINAMENTO = ConfiguracoesConstantes.CHATTERBOT + ".treinamento"
+
+    # Configurações
+    NOME = CONFIGURACOES + ".name"
+    TRAINER = CONFIGURACOES + ".trainer"
+    LOGIC_ADAPTERS = CONFIGURACOES + ".logic_adapters"
+    STORAGE_ADAPTER = CONFIGURACOES + ".storage_adapter"

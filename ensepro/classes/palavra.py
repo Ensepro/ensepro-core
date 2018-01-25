@@ -25,10 +25,20 @@ class Palavra:
 
     @property
     def sinonimos(self):
-        # TODO buscar sinonimos antes de retornar
-        # if self.__sinonimos:
-        #     return self.__sinonimos
-        # self.__sinonimos = obtem_dados_sinonimos(self)
+        if self.__sinonimos:
+            return self.__sinonimos
+
+        from ensepro import sinonimos, configuracoes
+        from ensepro.sinonimos import Sinonimo
+        from ensepro.constantes import ConfiguracoesConstantes
+        linguagens = configuracoes.get_config(path=ConfiguracoesConstantes.SINONIMOS_LINGUAGENS)
+        self.__sinonimos = {}
+
+        for linguagem in linguagens:
+            lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
+            lista_sinonimos = [Sinonimo.from_string(sinonimo_string) for sinonimo_string in lista_sinonimo_string]
+            self.__sinonimos[linguagem] = lista_sinonimos
+
         return self.__sinonimos
 
     def is_verbo(self):

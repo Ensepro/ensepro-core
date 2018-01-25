@@ -1,6 +1,6 @@
 """
 @project ensepro
-@since 20/01/2018
+@since 24/01/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
@@ -20,12 +20,12 @@ if (not frase_analisada.ok):
 frase = frase_conversor.from_json(1, frase_analisada.json())
 
 print(frase.id)
-# print([str(palavra) for palavra in frase.palavras])
-# print(frase.arvore)
-# print(frase.tipo)
-# print(frase.voz)
+print(frase.palavras)
+print(frase.arvore)
+print(frase.tipo)
+print(frase.voz)
 print(frase.locucao_verbal)
-# print(frase.complementos_nominais)
-# print(frase)
+print(frase.complementos_nominais, end="\n\n")
+print(frase.arvore.to_nltk_tree().pretty_print())
 
-print(json.dumps(frase, ensure_ascii=False, indent=4, sort_keys=False))
+# print(json.dumps(frase, ensure_ascii=False, indent=4, sort_keys=False))
