@@ -31,7 +31,7 @@ class Palavra:
         from ensepro import sinonimos, configuracoes
         from ensepro.sinonimos import Sinonimo
         from ensepro.constantes import ConfiguracoesConstantes
-        linguagens = configuracoes.get_config(path=ConfiguracoesConstantes.SINONIMOS_LINGUAGENS)
+        linguagens = configuracoes.get_config(ConfiguracoesConstantes.SINONIMOS_LINGUAGENS)
         self.__sinonimos = {}
 
         for linguagem in linguagens:

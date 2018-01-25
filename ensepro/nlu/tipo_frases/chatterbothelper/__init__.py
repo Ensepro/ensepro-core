@@ -5,4 +5,4 @@
 
 """
 
-from .chatterbothelper import *
+from .chatterbothelper import get_tipo

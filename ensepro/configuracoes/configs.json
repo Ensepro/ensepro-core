@@ -37,7 +37,7 @@
         }
     },
     "logger": {
-        "nome_arquivo": "ensepro_log.log",
+        "nome_arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro_log.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "modulos": {
@@ -122,7 +122,6 @@
                 "listar <vH> <mv>",
                 "buscar <vH> <mv>",
                 "achar <vH> <mv>",
-                "listar <vH> <mv>",
                 "encontrar <vH> <mv>",
                 "descobrir <vH> <mv>",
                 "mostrar <vH> <mv>",
@@ -130,8 +129,7 @@
                 "obter <vH> <mv>",
                 "recuperar <vH> <mv>",
                 "conseguir <vH> <mv>",
-                "nomear <vH> <mv>",
-                "listar <vH> <mv>"
+                "nomear <vH> <mv>"
             ]
         }
     }

@@ -29,10 +29,11 @@ class Frase:
 
     @property
     def tipo(self):
-        # TODO obter o tipo antes de retornar
-        # if self.__tipo:
-        #     return self.__tipo
-        # self.__tipo = get_tipo_1234_1234(self)
+        if self.__tipo:
+            return self.__tipo
+
+        from ensepro.nlu import tipo_frases
+        self.__tipo = tipo_frases.get_tipo(self)
         return self.__tipo
 
     @property
