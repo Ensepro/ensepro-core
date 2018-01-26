@@ -25,8 +25,8 @@ def get(frase):
         logger.debug("Verificando palavras: [palavra.tag_inicial=%s, regex=%s]", palavra.tag_inicial, regex_voz_passiva)
 
         if regex_voz_passiva.search(palavra.tag_inicial):
-            logger.info("[%s] = %s", frase, Voz.PASSIVA)
+            logger.info("Frase com voz=%s [%s]", Voz.PASSIVA, frase)
             return Voz.PASSIVA
 
-    logger.info("[%s] = %s", frase, Voz.ATIVA)
+    logger.info("Frase com voz=%s [%s]", Voz.ATIVA, frase)
     return Voz.ATIVA

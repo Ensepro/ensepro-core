@@ -88,7 +88,12 @@ class Node:
     @property
     def is_terminal(self):
         # se não possui filhos, é terminal/folha
-        return not self.__filhos
+        return not bool(self.__filhos)
+
+    @property
+    def is_nao_terminal(self):
+        # se possui filhos, não é terminal/folha
+        return bool(self.__filhos)
 
     def adicionar_filho(self, node):
         logger.debug("Adicionando filho: [pai=%s, filho=%s]", self.id, node)

@@ -5,4 +5,5 @@
 
 """
 
+from .complemento_nominal import ComplementoNominal
 from .complementos_nominais import get

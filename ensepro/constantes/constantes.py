@@ -81,6 +81,9 @@ class LoggerConstantes:
     MODULOS = LOGGER + ".modulos"
     NIVEL_LOG = ".nivel"
 
+    # Default logger
+    DEFAULT_LOGGER_NIVEL = LOGGER + ".default_logger_nivel"
+
     # Configurações básicas do logger
     NOME_DO_ARQUIVO = LOGGER + ".nome_arquivo"
     MODO_DO_ARQUIVO = LOGGER + ".modo_arquivo"
@@ -105,14 +108,20 @@ class LoggerConstantes:
     # Valor para utilizar no logging.getLogger
     GET_LOGGER_MODULO = "ensepro.{modulo}"
 
-    # Default logger
-
     @classmethod
     def get_logger(cls, modulo):
         import logging
         from ensepro import configuracoes
         logger = logging.getLogger(cls.GET_LOGGER_MODULO.format(modulo=modulo))
         logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
+        return logger
+
+    @classmethod
+    def default_logger(cls):
+        import logging
+        from ensepro import configuracoes
+        logger = logging.getLogger("ensepro")
+        logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.DEFAULT_LOGGER_NIVEL)))
         return logger
 
 

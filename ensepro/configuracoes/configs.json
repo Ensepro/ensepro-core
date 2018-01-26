@@ -40,6 +40,7 @@
         "nome_arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro_log.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
                 "nivel": "DEBUG"

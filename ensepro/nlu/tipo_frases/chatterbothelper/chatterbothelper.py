@@ -28,7 +28,7 @@ def get_tipo(frase):
     tipo = TipoFrase(st)
 
     logger.debug("Retorno do chatter_bot: [%s]", st)
-    logger.info("Tipo obtido: [tipo=%s]", tipo)
+    logger.info("Tipo obtido: [%s]", tipo)
     return tipo
 
 
@@ -67,6 +67,7 @@ def iniciar_treinamento():
     treinamento_normalizado = __normalizar_treinamento(treinamento_carregado)
     logger.debug("Treinamento normalizado: [%s]", treinamento_normalizado)
 
+    logger.info("Treinando....")
     chatter_bot.train(treinamento_normalizado)
     # TODO passar True para arquivo de configuração
     chatter_bot.read_only = True  # após treinamento inicial, bloqueia auto-aprendizagem

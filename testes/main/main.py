@@ -4,28 +4,16 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-import json
-from ensepro.servicos import palavras_service
-from ensepro.conversores import frase_conversor
 
+import ensepro
 
-# frase = "Você consegue imaginar o que poderia estar errado?"
-frase = "Qual é a idade de Alencar?"
+frase_text = "O mundo está nas mãos daqueles que têm a coragem de sonhar e de correr o risco de viver seus sonhos?"
 
-frase_analisada = palavras_service.analisar_frase(frase)
-if (not frase_analisada.ok):
-    print(frase_analisada)
-    exit(1)
+frase = ensepro.analisar_frase(frase_text)
 
-frase = frase_conversor.from_json(1, frase_analisada.json())
-
-print(frase.id)
-print(frase.palavras)
-print(frase.arvore)
-print(frase.tipo)
-print(frase.voz)
-print(frase.locucao_verbal)
-print(frase.complementos_nominais)
-# print(frase.arvore.to_nltk_tree().pretty_print())
-
-# print(json.dumps(frase, ensure_ascii=False, indent=4, sort_keys=False))
+print("Frase id={}".format(frase.id))
+print("Frase tipo={}".format(frase.tipo))
+print("Frase voz={}".format(frase.voz))
+print("Frase locucao_verbal={}".format(frase.locucao_verbal))
+print("Frase complementos_nominais={}".format(frase.complementos_nominais))
+print(frase.arvore.to_nltk_tree().pretty_print())
