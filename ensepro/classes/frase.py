@@ -47,10 +47,11 @@ class Frase:
 
     @property
     def palavras_relevantes(self):
-        # TODO determinar palavras relevantes antes de retornar
-        # if self.__palavras_relevantes:
-        #     return self.__palavras_relevantes
-        # self.__palavras_relevantes = obtem_palavras_relevantes(self)
+        if self.__palavras_relevantes:
+            return self.__palavras_relevantes
+
+        from ensepro.nlu import palavras_relevantes
+        self.__palavras_relevantes = palavras_relevantes.get(self)
         return self.__palavras_relevantes
 
     @property

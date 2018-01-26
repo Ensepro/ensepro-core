@@ -88,18 +88,22 @@ LOGICAS = {
 
 
 def __obtem_nucleo_node_pai(frase, palavra, nucleos):
+    logger.debug("Obtendo nucleo do node pai: [%s]", palavra)
     # 1. Obter node da palavra
     node_palavra = frase.arvore.nodes[palavra.id]
     # 2. Obter node pai da palavra
     node_pai_palavra = node_palavra.pai
     # 3. Obter nucleo do node pai
     nucleo_node_pai = __obtem_nucleo_somente_filhos(node_pai_palavra, nucleos)
+    logger.debug("Nucleo do node pai obtido: [%s]", nucleo_node_pai)
     return nucleo_node_pai
 
 
 def __obtem_nucleo_somente_filhos(node_pai, nucleos: list):
+    logger.debug("Buscando nucleo dos filhos: [node_pai='%s']", node_pai)
     for node_filho in node_pai.filhos:
         if node_filho.valor.tag_inicial in nucleos:
+            logger.debug("Nucleo encontrado: [nucleo='%s']", node_filho.valor)
             return node_filho.valor
 
     return None

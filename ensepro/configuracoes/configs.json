@@ -1,6 +1,6 @@
 {
     "frases": {
-        "arquivo": "arquivos/frases/frases.txt",
+        "arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/arquivos/frases/frases.txt",
         "regex": {
             "palavra_relevante": ":(adj|n|prop)$",
             "palavra_adjetivo": ":adj$",
