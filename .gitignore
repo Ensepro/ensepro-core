@@ -2,4 +2,7 @@
 /.idea
 /__ignorar
 **/__pycache__
+/venv/**
 \#*
+**/ensepro_log.log
+**/*/db.sqlite*

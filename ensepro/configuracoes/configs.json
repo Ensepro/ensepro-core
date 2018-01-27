@@ -1,0 +1,137 @@
+{
+    "frases": {
+        "arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/arquivos/frases/frases.txt",
+        "regex": {
+            "palavra_relevante": ":(adj|n|prop)$",
+            "palavra_adjetivo": ":adj$",
+            "palavra_substantivo": ":n$",
+            "palavra_preposicao": ":prop$",
+            "palavra_verbo": "v-",
+            "voz_passiva": "^fApass:pp$"
+        },
+        "verbos_de_ligacao": [
+            "ser"
+        ]
+    },
+    "sinonimos": {
+        "linguagens": [
+            "por",
+            "eng"
+        ]
+    },
+    "servidores": {
+        "palavras": {
+            "endpoint": "http://127.0.0.1",
+            "porta": "8099",
+            "servicos": {
+                "analisar_frase": "/palavras/analisar/"
+            }
+        },
+        "elastic_search": {
+            "endpoint": "127.0.0.1",
+            "porta": "9200",
+            "settings": {
+                "index_name": "triples",
+                "index_type": "triple"
+            }
+        }
+    },
+    "logger": {
+        "nome_arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro_log.log",
+        "modo_arquivo": "w",
+        "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        "default_logger_nivel": "DEBUG",
+        "modulos": {
+            "arvore": {
+                "nivel": "DEBUG"
+            },
+            "configuracoes": {
+                "nivel": "DEBUG"
+            },
+            "nlu": {
+                "nivel": "DEBUG",
+                "complementos_nominais": {
+                    "nivel": "DEBUG"
+                },
+                "locucao_verbal": {
+                    "nivel": "DEBUG"
+                },
+                "tipo_frases": {
+                    "nivel": "DEBUG",
+                    "chatterbot_helper": {
+                        "nivel": "DEBUG"
+                    }
+                },
+                "voz": {
+                    "nivel": "DEBUG"
+                }
+            },
+            "servicos": {
+                "nivel": "DEBUG",
+                "palavras_service": {
+                    "nivel": "DEBUG"
+                }
+            },
+            "sinonimos": {
+                "nivel": "DEBUG"
+            }
+        }
+    },
+    "chatterbot": {
+        "configuracoes": {
+            "name": "TipoFrases",
+            "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
+            "trainer": "chatterbot.trainers.ListTrainer",
+            "logic_adapters": [
+                {
+                    "import_path": "chatterbot.logic.BestMatch",
+                    "statement_comparison_function": "chatterbot.comparisons.levenshtein_distance",
+                    "response_selection_method": "chatterbot.response_selection.get_first_response"
+                },
+                {
+                    "import_path": "chatterbot.logic.LowConfidenceAdapter",
+                    "threshold": 0.20,
+                    "default_response": "desconhecida"
+                }
+            ]
+        },
+        "treinamento": {
+            "alguem": [
+                "alguém M S"
+            ],
+            "algum": [
+                "algum <quant> DET"
+            ],
+            "quanto": [
+                "quanto <clb> <interr> <quant> DET"
+            ],
+            "o_que": [
+                "o_que <clb> <interr> M S"
+            ],
+            "qual": [
+                "qual <clb> <interr> DET M/F",
+                "que <clb> <interr> DET"
+            ],
+            "quem": [
+                "quem <clb> <interr> M/F S"
+            ],
+            "onde": [
+                "onde <clb> <interr>",
+                "aonde <clb> <interr>"
+            ],
+            "consulta": [
+                "listar <vH> <mv>",
+                "buscar <vH> <mv>",
+                "achar <vH> <mv>",
+                "encontrar <vH> <mv>",
+                "descobrir <vH> <mv>",
+                "mostrar <vH> <mv>",
+                "localizar <vH> <mv>",
+                "obter <vH> <mv>",
+                "recuperar <vH> <mv>",
+                "conseguir <vH> <mv>",
+                "nomear <vH> <mv>"
+            ]
+        }
+    }
+}
