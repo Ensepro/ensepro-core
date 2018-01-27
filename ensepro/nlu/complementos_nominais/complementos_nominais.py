@@ -44,6 +44,8 @@ def __dn_num(frase, palavra):
 def __dn_adjp(frase, palavra):
     return __dn_np(frase, palavra)
 
+def __dn_v_pcp(frase, palavra):
+    return __dn_adj(frase, palavra)
 
 def __dn_np(frase, palavra):
     # 1. Obter o nucleo do node pai do node da palavra
@@ -72,6 +74,7 @@ NUCLEOS = {
     "DN:num": ["H:n", "H:adj", "H:prop", "DP:n"],
     "DN:np": ["H:n", "H:adj", "H:prop", "DP:n"],
     "DN:pp": ["H:n", "H:adj", "H:prop", "DP:prop", "DP:n"],
+    "DN:v-pcp": ["H:n"],
 }
 
 # TODO verificar as tags que devem ir aqui...
@@ -84,6 +87,7 @@ LOGICAS = {
     "DN:num": __dn_num,
     "DN:np": __dn_np,
     "DN:pp": __dn_pp,
+    "DN:v-pcp": __dn_v_pcp
 }
 
 
