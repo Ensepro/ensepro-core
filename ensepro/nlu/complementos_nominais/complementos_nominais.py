@@ -71,11 +71,11 @@ NUCLEOS = {
     "DN:adjp": ["H:n", "H:adj", "H:prop", "DP:n"],
     "DN:num": ["H:n", "H:adj", "H:prop", "DP:n"],
     "DN:np": ["H:n", "H:adj", "H:prop", "DP:n"],
-    "DN:pp": ["H:n", "H:adj", "H:prop", "DP:n"],
+    "DN:pp": ["H:n", "H:adj", "H:prop", "DP:prop", "DP:n"],
 }
 
 # TODO verificar as tags que devem ir aqui...
-TAG_PARAR_BUSCA_NUCLEO = ["DP:icl"]
+TAG_PARAR_BUSCA_NUCLEO = []
 
 LOGICAS = {
     "DN:prop": __dn_prop,

@@ -17,7 +17,7 @@ class Palavra:
     def __init__(self, id=None, dados_palavra=None):
         self.id = id
         self.tags = dados_palavra["tags"] if dados_palavra else None
-        self.nivel = dados_palavra["nivel"] if dados_palavra else None
+        self.nivel = int(dados_palavra["nivel"]) if dados_palavra else None
         self.tag_inicial = dados_palavra["tag_inicial"] if dados_palavra else None
         self.palavra_original = dados_palavra["palavra_original"] if dados_palavra else None
         self.palavra_canonica = dados_palavra["palavra_canonica"] if dados_palavra else None

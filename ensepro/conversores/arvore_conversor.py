@@ -37,7 +37,7 @@ def __corrige_problema_ordenacao_arvore_printada(palavra):
     if palavra.palavra_original:
         return
 
-    CARACTERES_PARA_ADICIONAR_ESPACO = ",.;?!\""
+    CARACTERES_PARA_ADICIONAR_ESPACO = ",.;:?!\"()"
 
     if palavra.tag_inicial in CARACTERES_PARA_ADICIONAR_ESPACO:
         palavra.palavra_original = ' '
