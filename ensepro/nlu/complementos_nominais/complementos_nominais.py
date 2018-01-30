@@ -44,8 +44,10 @@ def __dn_num(frase, palavra):
 def __dn_adjp(frase, palavra):
     return __dn_np(frase, palavra)
 
+
 def __dn_v_pcp(frase, palavra):
     return __dn_adj(frase, palavra)
+
 
 def __dn_np(frase, palavra):
     # 1. Obter o nucleo do node pai do node da palavra
@@ -62,7 +64,8 @@ def __dn_pp(frase, palavra):
     nome = __obtem_nucleo_node_pai(frase, palavra, NUCLEOS[palavra.tag_inicial])
 
     # 2. Obter o primeiro nucleo abaixo do node da palavra, de forma recursiva
-    complemento = __obtem_primeiro_nucleo_abaixo(frase.arvore.nodes[palavra.id], NUCLEOS[palavra.tag_inicial])
+    complemento = __obtem_primeiro_nucleo_abaixo(frase.arvore.nodes[palavra.id], NUCLEOS[palavra.tag_inicial],
+                                                 TAG_PARAR_BUSCA_COMPLEMENTOS_NOMINAIS[palavra.tag_inicial])
 
     return ComplementoNominal(nome, complemento)
 
@@ -78,7 +81,15 @@ NUCLEOS = {
 }
 
 # TODO verificar as tags que devem ir aqui...
-TAG_PARAR_BUSCA_NUCLEO = []
+TAG_PARAR_BUSCA_COMPLEMENTOS_NOMINAIS = {
+    "DN:prop": [],
+    "DN:adj": [],
+    "DN:adjp": [],
+    "DN:num": [],
+    "DN:np": [],
+    "DN:pp": [],
+    "DN:v-pcp": [],
+}
 
 LOGICAS = {
     "DN:prop": __dn_prop,
@@ -113,7 +124,7 @@ def __obtem_nucleo_somente_filhos(node_pai, nucleos: list):
     return None
 
 
-def __obtem_primeiro_nucleo_abaixo(node, nucleos: list):
+def __obtem_primeiro_nucleo_abaixo(node, nucleos: list, tags_parar_busca: list):
     """
     Este método vai ir descendo na árvore a partir do 'node' indicado e irá retornar
     o primeiro Nucleo que encontrar. Caso não existe um Nucleo, será retornado None.
@@ -130,8 +141,8 @@ def __obtem_primeiro_nucleo_abaixo(node, nucleos: list):
         return nucleo
 
     for node_filho in node.filhos:
-        if node_filho.is_nao_terminal and node_filho.valor.tag_inicial not in TAG_PARAR_BUSCA_NUCLEO:
-            nucleo = __obtem_primeiro_nucleo_abaixo(node_filho, nucleos)
+        if node_filho.is_nao_terminal and node_filho.valor.tag_inicial not in tags_parar_busca:
+            nucleo = __obtem_primeiro_nucleo_abaixo(node_filho, nucleos, tags_parar_busca)
             if nucleo:
                 return nucleo
 
