@@ -31,10 +31,43 @@ def analisar_frase(frase: str):
         logger.info("Iniciando processamento: [frase_id=%s, frase=%s]", id, frase)
 
         frase_analisada = palavras_service.analisar_frase(frase)
-        frase_final = frase_conversor.from_json(id, frase_analisada.json())
+        frase_final = frase_conversor.from_json(id, frase, frase_analisada.json())
 
         logger.info("Frase processada: [frase=%s]", frase_final)
         return frase_final
     except Exception as ex:
         logger.exception(ex)
         raise ex
+
+
+def frase_pretty_print(frase: Frase, file=None):
+    if not isinstance(frase, Frase):
+        raise Exception("Não é um objeto Frase.")
+
+    print("->Frase {0}: {1}".format(frase.id, frase.frase_original), file=file)
+    print("--> Tipo:", frase.tipo, file=file)
+    print("--> Voz:", frase.voz, file=file)
+    print("--> Palavras Relevantes:", file=file)
+    if frase.palavras_relevantes:
+        for index, palavra in enumerate(frase.palavras_relevantes):
+            print("----> PR {0}:".format(index), palavra, file=file)
+    else:
+        print("----> Nenhuma.", file=file)
+
+
+    print("--> Complementos Nominais:", file=file)
+    if frase.complementos_nominais:
+        for index, cn in enumerate(frase.complementos_nominais):
+            print("----> CN {0}:".format(index), cn.as_text, file=file)
+    else:
+        print("----> Nenhum.", file=file)
+
+    print("--> Locuções Verbais:", file=file)
+    if frase.locucao_verbal:
+        for index, lv in frase.locucao_verbal:
+            print("----> LV {0}:".format(index), lv, file=file)
+    else:
+        print("----> Nenhum.", file=file)
+
+    frase.arvore.to_nltk_tree().pretty_print(stream=file)
+

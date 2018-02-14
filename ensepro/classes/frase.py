@@ -8,9 +8,10 @@ from ensepro.conversores import make_json_serializable
 
 
 class Frase:
-    def __init__(self, id=None, palavras=None):
+    def __init__(self, id=None, frase=None, palavras=None):
         self.id = id
         self.palavras = palavras
+        self.frase_original = frase
         self.__arvore = None
         self.__tipo = None
         self.__locucao_verbal = None
@@ -72,15 +73,15 @@ class Frase:
         self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
-    def get_palavras(self, condicao):
+    def get_palavras(self, condicao, *args):
         """
         Percorre a lista de palavras da frase validando a condicao passada.
 
-        :param condicao: deve ser um função que recebe uma palavra por parametro e retorna uma valor booleano [def condicao(palavra) -> bool]
+        :param condicao: deve ser um função que recebe a frase e uma de suas palavras por parametro e retorna uma valor booleano [def condicao(palavra) -> bool]
         :return: lista de palavras das quais a função 'condicao' retornou True
         """
         if (callable(condicao)):
-            return [palavra for palavra in self.palavras if condicao(palavra)]
+            return [palavra for palavra in self.palavras if condicao(self, palavra, args)]
 
         raise TypeError("Parametro 'condição' deve ser uma função.")
 

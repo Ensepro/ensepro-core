@@ -87,7 +87,7 @@ TAG_PARAR_BUSCA_COMPLEMENTOS_NOMINAIS = {
     "DN:adjp": [],
     "DN:num": [],
     "DN:np": [],
-    "DN:pp": [],
+    "DN:pp": ["DP:icl"],
     "DN:v-pcp": [],
 }
 
