@@ -36,13 +36,12 @@ def __is_palavra_relevante(frase, palavra, *args):
     # 2. Se possuir tipo
     if args[0]:
         tipo_id = args[0]["tipo"].id
-        palavra_anterior_era_tipo = False
         # 2.1. Palavras não deve fazer parte do tipo da frase
         if tipo_id >= palavra.id:
             palavra_anterior_era_tipo = tipo_id == palavra.id
             return False
         # 2.2. Se a primeira palavra após o tipo for um verbo de ligação, ignora-lá
-        if palavra_anterior_era_tipo and palavra.palavra_canonica in verbos_ligacao:
+        if tipo_id+1 == palavra.id and palavra.palavra_canonica in verbos_ligacao:
             return False
 
     # 3. tagInicial da palavra deve bater com a regex de palavras relevantes
