@@ -73,11 +73,12 @@ class Frase:
         self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
-    def get_palavras(self, condicao, *args):
+    def get_palavras(self, condicao, **args):
         """
         Percorre a lista de palavras da frase validando a condicao passada.
 
-        :param condicao: deve ser um função que recebe a frase e uma de suas palavras por parametro e retorna uma valor booleano [def condicao(palavra) -> bool]
+        :param condicao: deve ser um função que recebe a frase e uma de suas palavras por parametro e retorna uma valor booleano
+        ex: def condicao(frase, palavra, *args) -> bool
         :return: lista de palavras das quais a função 'condicao' retornou True
         """
         if (callable(condicao)):

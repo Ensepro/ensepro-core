@@ -1,51 +1,39 @@
 """
 @project ensepro
-@since 24/01/2018
+@since 02/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
 import ensepro
-from ensepro import configuracoes
-from ensepro.constantes import ConfiguracoesConstantes, StringConstantes
+
+frases = [
+    "Que alunos do Pipca trabalham no projeto CNJ Acadêmico patrocinados pela Capes?"
+    # "Como é que a gente sabe que a carne de chester é de chester se nunca ninguém viu um chester?",
+    # "Já fez alguma coisa que teve vontade de sair gritando na rua?"
+]
+
+
+def __command(frase_analisada, *args):
+    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"])
 
 
 def carregar_frases():
-    with open(
-            configuracoes.get_config(ConfiguracoesConstantes.ARQUIVO_FRASES),
-            StringConstantes.FILE_READ_ONLY,
-            encoding=StringConstantes.UTF_8) as frases:
+    global frases
+    frases = []
+    with open("../../arquivos/frases/frases.txt", encoding="UTF-8") as frases_in_text:
+        for frase in frases_in_text:
+            frase = frase.replace("\n", "")
 
-        for frase in frases:
-            frase = frase.replace(StringConstantes.BREAK_LINE, "")
-            if not frase or frase.startswith("#"):
+            if not frase:
                 continue
 
-            lista_frases.append(frase)
+            if frase.startswith("#"):
+                continue
+
+            frases.append(frase)
 
 
-def _print(msg):
-    print(msg, file=RESULT_FILE)
+carregar_frases()
 
-
-SEPARATOR = 200
-lista_frases = ["Qual é o melhor e o pior momento da sua vida?"]
-# carregar_frases()
-with open("resultado.txt", StringConstantes.FILE_WRITE_ONLY, encoding=StringConstantes.UTF_8) as RESULT_FILE:
-    _print("#" * SEPARATOR)
-    for frase_text in lista_frases:
-        frase = ensepro.analisar_frase(frase_text)
-
-        _print("Frase {0}: {1}".format(frase.id, frase_text))
-        print("Frase {0}: {1}".format(frase.id, frase_text))
-
-        if frase.complementos_nominais:
-            i = 0
-            for complemento_nominal in frase.complementos_nominais:
-                _print("CN {0}: {1} + {2}".format(i, complemento_nominal.nome.palavra_original, complemento_nominal.complemento.palavra_original))
-                i+=1
-        else:
-            _print("nenhuma complementação nominal encontrada.")
-
-        _print(frase.arvore.to_nltk_tree().pretty_print(stream=RESULT_FILE))
-        _print("#" * SEPARATOR)
-        RESULT_FILE.flush()
+with open("resultado_completo.txt", mode="w", encoding="UTF-8") as save_in:
+    ensepro.analisar_frases_and_execute(frases, __command, file=save_in)

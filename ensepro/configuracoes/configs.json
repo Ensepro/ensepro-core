@@ -91,7 +91,7 @@
                 {
                     "import_path": "chatterbot.logic.LowConfidenceAdapter",
                     "threshold": 0.20,
-                    "default_response": "desconhecida"
+                    "default_response": "desconhecido"
                 }
             ]
         },

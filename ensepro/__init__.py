@@ -21,6 +21,20 @@ def __next_id():
     return __FRASE_ID
 
 
+def analisar_frases(frases: list) -> list:
+    frases_analisadas = []
+    for frase in frases:
+        frases_analisadas.append(analisar_frase(frase))
+
+    return frases_analisadas
+
+
+def analisar_frases_and_execute(frases: list, command, **args):
+    for frase in frases:
+        frase_analisada = analisar_frase(frase)
+        command(frase_analisada, args)
+
+
 def analisar_frase(frase: str):
     from ensepro.servicos import palavras_service
     from ensepro.conversores import frase_conversor
@@ -54,7 +68,6 @@ def frase_pretty_print(frase: Frase, file=None):
     else:
         print("----> Nenhuma.", file=file)
 
-
     print("--> Complementos Nominais:", file=file)
     if frase.complementos_nominais:
         for index, cn in enumerate(frase.complementos_nominais):
@@ -64,10 +77,9 @@ def frase_pretty_print(frase: Frase, file=None):
 
     print("--> Locuções Verbais:", file=file)
     if frase.locucao_verbal:
-        for index, lv in frase.locucao_verbal:
+        for index, lv in enumerate(frase.locucao_verbal):
             print("----> LV {0}:".format(index), lv, file=file)
     else:
         print("----> Nenhum.", file=file)
 
     frase.arvore.to_nltk_tree().pretty_print(stream=file)
-
