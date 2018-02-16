@@ -10,7 +10,12 @@
             "voz_passiva": "^fApass:pp$"
         },
         "verbos_de_ligacao": [
-            "ser"
+            "ser",
+            "estar",
+            "permanecer",
+            "continuar",
+            "parecer",
+            "tornar"
         ]
     },
     "sinonimos": {
