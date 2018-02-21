@@ -4,12 +4,16 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-from ensepro.conversores import make_json_serializable
 import re
+from enum import Enum
 from ensepro import configuracoes
 from ensepro.constantes import ConfiguracoesConstantes
+from ensepro.conversores import make_json_serializable
 
 regex_palavra_verbo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_VERBO))
+regex_palavra_adjetivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_ADJETIVO))
+regex_palavra_preposicao = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_PREPOSICAO))
+regex_palavra_substantivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO))
 
 
 class Palavra:
@@ -37,14 +41,21 @@ class Palavra:
         for linguagem in linguagens:
             lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
             lista_sinonimos = [Sinonimo.from_string(sinonimo_string) for sinonimo_string in lista_sinonimo_string]
-            self.__sinonimos[linguagem] = lista_sinonimos
+            self.__sinonimos[linguagem] = [sinonimo for sinonimo in lista_sinonimos if sinonimo.is_mesma_classe_gramatical(self)]
 
         return self.__sinonimos
 
     def is_verbo(self):
-        if regex_palavra_verbo.search(self.tag_inicial):
-            return True
-        return False
+        return bool(regex_palavra_verbo.search(self.tag_inicial))
+
+    def is_adjetivo(self):
+        return bool(regex_palavra_adjetivo.search(self.tag_inicial))
+
+    def is_preposicao(self):
+        return bool(regex_palavra_preposicao.search(self.tag_inicial))
+
+    def is_substantivo(self):
+        return bool(regex_palavra_substantivo.search(self.tag_inicial))
 
     def __to_json__(self):
         return {
@@ -83,3 +94,9 @@ class Palavra:
                     str(self.palavra_original),
                     str(self.palavra_canonica)
             )
+
+
+class ClasseGramatical(Enum):
+    VERBO = "v"
+    ADJETIVO = "a"
+    SUBSTANTIVO = "n"

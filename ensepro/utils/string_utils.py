@@ -5,6 +5,7 @@
 
 """
 
+
 def remover_acentos(txt):
     from unicodedata import normalize
     return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')

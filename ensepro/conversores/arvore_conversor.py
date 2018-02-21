@@ -53,7 +53,6 @@ def from_frase(frase):
     while (index < numero_de_palavras):
         palavra = frase.palavras[index]
 
-
         # Quando ocorre algum palavra sem palavra_original e com tag_inicial, a ordem de aparição na arvore printada
         # pelo nltk.tree.Tree fica errada, sendo esta palavra printada antes das demais.
         # O método abaixo corrige este problema e informa uma melhor explicação
