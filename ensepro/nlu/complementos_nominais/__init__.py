@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 """
 @project ensepro
-@since 18/12/2017
+@since 25/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """

@@ -1,9 +1,15 @@
+# -*- coding: utf-8 -*-
 """
 @project ensepro
-@since 19/12/2017
+@since 25/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+
+
+def path():
+    import os
+    return os.path.abspath("../../")
 
 
 class SinonimosConstantes:
@@ -21,7 +27,8 @@ class StringConstantes:
 
 
 class ConfiguracoesConstantes:
-    ARQUIVO_CONFIGURACOES = "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro/configuracoes/configs.json"
+    PATH = path()
+    ARQUIVO_CONFIGURACOES = PATH + "/ensepro/configuracoes/configs.json"
 
     # Servidores
     SERVIDOR_PALAVRAS = "palavras"
@@ -37,9 +44,6 @@ class ConfiguracoesConstantes:
     # Segundo nivel
     REGEX = FRASES + ".regex"
     SERVIDOR = SERVIDORES + ".{servidor}"
-
-    # Arquivo que contém as frases
-    ARQUIVO_FRASES = FRASES + ".arquivo"
 
     # Regexps
     REGEX_VOZ_PASSIVA = REGEX + ".voz_passiva"
