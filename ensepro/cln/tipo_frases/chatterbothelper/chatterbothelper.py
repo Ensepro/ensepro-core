@@ -7,7 +7,7 @@
 """
 from chatterbot import ChatBot
 from ensepro import configuracoes
-from ensepro.nlu.tipo_frases import TipoFrase
+from ensepro.cln.tipo_frases import TipoFrase
 from ensepro.constantes import ChaterbotConstantes, LoggerConstantes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)

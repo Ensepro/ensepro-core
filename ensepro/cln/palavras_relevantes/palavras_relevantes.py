@@ -8,8 +8,8 @@
 import re
 from ensepro import configuracoes
 from ensepro.constantes import ConfiguracoesConstantes, ChaterbotConstantes
-from ensepro.nlu.voz.voz import Voz
-from ensepro.nlu.tipo_frases.chatterbothelper.chatterbothelper import termos_relevantes_agrupados_por_tipo
+from ensepro.cln.voz.voz import Voz
+from ensepro.cln.tipo_frases.chatterbothelper.chatterbothelper import termos_relevantes_agrupados_por_tipo
 from ensepro.utils.string_utils import remover_acentos
 
 regex_palavra_relevante = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_RELEVENTE))

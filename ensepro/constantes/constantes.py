@@ -94,17 +94,17 @@ class LoggerConstantes:
     FORMATO = LOGGER + ".formato"
 
     # Lista de modulos
-    MODULO_NLU = "nlu"
-    MODULO_VOZ = MODULO_NLU + ".voz"
+    MODULO_CLN = "cln"
+    MODULO_VOZ = MODULO_CLN + ".voz"
     MODULO_ARVORE = "arvore"
     MODULO_SERVICOS = "servicos"
     MODULO_SINONIMOS = "sinonimos"
-    MODULO_TIPO_FRASES = MODULO_NLU + ".tipo_frases"
+    MODULO_TIPO_FRASES = MODULO_CLN + ".tipo_frases"
     MODULO_CONFIGURACOES = "configuracoes"
-    MODULO_LOCUCAO_VERBAL = MODULO_NLU + ".locucao_verbal"
+    MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
     MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
-    MODULO_COMPLEMENTOS_NOMINAIS = MODULO_NLU + ".complementos_nominais"
+    MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG

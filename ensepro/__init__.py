@@ -11,7 +11,7 @@ from .classes import *
 from .arvore import *
 from .sinonimos import *
 from .constantes import *
-from .nlu import *
+from .cln import *
 
 __FRASE_ID = 0
 

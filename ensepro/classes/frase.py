@@ -34,7 +34,7 @@ class Frase:
         if self.__tipo:
             return self.__tipo
 
-        from ensepro.nlu import tipo_frases
+        from ensepro.cln import tipo_frases
         self.__tipo = tipo_frases.get_tipo(self)
         return self.__tipo
 
@@ -43,7 +43,7 @@ class Frase:
         if self.__locucao_verbal:
             return self.__locucao_verbal
 
-        from ensepro.nlu import locucao_verbal
+        from ensepro.cln import locucao_verbal
         self.__locucao_verbal = locucao_verbal.get(self)
         return self.__locucao_verbal
 
@@ -52,7 +52,7 @@ class Frase:
         if self.__palavras_relevantes:
             return self.__palavras_relevantes
 
-        from ensepro.nlu import palavras_relevantes
+        from ensepro.cln import palavras_relevantes
         self.__palavras_relevantes = palavras_relevantes.get(self)
         return self.__palavras_relevantes
 
@@ -61,7 +61,7 @@ class Frase:
         if self.__voz:
             return self.__voz
 
-        from ensepro.nlu import voz
+        from ensepro.cln import voz
         self.__voz = voz.get(self)
         return self.__voz
 
@@ -70,7 +70,7 @@ class Frase:
         if self.__complementos_nominais:
             return self.__complementos_nominais
 
-        from ensepro.nlu import complementos_nominais
+        from ensepro.cln import complementos_nominais
         self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
