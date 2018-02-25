@@ -5,7 +5,7 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-from ensepro.nlu.complementos_nominais import ComplementoNominal
+from ensepro.cln.complementos_nominais import ComplementoNominal
 from ensepro.constantes import LoggerConstantes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_COMPLEMENTOS_NOMINAIS)

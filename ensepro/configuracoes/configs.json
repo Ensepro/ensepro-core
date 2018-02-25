@@ -52,7 +52,7 @@
             "configuracoes": {
                 "nivel": "INFO"
             },
-            "nlu": {
+            "cln": {
                 "nivel": "INFO",
                 "complementos_nominais": {
                     "nivel": "INFO"
