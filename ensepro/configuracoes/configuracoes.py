@@ -1,6 +1,7 @@
+
 """
 @project ensepro
-@since 04/01/2018
+@since 25/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
@@ -13,7 +14,7 @@ def __init_logger():
     global logger
 
     logging.basicConfig(
-            filename=__get_config(LoggerConstantes.NOME_DO_ARQUIVO),
+            filename=ConfiguracoesConstantes.PATH + __get_config(LoggerConstantes.NOME_DO_ARQUIVO),
             level=logging.INFO,
             format=__get_config(LoggerConstantes.FORMATO),
             filemode=__get_config(LoggerConstantes.MODO_DO_ARQUIVO),

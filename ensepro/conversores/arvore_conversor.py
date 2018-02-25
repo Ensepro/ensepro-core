@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 """
 @project ensepro
-@since 21/01/2018
+@since 25/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
@@ -12,7 +13,7 @@ def __corrige_problema_ordenacao_arvore_printada(palavra):
     Este problema ocorre quando a palavra não possui uma palavra_original e não possui filhos,
     como no exemplo das sub-arvores (ex:X:par|2|, também não possui palavra_original, mas possui filhos).
 
-    Quando uma palavra não possui palavra_original, o termo se torna uma flhos, e o print feito
+    Quando uma palavra não possui palavra_original, o termo se torna uma folha, e o print feito
     pela nltk.tree.Tree faz algum tipo de ordenação e printa primeiro as folhas, e depois as sub-arvores.
 
     Frase usada para exemplo: "Alencar, tudo bem?"

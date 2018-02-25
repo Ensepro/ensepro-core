@@ -1,15 +1,17 @@
+# -*- coding: utf-8 -*-
 """
 @project ensepro
-@since 02/02/2018
+@since 25/02/2018
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+import sys
+import os
+sys.path.append(os.path.abspath("../../"))
+
 import ensepro
 
 frases = [
-    # "por que o céu é azul?"
-    # "Você sabe que alunos do Pipca trabalham no projeto CNJ Acadêmico patrocinados pela Capes?"
-    # "Como é que a gente sabe que a carne de chester é de chester se nunca ninguém viu um chester?",
     "Já fez alguma coisa que teve vontade de sair gritando na rua?"
 ]
 
@@ -35,9 +37,4 @@ def carregar_frases():
             frases.append(frase)
 
 
-# carregar_frases()
-
-# with open("resultado_completo.txt", mode="w", encoding="UTF-8") as save_in:
-#     ensepro.analisar_frases_and_execute(frases, __command, file=save_in)
-    
 ensepro.analisar_frases_and_execute(frases, __command, file=None)

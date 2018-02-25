@@ -1,6 +1,5 @@
 {
     "frases": {
-        "arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/arquivos/frases/frases.txt",
         "regex": {
             "palavra_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",
@@ -42,43 +41,43 @@
         }
     },
     "logger": {
-        "nome_arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/ensepro_log.log",
+        "nome_arquivo": "/ensepro_log.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        "default_logger_nivel": "DEBUG",
+        "default_logger_nivel": "INFO",
         "modulos": {
             "arvore": {
-                "nivel": "DEBUG"
+                "nivel": "INFO"
             },
             "configuracoes": {
-                "nivel": "DEBUG"
+                "nivel": "INFO"
             },
             "nlu": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "complementos_nominais": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "locucao_verbal": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "tipo_frases": {
-                    "nivel": "DEBUG",
+                    "nivel": "INFO",
                     "chatterbot_helper": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     }
                 },
                 "voz": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "servicos": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "palavras_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "sinonimos": {
-                "nivel": "DEBUG"
+                "nivel": "INFO"
             }
         }
     },
