@@ -4,8 +4,8 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-
 from ensepro.conversores import make_json_serializable
+from ensepro.classes.palavra import ClasseGramatical
 
 
 class Sinonimo:
@@ -15,6 +15,18 @@ class Sinonimo:
         self.sinonimo = kwargs['sinonimo'] if kwargs else ''
         self.classe_gramatical = kwargs['classe_gramatical'] if kwargs else None
         self.distancia_semantica = kwargs['distancia_semantica'] if kwargs else None
+
+    def is_mesma_classe_gramatical(self, palavra):
+        if palavra.is_verbo():
+            return self.classe_gramatical == ClasseGramatical.VERBO
+
+        if palavra.is_adjetivo():
+            return self.classe_gramatical == ClasseGramatical.ADJETIVO
+
+        if palavra.is_substantivo():
+            return self.classe_gramatical == ClasseGramatical.SUBSTANTIVO
+
+        return False
 
     def to_json(self):
         return self.__dict__

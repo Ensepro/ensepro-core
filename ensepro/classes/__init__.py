@@ -4,3 +4,5 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+from .frase import Frase
+from .palavra import Palavra

@@ -2,7 +2,7 @@
     "frases": {
         "arquivo": "C:/Users/alenc/Documents/_gitProjects/ENSEPRO/ensepro/arquivos/frases/frases.txt",
         "regex": {
-            "palavra_relevante": ":(adj|n|prop)$",
+            "palavra_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",
             "palavra_substantivo": ":n$",
             "palavra_preposicao": ":prop$",
@@ -96,7 +96,7 @@
                 {
                     "import_path": "chatterbot.logic.LowConfidenceAdapter",
                     "threshold": 0.20,
-                    "default_response": "desconhecida"
+                    "default_response": "desconhecido"
                 }
             ]
         },

@@ -53,7 +53,7 @@ def __locucao_to_list(locucoes_map):
     return [locucoes_map[id] for id in locucoes_map]
 
 
-def __condicao_palavra_original_nao_vazia(palavra) -> bool:
+def __condicao_palavra_original_nao_vazia(frase, palavra, *args) -> bool:
     if palavra.palavra_original and palavra.palavra_original.strip():
         return True
     return False

@@ -16,6 +16,10 @@ class ComplementoNominal:
     def ok(self):
         return bool(self.nome) and bool(self.complemento)
 
+    @property
+    def as_text(self):
+        return "{0} + {1}".format(self.nome.palavra_original, self.complemento.palavra_original)
+
     def __str__(self):
         return "ComplementoNominal{{nome={0}, complemento={1}}}" \
                "".format(self.nome, self.complemento)

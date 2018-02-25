@@ -14,6 +14,7 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)
 chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
 termos_relevantes = []
+termos_relevantes_agrupados_por_tipo = {}
 
 
 def get_tipo(frase):
@@ -80,14 +81,28 @@ def __normalizar_treinamento(treinamento_carregado):
 
     for tipo in treinamento_carregado:
         for quando in treinamento_carregado[tipo]:
-            __add_termo_relevante(quando)
+            __add_termo_relevante(tipo, quando)
             treinamento_normalizado.append(quando)
             treinamento_normalizado.append(tipo)
 
     return treinamento_normalizado
 
 
-def __add_termo_relevante(termo: str):
+def __add_termo_relevante(tipo: str, termo: str):
+    __add_termo_relevante_lista(termo)
+    __add_termo_relevante_agrupado_por_tipo(tipo, termo)
+
+
+def __add_termo_relevante_agrupado_por_tipo(tipo, termo):
+    global termos_relevantes_agrupados_por_tipo
+    if not tipo in termos_relevantes_agrupados_por_tipo:
+        termos_relevantes_agrupados_por_tipo[tipo] = []
+
+    _termo = termo.split(' ')[0]
+    termos_relevantes_agrupados_por_tipo[tipo].append(_termo)
+
+
+def __add_termo_relevante_lista(termo: str):
     global termos_relevantes
     _termo = termo.split(' ')[0]
     termos_relevantes.append(_termo)
@@ -95,12 +110,12 @@ def __add_termo_relevante(termo: str):
 
 
 def __get_termos_relevantes(frase):
-    logger.info("Montando frase em texto com apenas termos relevantes")
+    logger.debug("Montando frase em texto com apenas termos relevantes")
     frase_string = ""
 
     for palavra in frase.palavras:
         if palavra.palavra_canonica in termos_relevantes:
             frase_string = ' '.join([frase_string, palavra.palavra_canonica, ' '.join(palavra.tags), ''])
 
-    logger.info("String da frase criada: [frase_string='%s']", frase_string)
+    logger.debug("String da frase criada: [frase_string='%s']", frase_string)
     return frase_string.strip(' ')
