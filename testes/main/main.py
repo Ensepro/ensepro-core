@@ -9,9 +9,14 @@ import sys
 
 def ensepro_path():
     import os
+    # Obtém o PATH para a pasta que contém este arquivo
     this_file_directory = os.path.dirname(os.path.abspath(__file__))
-    this_file_directory = this_file_directory.replace("\\", "/")
-    return this_file_directory[:this_file_directory.rindex("/")]
+
+    # Volta duas pastas
+    ensepro_path = os.path.dirname(this_file_directory)
+    ensepro_path = os.path.dirname(ensepro_path)
+    print(ensepro_path)
+    return ensepro_path
 
 sys.path.append(ensepro_path())
 
