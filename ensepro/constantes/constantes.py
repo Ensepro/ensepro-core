@@ -7,9 +7,16 @@
 """
 
 
-def path():
+def ensepro_path():
     import os
-    return os.path.abspath("../../")
+    # Obtém o PATH para a pasta que contém este arquivo
+    this_file_directory = os.path.dirname(os.path.abspath(__file__))
+
+    # Volta duas pastas
+    ensepro_path = os.path.dirname(this_file_directory)
+    ensepro_path = os.path.dirname(ensepro_path)
+
+    return ensepro_path
 
 
 class SinonimosConstantes:
@@ -27,8 +34,8 @@ class StringConstantes:
 
 
 class ConfiguracoesConstantes:
-    PATH = path()
-    ARQUIVO_CONFIGURACOES = PATH + "/ensepro/configuracoes/configs.json"
+    ENSEPRO_PATH = ensepro_path()
+    ARQUIVO_CONFIGURACOES = ENSEPRO_PATH + "/ensepro/configuracoes/configs.json"
 
     # Servidores
     SERVIDOR_PALAVRAS = "palavras"

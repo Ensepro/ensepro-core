@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 """
 @project ensepro
 @since 25/02/2018
@@ -14,7 +14,7 @@ def __init_logger():
     global logger
 
     logging.basicConfig(
-            filename=ConfiguracoesConstantes.PATH + __get_config(LoggerConstantes.NOME_DO_ARQUIVO),
+            filename=ConfiguracoesConstantes.ENSEPRO_PATH + __get_config(LoggerConstantes.NOME_DO_ARQUIVO),
             level=logging.INFO,
             format=__get_config(LoggerConstantes.FORMATO),
             filemode=__get_config(LoggerConstantes.MODO_DO_ARQUIVO),
