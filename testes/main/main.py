@@ -19,11 +19,13 @@ import ensepro
 
 frases = [
     "Já fez alguma coisa que teve vontade de sair gritando na rua?"
+    # "Quem é o presidente do Egito?"
 ]
 
 
+
 def __command(frase_analisada, *args):
-    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"])
+    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"], print_sinonimos=True)
     print("#" * 150, file=args[0]["file"], end="\n\n")
 
 

@@ -14,20 +14,11 @@ class Sinonimo:
     def __init__(self, **kwargs):
         self.synset = kwargs['synset'] if kwargs else None
         self.sinonimo = kwargs['sinonimo'] if kwargs else ''
-        self.classe_gramatical = kwargs['classe_gramatical'] if kwargs else None
+        self.classe_gramatical = ClasseGramatical(kwargs['classe_gramatical']) if kwargs else None
         self.distancia_semantica = kwargs['distancia_semantica'] if kwargs else None
 
     def is_mesma_classe_gramatical(self, palavra):
-        if palavra.is_verbo():
-            return self.classe_gramatical == ClasseGramatical.VERBO
-
-        if palavra.is_adjetivo():
-            return self.classe_gramatical == ClasseGramatical.ADJETIVO
-
-        if palavra.is_substantivo():
-            return self.classe_gramatical == ClasseGramatical.SUBSTANTIVO
-
-        return False
+        return self.classe_gramatical == palavra.classe_gramatical
 
     def to_json(self):
         return self.__dict__
@@ -36,7 +27,7 @@ class Sinonimo:
         return hash(str(self))
 
     def __eq__(self, other):
-        return str(self) == str(other)
+        return self.sinonimo == other.sinonimo
 
     def __str__(self):
         return self.sinonimo
@@ -46,6 +37,10 @@ class Sinonimo:
 
     def as_text(self) -> str:
         return '.'.join([self.synset, self.classe_gramatical, self.distancia_semantica, self.sinonimo])
+
+    @classmethod
+    def from_list_string(cls, wordnet_sinonimos: list):
+        return [cls.from_string(wordnet_sinonimo) for wordnet_sinonimo in wordnet_sinonimos]
 
     @classmethod
     def from_string(cls, wordnet_sinonimo: str):
