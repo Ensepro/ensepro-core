@@ -27,6 +27,7 @@ class Palavra:
         self.palavra_original = dados_palavra["palavra_original"] if dados_palavra else None
         self.palavra_canonica = dados_palavra["palavra_canonica"] if dados_palavra else None
         self.__sinonimos = None
+        self.__classe_gramatical = None
 
     @property
     def sinonimos(self):
@@ -41,10 +42,17 @@ class Palavra:
 
         for linguagem in linguagens:
             lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
-            lista_sinonimos = [Sinonimo.from_string(sinonimo_string) for sinonimo_string in lista_sinonimo_string]
-            self.__sinonimos[linguagem] = [sinonimo for sinonimo in lista_sinonimos if sinonimo.is_mesma_classe_gramatical(self)]
+            lista_sinonimos = Sinonimo.from_list_string(lista_sinonimo_string)
+            self.__sinonimos[linguagem] = list(set([sinonimo for sinonimo in lista_sinonimos if str(sinonimo.classe_gramatical) == str(self.classe_gramatical)]))
 
         return self.__sinonimos
+
+    @property
+    def classe_gramatical(self):
+        if self.__classe_gramatical:
+            return self.__classe_gramatical
+        self.__classe_gramatical = ClasseGramatical.classe_gramatical_palavra(self)
+        return self.__classe_gramatical
 
     def is_verbo(self):
         return bool(regex_palavra_verbo.search(self.tag_inicial))
@@ -101,3 +109,16 @@ class ClasseGramatical(Enum):
     VERBO = "v"
     ADJETIVO = "a"
     SUBSTANTIVO = "n"
+    PREPOSICAO = "p"
+
+    @classmethod
+    def classe_gramatical_palavra(self, palavra: Palavra):
+        if palavra.is_verbo():
+            return ClasseGramatical.VERBO
+        if palavra.is_substantivo():
+            return ClasseGramatical.SUBSTANTIVO
+        if palavra.is_adjetivo():
+            return ClasseGramatical.ADJETIVO
+        if palavra.is_preposicao():
+            return ClasseGramatical.PREPOSICAO
+        return None

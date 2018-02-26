@@ -55,7 +55,7 @@ def analisar_frase(frase: str):
         raise ex
 
 
-def frase_pretty_print(frase: Frase, file=None):
+def frase_pretty_print(frase: Frase, file=None, print_sinonimos=False):
     if not isinstance(frase, Frase):
         raise Exception("Não é um objeto Frase.")
 
@@ -66,6 +66,8 @@ def frase_pretty_print(frase: Frase, file=None):
     if frase.palavras_relevantes:
         for index, palavra in enumerate(frase.palavras_relevantes):
             print("----> PR {0}:".format(index), palavra, file=file)
+            if print_sinonimos:
+                print("--------> Sinonimos: " + str(palavra.sinonimos))
     else:
         print("----> Nenhuma.", file=file)
 
