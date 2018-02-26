@@ -6,8 +6,14 @@
 
 """
 import sys
-import os
-sys.path.append(os.path.abspath("../../"))
+
+def ensepro_path():
+    import os
+    this_file_directory = os.path.dirname(os.path.abspath(__file__))
+    this_file_directory = this_file_directory.replace("\\", "/")
+    return this_file_directory[:this_file_directory.rindex("/")]
+
+sys.path.append(ensepro_path())
 
 import ensepro
 
