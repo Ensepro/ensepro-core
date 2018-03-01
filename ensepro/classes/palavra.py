@@ -6,8 +6,8 @@
 
 """
 import re
-from enum import Enum
 from ensepro import configuracoes
+from ensepro.classes.classe_gramatical import ClasseGramatical
 from ensepro.constantes import ConfiguracoesConstantes
 from ensepro.conversores import make_json_serializable
 
@@ -43,7 +43,7 @@ class Palavra:
         for linguagem in linguagens:
             lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
             lista_sinonimos = Sinonimo.from_list_string(lista_sinonimo_string)
-            self.__sinonimos[linguagem] = list(set([sinonimo for sinonimo in lista_sinonimos if str(sinonimo.classe_gramatical) == str(self.classe_gramatical)]))
+            self.__sinonimos[linguagem] = list(set([sinonimo for sinonimo in lista_sinonimos if sinonimo.classe_gramatical == self.classe_gramatical]))
 
         return self.__sinonimos
 
@@ -103,22 +103,3 @@ class Palavra:
                     str(self.palavra_original),
                     str(self.palavra_canonica)
             )
-
-
-class ClasseGramatical(Enum):
-    VERBO = "v"
-    ADJETIVO = "a"
-    SUBSTANTIVO = "n"
-    PREPOSICAO = "p"
-
-    @classmethod
-    def classe_gramatical_palavra(self, palavra: Palavra):
-        if palavra.is_verbo():
-            return ClasseGramatical.VERBO
-        if palavra.is_substantivo():
-            return ClasseGramatical.SUBSTANTIVO
-        if palavra.is_adjetivo():
-            return ClasseGramatical.ADJETIVO
-        if palavra.is_preposicao():
-            return ClasseGramatical.PREPOSICAO
-        return None
