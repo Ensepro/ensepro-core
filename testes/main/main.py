@@ -15,7 +15,6 @@ def ensepro_path():
     # Volta duas pastas
     ensepro_path = os.path.dirname(this_file_directory)
     ensepro_path = os.path.dirname(ensepro_path)
-    print(ensepro_path)
     return ensepro_path
 
 sys.path.append(ensepro_path())
@@ -28,9 +27,8 @@ frases = [
 ]
 
 
-
 def __command(frase_analisada, *args):
-    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"], print_sinonimos=True)
+    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"], mostrar_sinonimos=True)
     print("#" * 150, file=args[0]["file"], end="\n\n")
 
 

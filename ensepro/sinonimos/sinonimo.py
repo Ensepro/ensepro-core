@@ -36,7 +36,7 @@ class Sinonimo:
         return self.__str__()
 
     def as_text(self) -> str:
-        return '.'.join([self.synset, self.classe_gramatical, self.distancia_semantica, self.sinonimo])
+        return '.'.join([self.synset, self.classe_gramatical.value, self.distancia_semantica, self.sinonimo])
 
     @classmethod
     def from_list_string(cls, wordnet_sinonimos: list):
