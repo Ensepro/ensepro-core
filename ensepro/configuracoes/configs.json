@@ -109,6 +109,9 @@
             "quanto": [
                 "quanto <clb> <interr> <quant> DET"
             ],
+            "quando": [
+                "quando <clb> <interr>"
+            ], 
             "o_que": [
                 "o_que <clb> <interr> M S"
             ],
