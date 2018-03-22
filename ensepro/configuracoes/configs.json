@@ -100,46 +100,75 @@
             ]
         },
         "treinamento": {
-            "alguem": [
-                "alguém M S"
-            ],
-            "algum": [
-                "algum <quant> DET"
-            ],
-            "quanto": [
-                "quanto <clb> <interr> <quant> DET"
-            ],
-            "quando": [
-                "quando <clb> <interr>"
-            ],
-            "o_que": [
-                "o_que <clb> <interr> M S"
-            ],
-            "qual": [
-                "qual <clb> <interr> DET M/F",
-                "que <clb> <interr> DET"
-            ],
-            "quem": [
-                "quem <clb> <interr> M/F S"
-            ],
-            "onde": [
-                "onde <clb> <interr>",
-                "aonde <clb> <interr>"
-            ],
-            "consulta": [
-                "listar <vH> <mv>",
-                "buscar <vH> <mv>",
-                "achar <vH> <mv>",
-                "encontrar <vH> <mv>",
-                "descobrir <vH> <mv>",
-                "mostrar <vH> <mv>",
-                "localizar <vH> <mv>",
-                "obter <vH> <mv>",
-                "recuperar <vH> <mv>",
-                "conseguir <vH> <mv>",
-                "nomear <vH> <mv>",
-                "dar <mv> PR 3S SUBJ VFIN"
-            ]
+            "dicionario": {
+                "alguem": "alguém M S",
+                "algum": "algum <quant> DET",
+                "quanto": "quanto <clb> <interr> <quant> DET",
+                "quando": "quando <clb> <interr>",
+                "o_que": "o_que <clb> <interr> M S",
+                "qual": "qual <clb> <interr> DET M/F",
+                "que": "que <clb> <interr> DET",
+                "quem": "quem <clb> <interr> M/F S",
+                "onde": "onde <clb> <interr>",
+                "aonde": "aonde <clb> <interr>",
+                "listar": "listar <vH> <mv>",
+                "buscar": "buscar <vH> <mv>",
+                "achar": "achar <vH> <mv>",
+                "encontrar": "encontrar <vH> <mv>",
+                "descobrir": "descobrir <vH> <mv>",
+                "mostrar": "mostrar <vH> <mv>",
+                "localizar": "localizar <vH> <mv>",
+                "obter": "obter <vH> <mv>",
+                "recuperar": "recuperar <vH> <mv>",
+                "conseguir": "conseguir <vH> <mv>",
+                "nomear": "nomear <vH> <mv>",
+                "em": "em <clb> <*>",
+                "cidade": "cidade <Lciv> F S",
+                "dia": "dia <temp> <dur> <per> <unit> M S"
+            },
+            "mapeamento": {
+                "alguem": [
+                    "$alguem"
+                ],
+                "algum": [
+                    "$algum"
+                ],
+                "quanto": [
+                    "$quanto"
+                ],
+                "quando": [
+                    "$quando",
+                    "$em $que $dia"
+                ],
+                "o_que": [
+                    "$o_que"
+                ],
+                "qual": [
+                    "$qual",
+                    "$que"
+                ],
+                "quem": [
+                    "$quem"
+                ],
+                "onde": [
+                    "$onde",
+                    "$aonde",
+                    "$em $que $cidade"
+                ],
+                "consulta": [
+                    "$listar",
+                    "$buscar",
+                    "$achar",
+                    "$encontrar",
+                    "$descobrir",
+                    "$mostrar",
+                    "$localizar",
+                    "$obter",
+                    "$recuperar",
+                    "$conseguir",
+                    "$nomear"
+                ]
+            }
         }
     }
 }

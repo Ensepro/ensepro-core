@@ -14,7 +14,7 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)
 
 chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
-termos_relevantes = []
+termos_relevantes = set()
 termos_relevantes_agrupados_por_tipo = {}
 
 
@@ -66,7 +66,10 @@ def iniciar_treinamento():
     treinamento_carregado = configuracoes.get_config(ChaterbotConstantes.TREINAMENTO)
     logger.debug("Treinamento carregado: [%s]", treinamento_carregado)
 
-    treinamento_normalizado = __normalizar_treinamento(treinamento_carregado)
+    dicionario = treinamento_carregado["dicionario"]
+    mapeamento = treinamento_carregado["mapeamento"]
+
+    treinamento_normalizado = __normalizar_treinamento(dicionario, mapeamento)
     logger.debug("Treinamento normalizado: [%s]", treinamento_normalizado)
 
     logger.info("Treinando....")
@@ -77,37 +80,37 @@ def iniciar_treinamento():
     logger.info("Treinamento executado")
 
 
-def __normalizar_treinamento(treinamento_carregado):
+def __normalizar_treinamento(dicionario, mapeamento):
     treinamento_normalizado = []
-
-    for tipo in treinamento_carregado:
-        for quando in treinamento_carregado[tipo]:
-            __add_termo_relevante(tipo, quando)
-            treinamento_normalizado.append(quando)
+    from string import Template
+    for tipo in mapeamento:
+        for match in mapeamento[tipo]:
+            __add_termo_relevante(tipo, match)
+            termo = Template(match).substitute(dicionario)
             treinamento_normalizado.append(tipo)
+            treinamento_normalizado.append(termo)
 
     return treinamento_normalizado
 
 
-def __add_termo_relevante(tipo: str, termo: str):
-    __add_termo_relevante_lista(termo)
-    __add_termo_relevante_agrupado_por_tipo(tipo, termo)
+def __add_termo_relevante(tipo: str, termos: str):
+    for termo in termos.split(' '):
+        _termo = termo[1:]
+        __add_termo_relevante_lista(_termo)
+        __add_termo_relevante_agrupado_por_tipo(tipo, _termo)
 
 
 def __add_termo_relevante_agrupado_por_tipo(tipo, termo):
     global termos_relevantes_agrupados_por_tipo
     if not tipo in termos_relevantes_agrupados_por_tipo:
         termos_relevantes_agrupados_por_tipo[tipo] = []
-
-    _termo = termo.split(' ')[0]
-    termos_relevantes_agrupados_por_tipo[tipo].append(_termo)
+    termos_relevantes_agrupados_por_tipo[tipo].append(termo)
 
 
 def __add_termo_relevante_lista(termo: str):
     global termos_relevantes
-    _termo = termo.split(' ')[0]
-    termos_relevantes.append(_termo)
-    logger.debug("Termo relevante adicionado. [termo='%s', from='%s']", _termo, termo)
+    termos_relevantes.add(termo)
+    logger.debug("Termo relevante adicionado. [termo='%s']", termo)
 
 
 def __get_termos_relevantes(frase):

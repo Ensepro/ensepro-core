@@ -40,7 +40,7 @@ def __get_config(path):
     return value
 
 
-def get_config(path: str, path_params=None, config_params=None) -> str:
+def get_config(path: str, path_params=None, config_params=None):
     """
     Obtém a configuração (<i>path</i>) do arquivo de configuração.
     :param path: caminho da configuração no arquivo json, separada por ponto('.').
