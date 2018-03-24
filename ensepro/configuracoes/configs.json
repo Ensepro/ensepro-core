@@ -122,6 +122,7 @@
                 "recuperar": "recuperar <vH> <mv>",
                 "conseguir": "conseguir <vH> <mv>",
                 "nomear": "nomear <vH> <mv>",
+                "dar": "dar <mv> PR 3S SUBJ VFIN",
                 "em": "em <clb> <*>",
                 "cidade": "cidade <Lciv> F S",
                 "dia": "dia <temp> <dur> <per> <unit> M S"
@@ -166,7 +167,8 @@
                     "$obter",
                     "$recuperar",
                     "$conseguir",
-                    "$nomear"
+                    "$nomear",
+                    "$dar"
                 ]
             }
         }
