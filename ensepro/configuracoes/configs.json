@@ -111,7 +111,7 @@
             ],
             "quando": [
                 "quando <clb> <interr>"
-            ], 
+            ],
             "o_que": [
                 "o_que <clb> <interr> M S"
             ],
@@ -137,7 +137,8 @@
                 "obter <vH> <mv>",
                 "recuperar <vH> <mv>",
                 "conseguir <vH> <mv>",
-                "nomear <vH> <mv>"
+                "nomear <vH> <mv>",
+                "dar <mv> PR 3S SUBJ VFIN"
             ]
         }
     }
