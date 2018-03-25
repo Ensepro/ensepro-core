@@ -5,6 +5,7 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+from string import Template
 from chatterbot import ChatBot
 from ensepro import configuracoes
 from ensepro.cln.tipo_frases import TipoFrase
@@ -14,8 +15,10 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)
 
 chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
-termos_relevantes = []
+termos_relevantes = set()
 termos_relevantes_agrupados_por_tipo = {}
+
+KEY_WORDS = ["#"]
 
 
 def get_tipo(frase):
@@ -66,7 +69,10 @@ def iniciar_treinamento():
     treinamento_carregado = configuracoes.get_config(ChaterbotConstantes.TREINAMENTO)
     logger.debug("Treinamento carregado: [%s]", treinamento_carregado)
 
-    treinamento_normalizado = __normalizar_treinamento(treinamento_carregado)
+    dicionario = treinamento_carregado["dicionario"]
+    mapeamento = treinamento_carregado["mapeamento"]
+
+    treinamento_normalizado = __normalizar_treinamento(dicionario, mapeamento)
     logger.debug("Treinamento normalizado: [%s]", treinamento_normalizado)
 
     logger.info("Treinando....")
@@ -77,37 +83,48 @@ def iniciar_treinamento():
     logger.info("Treinamento executado")
 
 
-def __normalizar_treinamento(treinamento_carregado):
+def __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario):
+    termo = Template(map_termo).substitute(dicionario)
+    logger.debug("Termo '%s' normalizado: %s", map_termo, termo)
+
+    __add_termo_relevante(tipo, termo)
+    termo = __remover_palavras_chaves(termo)
+    treinamento_normalizado.append(termo)
+    treinamento_normalizado.append(tipo)
+
+
+def __normalizar_treinamento(dicionario, mapeamento):
     treinamento_normalizado = []
-
-    for tipo in treinamento_carregado:
-        for quando in treinamento_carregado[tipo]:
-            __add_termo_relevante(tipo, quando)
-            treinamento_normalizado.append(quando)
-            treinamento_normalizado.append(tipo)
-
+    for tipo in mapeamento:
+        for map_termo in mapeamento[tipo]:
+            __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario)
     return treinamento_normalizado
 
 
-def __add_termo_relevante(tipo: str, termo: str):
-    __add_termo_relevante_lista(termo)
-    __add_termo_relevante_agrupado_por_tipo(tipo, termo)
+def __remover_palavras_chaves(termo):
+    for keyword in KEY_WORDS:
+        termo = termo.replace(keyword, "")
+    return termo
+
+
+def __add_termo_relevante(tipo: str, termos: str):
+    for termo in termos.split(' '):
+        if termo[0] == KEY_WORDS[0]:
+            __add_termo_relevante_lista(termo[1:])
+            __add_termo_relevante_agrupado_por_tipo(tipo, termo[1:])
 
 
 def __add_termo_relevante_agrupado_por_tipo(tipo, termo):
     global termos_relevantes_agrupados_por_tipo
     if not tipo in termos_relevantes_agrupados_por_tipo:
         termos_relevantes_agrupados_por_tipo[tipo] = []
-
-    _termo = termo.split(' ')[0]
-    termos_relevantes_agrupados_por_tipo[tipo].append(_termo)
+    termos_relevantes_agrupados_por_tipo[tipo].append(termo)
 
 
 def __add_termo_relevante_lista(termo: str):
     global termos_relevantes
-    _termo = termo.split(' ')[0]
-    termos_relevantes.append(_termo)
-    logger.debug("Termo relevante adicionado. [termo='%s', from='%s']", _termo, termo)
+    termos_relevantes.add(termo)
+    logger.debug("Termo relevante adicionado. [termo='%s']", termo)
 
 
 def __get_termos_relevantes(frase):
