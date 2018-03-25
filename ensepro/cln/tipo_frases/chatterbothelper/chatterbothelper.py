@@ -5,6 +5,7 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+from string import Template
 from chatterbot import ChatBot
 from ensepro import configuracoes
 from ensepro.cln.tipo_frases import TipoFrase
@@ -16,6 +17,8 @@ chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
 termos_relevantes = set()
 termos_relevantes_agrupados_por_tipo = {}
+
+KEY_WORDS = ["#"]
 
 
 def get_tipo(frase):
@@ -80,24 +83,35 @@ def iniciar_treinamento():
     logger.info("Treinamento executado")
 
 
+def __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario):
+    termo = Template(map_termo).substitute(dicionario)
+    logger.debug("Termo '%s' normalizado: %s", map_termo, termo)
+
+    __add_termo_relevante(tipo, termo)
+    termo = __remover_palavras_chaves(termo)
+    treinamento_normalizado.append(termo)
+    treinamento_normalizado.append(tipo)
+
+
 def __normalizar_treinamento(dicionario, mapeamento):
     treinamento_normalizado = []
-    from string import Template
     for tipo in mapeamento:
-        for match in mapeamento[tipo]:
-            __add_termo_relevante(tipo, match)
-            termo = Template(match).substitute(dicionario)
-            treinamento_normalizado.append(tipo)
-            treinamento_normalizado.append(termo)
-
+        for map_termo in mapeamento[tipo]:
+            __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario)
     return treinamento_normalizado
+
+
+def __remover_palavras_chaves(termo):
+    for keyword in KEY_WORDS:
+        termo = termo.replace(keyword, "")
+    return termo
 
 
 def __add_termo_relevante(tipo: str, termos: str):
     for termo in termos.split(' '):
-        _termo = termo[1:]
-        __add_termo_relevante_lista(_termo)
-        __add_termo_relevante_agrupado_por_tipo(tipo, _termo)
+        if termo[0] == KEY_WORDS[0]:
+            __add_termo_relevante_lista(termo[1:])
+            __add_termo_relevante_agrupado_por_tipo(tipo, termo[1:])
 
 
 def __add_termo_relevante_agrupado_por_tipo(tipo, termo):
