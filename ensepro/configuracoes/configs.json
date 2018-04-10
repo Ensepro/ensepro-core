@@ -38,6 +38,12 @@
                 "index_name": "triples",
                 "index_type": "triple"
             }
+        },
+        "dbpedia_spotlight":{
+            "endpoint": "http://api.dbpedia-spotlight.org",
+            "servicos": {
+                "spotlight": "/en/annotate/"
+            }
         }
     },
     "logger": {
@@ -73,6 +79,9 @@
             "servicos": {
                 "nivel": "INFO",
                 "palavras_service": {
+                    "nivel": "INFO"
+                },
+                "dbpedia_spotlight_service":{
                     "nivel": "INFO"
                 }
             },

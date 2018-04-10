@@ -7,7 +7,7 @@ O Ensepro é um sistema semântico de perguntas e respostas baseado em ontologia
 
 ### Dependências
 
-* Python >= 3.5
+* Python >= 3.6
 * Modulo NLTK [`pip install nltk`]
     * Importe e execute o comando `nltk.download()`
     * Faça o download da collection `all-nltk`
