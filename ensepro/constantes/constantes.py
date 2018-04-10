@@ -112,6 +112,7 @@ class LoggerConstantes:
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
     MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
+    MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG
@@ -149,3 +150,14 @@ class ChaterbotConstantes:
 
     # Termos
     TIPO_DESCONHECIDO = "desconhecido"
+
+
+class DBPediaSpotlightConstantes:
+    SERVIDOR_NOME = "dbpedia_spotlight"
+
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+
+    SERVICO_SPOTLIGHT = ConfiguracoesConstantes.SERVICO.format(
+            servidor=SERVIDOR_NOME,
+            nome_servico="spotlight"
+    )
