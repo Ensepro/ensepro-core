@@ -7,6 +7,9 @@
 """
 
 
+# TODO refactor this
+# TODO refactor this
+
 def ensepro_path():
     import os
     # Obtém o PATH para a pasta que contém este arquivo
@@ -113,6 +116,7 @@ class LoggerConstantes:
     MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
+    MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG
@@ -160,4 +164,15 @@ class DBPediaSpotlightConstantes:
     SERVICO_SPOTLIGHT = ConfiguracoesConstantes.SERVICO.format(
             servidor=SERVIDOR_NOME,
             nome_servico="spotlight"
+    )
+
+
+class KnowledgeGraphSearchConstantes:
+    SERVIDOR_NOME = "knowledge_graph_search"
+
+    API_KEY = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".key_file"
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+    SEARCH_SERVICE = ConfiguracoesConstantes.SERVICO.format(
+            servidor=SERVIDOR_NOME,
+            nome_servico="search"
     )

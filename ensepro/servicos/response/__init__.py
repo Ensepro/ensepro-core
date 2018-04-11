@@ -5,4 +5,5 @@
 
 """
 
-from .SpotlightResponse import SpotlightResponse
+from .spotlight_response import SpotlightResponse
+from .knowledge_graph_search_response import KnowledgeGraphSearchResponse

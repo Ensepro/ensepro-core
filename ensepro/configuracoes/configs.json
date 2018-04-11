@@ -39,10 +39,17 @@
                 "index_type": "triple"
             }
         },
-        "dbpedia_spotlight":{
+        "dbpedia_spotlight": {
             "endpoint": "http://api.dbpedia-spotlight.org",
             "servicos": {
                 "spotlight": "/en/annotate/"
+            }
+        },
+        "knowledge_graph_search": {
+            "endpoint": "https://kgsearch.googleapis.com/v1/entities",
+            "key_file": "../../.key",
+            "servicos": {
+                "search": ":search"
             }
         }
     },
@@ -81,7 +88,10 @@
                 "palavras_service": {
                     "nivel": "INFO"
                 },
-                "dbpedia_spotlight_service":{
+                "dbpedia_spotlight_service": {
+                    "nivel": "INFO"
+                },
+                "knowledge_graph_search_service": {
                     "nivel": "INFO"
                 }
             },
