@@ -7,3 +7,4 @@
 """
 
 from . import palavras_service
+from . import dbpedia_spotlight_service

@@ -5,4 +5,5 @@
 
 """
 
-from .SpotlightRequest import SpotlightRequest
+from .spotlight_request import SpotlightRequest
+from .knowledge_graph_search_request import KnowledgeGraphSearchRequest

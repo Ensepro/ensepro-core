@@ -6,7 +6,6 @@
 """
 
 import requests
-import json
 from ensepro.servicos.request import SpotlightRequest
 from ensepro.servicos.response import SpotlightResponse
 import ensepro.configuracoes as configuracoes
