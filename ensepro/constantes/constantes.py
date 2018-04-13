@@ -40,10 +40,6 @@ class ConfiguracoesConstantes:
     ENSEPRO_PATH = ensepro_path()
     ARQUIVO_CONFIGURACOES = ENSEPRO_PATH + "/ensepro/configuracoes/configs.json"
 
-    # Servidores
-    SERVIDOR_PALAVRAS = "palavras"
-    SERVIDOR_ELASTIC_SEARCH = "elastic_search"
-
     # Primeiro nivel
     LOG = "logger"
     FRASES = "frases"
@@ -80,13 +76,24 @@ class ConfiguracoesConstantes:
 class PalavrasServidorConstantes:
     SERVIDOR_NOME = "palavras"
 
-    ANALISAR_FRASE_PARAM = "frase"
     ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
     PORTA = ConfiguracoesConstantes.PORTA.format(servidor=SERVIDOR_NOME)
+
+    ANALISAR_FRASE_PARAM = "frase"
     SERVICO_ANALISAR_FRASE = ConfiguracoesConstantes.SERVICO.format(
             servidor=SERVIDOR_NOME,
             nome_servico="analisar_frase"
     )
+
+
+class ElasticSearchConstantes:
+    SERVIDOR_NOME = "elastic_search"
+
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+    PORTA = ConfiguracoesConstantes.PORTA.format(servidor=SERVIDOR_NOME)
+
+    USERNAME = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".username").format(servidor=SERVIDOR_NOME)
+    PASSWORD = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".password").format(servidor=SERVIDOR_NOME)
 
 
 class LoggerConstantes:
@@ -117,6 +124,15 @@ class LoggerConstantes:
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
+
+
+    MODULO_ELASTIC_SEARCH = "elasticsearch"
+    MODULO_ES_CONNECTION = MODULO_ELASTIC_SEARCH + ".connection"
+    MODULO_ES_CONSULTA = MODULO_ELASTIC_SEARCH + ".consulta"
+    MODULO_ES_HELPERS = MODULO_ELASTIC_SEARCH + ".helpers"
+    MODULO_ES_LOADERS = MODULO_ELASTIC_SEARCH + ".loaders"
+    MODULO_ES_DATASET = MODULO_ES_LOADERS + ".dataset"
+
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG

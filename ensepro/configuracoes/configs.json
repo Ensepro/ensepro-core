@@ -36,8 +36,10 @@
             "endpoint": "127.0.0.1",
             "porta": "9200",
             "settings": {
-                "index_name": "triples",
-                "index_type": "triple"
+                "index_name": "triplas",
+                "index_type": "tripla",
+                "username": "",
+                "password": ""
             }
         },
         "dbpedia_spotlight": {
@@ -65,6 +67,24 @@
             },
             "configuracoes": {
                 "nivel": "INFO"
+            },
+            "elasticsearch": {
+                "nivel": "INFO",
+                "connection": {
+                    "nivel": "INFO"
+                },
+                "consulta": {
+                    "nivel": "INFO"
+                },
+                "helpers": {
+                    "nivel": "INFO"
+                },
+                "loaders": {
+                    "nivel": "INFO",
+                    "dataset": {
+                        "nivel": "INFO"
+                    }
+                }
             },
             "cln": {
                 "nivel": "INFO",
