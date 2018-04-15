@@ -5,5 +5,4 @@
 
 """
 
-from . import helpers
-from .connection import ensepro_connection
+from .connection import connection

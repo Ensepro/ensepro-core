@@ -4,17 +4,17 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-from ..query import Query
+from ensepro.elasticsearch.queries import Query
 from elasticsearch import Elasticsearch
 from ensepro.constantes import LoggerConstantes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ES_CONSULTA)
 
-def search(client: Elasticsearch, query: Query):
-    logger.debug("Executando curstom_query: {}", query)
+
+def execute_search(client: Elasticsearch, query: Query):
+    logger.debug("Executando consulta simples: %s", query)
     return client.search(
             index=query.index_name,
             doc_type=query.index_type,
-            query=query.query,
-            params=query.params
+            body=query.query
     )

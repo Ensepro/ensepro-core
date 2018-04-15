@@ -4,7 +4,8 @@
             "palavra_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",
             "palavra_substantivo": ":n$",
-            "palavra_preposicao": ":prop$",
+            "palavra_preposicao": ":prp$",
+            "palavra_substantivo_proprio": ":prop$",
             "palavra_verbo": "v-",
             "voz_passiva": "^fApass:pp$"
         },
@@ -45,7 +46,8 @@
         "dbpedia_spotlight": {
             "endpoint": "http://api.dbpedia-spotlight.org",
             "servicos": {
-                "spotlight": "/en/annotate/"
+                "spotlight": "/{lang}/annotate/"
+
             }
         },
         "knowledge_graph_search": {
@@ -68,22 +70,31 @@
             "configuracoes": {
                 "nivel": "INFO"
             },
+            "consulta": {
+                "nivel": "DEBUG",
+                "localizar_referencia_substantivo_proprio": {
+                    "nivel": "DEBUG"
+                }
+            },
             "elasticsearch": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "connection": {
-                    "nivel": "INFO"
-                },
-                "consulta": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "helpers": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "loaders": {
-                    "nivel": "INFO",
+                    "nivel": "DEBUG",
                     "dataset": {
-                        "nivel": "INFO"
+                        "nivel": "DEBUG"
                     }
+                },
+                "queries": {
+                    "nivel": "DEBUG"
+                },
+                "searches": {
+                    "nivel": "DEBUG"
                 }
             },
             "cln": {

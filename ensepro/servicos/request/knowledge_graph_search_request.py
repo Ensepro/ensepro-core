@@ -9,8 +9,9 @@ from ensepro.conversores import make_json_serializable
 
 class KnowledgeGraphSearchRequest:
 
-    def __init__(self, query):
+    def __init__(self, query, languages="pt"):
         self.query = query
+        self.languages = languages
 
     def __to_json__(self):
         return self.__dict__
