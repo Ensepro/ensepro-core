@@ -5,5 +5,6 @@
 
 """
 
-from .simple_query_search import SimpleQuerySearch
+from .simple_query_string_search import SimpleQueryStringSearch
+from .simple_query_term_search import SimpleQueryTermSearch
 from .query import Query

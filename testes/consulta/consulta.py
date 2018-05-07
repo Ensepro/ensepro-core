@@ -25,7 +25,7 @@ import ensepro
 from ensepro.consulta import ReferenciasSubstantivosProprios
 
 # frase = "Obtenha a imagem de Anatole france."
-# frase = "Obtenha uma imagem de Darwin."
+frase = "Obtenha uma imagem da Angola."
 # frase = "Obtenha uma imagem de Heisenberg."
 # frase = "Obtenha uma imagem de Charles Darwin."
 # frase = "Obtenha uma imagem da batalha de Gettysburg."
@@ -34,15 +34,16 @@ from ensepro.consulta import ReferenciasSubstantivosProprios
 
 
 args = sys.argv
-frase = sys.argv[1]
+# frase = sys.argv[1]
+
 print_dados = False
 if len(sys.argv) > 2:
     print_dados = sys.argv[2] == "-p"
 
 frase_processada = ensepro.analisar_frase(frase)
-if print_dados:
+if print_dados or True:
     ensepro.frase_pretty_print(frase_processada)
 
 referencias = ReferenciasSubstantivosProprios(frase_processada)
-referencias.localizar()
-print(referencias.resultado_referencias)
+result = referencias.localizar()
+print(result)

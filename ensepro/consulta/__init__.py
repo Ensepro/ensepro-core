@@ -5,4 +5,10 @@
 
 """
 
-from .localizar_referencia_substantivo_proprio import ReferenciasSubstantivosProprios
+from .substantivos_proprios import ReferenciasSubstantivosProprios
+
+
+
+
+
+

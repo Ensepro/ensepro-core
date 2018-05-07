@@ -37,8 +37,8 @@
             "endpoint": "127.0.0.1",
             "porta": "9200",
             "settings": {
-                "index_name": "triplas",
-                "index_type": "tripla",
+                "index_name": "ensepro_triplas",
+                "index_type": "ensepro_tripla",
                 "username": "",
                 "password": ""
             }
