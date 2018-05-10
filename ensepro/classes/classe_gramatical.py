@@ -6,7 +6,7 @@
 
 """
 from enum import Enum
-
+from ensepro.conversores import make_json_serializable
 # TODO revisar valores
 # http://www.nltk.org/_modules/nltk/corpus/reader/wordnet.html
 #
@@ -20,6 +20,8 @@ class ClasseGramatical(Enum):
     SUBSTANTIVO = "n"
     PREPOSICAO = "r"
 
+    def __to_json__(self):
+        return str(self)
 
     @classmethod
     def classe_gramatical_palavra(self, palavra):
