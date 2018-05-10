@@ -54,7 +54,8 @@ def criar_chatterbot():
             name=nome,
             storage_adapter=storage_adapter,
             logic_adapters=logic_adapters,
-            trainer=trainer
+            trainer=trainer,
+            show_training_progress=False
     )
 
     logger.info("Chatterbot criado.")

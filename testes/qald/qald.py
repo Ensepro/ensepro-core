@@ -42,5 +42,5 @@ def tem_pergunta_pt_br(qald_question):
 
 
 def command(frase_analisada, file, mostrar_sinonimos):
-    ensepro.frase_pretty_print(frase_analisada, file=file, mostrar_sinonimos=mostrar_sinonimos)
+    ensepro.frase_pretty_print(frase_analisada, file=file, sinonimos=mostrar_sinonimos)
     print("#" * 150, file=file, end="\n\n")

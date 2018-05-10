@@ -7,11 +7,8 @@
 """
 
 # Modulos/classes/funções publicas na importação
-from .classes import *
-from .arvore import *
-from .sinonimos import *
-from .constantes import *
-from .cln import *
+from ensepro.classes import *
+from ensepro.constantes import *
 
 __FRASE_ID = 0
 
@@ -55,38 +52,61 @@ def analisar_frase(frase: str):
         raise ex
 
 
-def frase_pretty_print(frase: Frase, file=None, mostrar_sinonimos=False):
+def frase_pretty_print(frase: Frase,
+                       file=None,
+                       termos_relevantes=False,
+                       sinonimos=False,
+                       complementos_nominais=False,
+                       locucoes_verbais=False,
+                       tags=False,
+                       arvore=False,
+                       verbose=False):
     if not isinstance(frase, Frase):
         raise Exception("Não é um objeto Frase.")
 
-    print("->Frase {0}: {1}".format(frase.id, frase.frase_original), file=file)
+    print("-> Frase {0}: {1}".format(frase.id, frase.frase_original), file=file)
     print("--> Tipo:", frase.tipo, file=file)
     print("--> Voz:", frase.voz, file=file)
-    print("--> Palavras Relevantes:", file=file)
-    if frase.palavras_relevantes:
-        for index, palavra in enumerate(frase.palavras_relevantes):
-            print("----> PR {0}:".format(index), palavra, file=file)
-            if mostrar_sinonimos:
-                print("--------> Sinonimos: " + str(palavra.sinonimos), file=file)
-    else:
-        print("----> Nenhuma.", file=file)
 
-    print("--> Complementos Nominais:", file=file)
-    if frase.complementos_nominais:
-        for index, cn in enumerate(frase.complementos_nominais):
-            print("----> CN {0}:".format(index), cn.as_text, file=file)
-    else:
-        print("----> Nenhum.", file=file)
+    if termos_relevantes or verbose:
+        print("--> Termos Relevantes:", file=file)
+        if frase.palavras_relevantes:
+            for index, palavra in enumerate(frase.palavras_relevantes):
+                print("----> TR {0}:".format(index), palavra, file=file)
+                if sinonimos or verbose:
+                    print("--------> Sinonimos: " + str(palavra.sinonimos), file=file)
+        else:
+            print("----> Nenhuma.", file=file)
 
-    print("--> Locuções Verbais:", file=file)
-    if frase.locucao_verbal:
-        for index, lv in enumerate(frase.locucao_verbal):
-            print("----> LV {0}:".format(index), lv, file=file)
-    else:
-        print("----> Nenhum.", file=file)
+    if complementos_nominais or verbose:
+        print("--> Complementos Nominais:", file=file)
+        if frase.complementos_nominais:
+            for index, cn in enumerate(frase.complementos_nominais):
+                print("----> CN {0}:".format(index), cn.as_text, file=file)
+        else:
+            print("----> Nenhum.", file=file)
 
-    print("--> Tags das palavras", file=file)
-    for palavra in frase.palavras:
-        print("Palavra[{:>3}] {:>20} - {:>20}: {}".format(palavra.id,palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)), file=file)
+    if locucoes_verbais or verbose:
+        print("--> Locuções Verbais:", file=file)
+        if frase.locucao_verbal:
+            for index, lv in enumerate(frase.locucao_verbal):
+                print("----> LV {0}:".format(index), lv, file=file)
+        else:
+            print("----> Nenhum.", file=file)
 
-    frase.arvore.to_nltk_tree().pretty_print(stream=file)
+    if tags or verbose:
+        print("--> Tags das palavras", file=file)
+        for palavra in frase.palavras:
+            print("Palavra[{:>3}] {:>20} - {:>20}: {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)),
+                  file=file)
+
+    if arvore or verbose:
+        frase.arvore.to_nltk_tree().pretty_print(stream=file)
+
+
+def save_as_json(value, filename, indent=4, sort_keys=False):
+    import json
+    print(
+            json.dumps(value, indent=indent, sort_keys=sort_keys, ensure_ascii=False),
+            file=open(filename, mode='w', encoding="UTF-8")
+    )
