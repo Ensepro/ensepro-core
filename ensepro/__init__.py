@@ -70,8 +70,8 @@ def frase_pretty_print(frase: Frase,
 
     if termos_relevantes or verbose:
         print("--> Termos Relevantes:", file=file)
-        if frase.palavras_relevantes:
-            for index, palavra in enumerate(frase.palavras_relevantes):
+        if frase.termos_relevantes:
+            for index, palavra in enumerate(frase.termos_relevantes):
                 print("----> TR {0}:".format(index), palavra, file=file)
                 if sinonimos or verbose:
                     print("--------> Sinonimos: " + str(palavra.sinonimos), file=file)
@@ -97,7 +97,7 @@ def frase_pretty_print(frase: Frase,
     if tags or verbose:
         print("--> Tags das palavras", file=file)
         for palavra in frase.palavras:
-            print("Palavra[{:>3}] {:>20} - {:>20}: {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)),
+            print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)),
                   file=file)
 
     if arvore or verbose:

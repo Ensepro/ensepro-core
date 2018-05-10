@@ -16,7 +16,7 @@ class Frase:
         self.__arvore = None
         self.__tipo = None
         self.__locucao_verbal = None
-        self.__palavras_relevantes = None
+        self.__termos_relevantes = None
         self.__voz = None
         self.__complementos_nominais = None
 
@@ -48,13 +48,13 @@ class Frase:
         return self.__locucao_verbal
 
     @property
-    def palavras_relevantes(self):
-        if self.__palavras_relevantes:
-            return self.__palavras_relevantes
+    def termos_relevantes(self):
+        if self.__termos_relevantes:
+            return self.__termos_relevantes
 
-        from ensepro.cln import palavras_relevantes
-        self.__palavras_relevantes = palavras_relevantes.get(self)
-        return self.__palavras_relevantes
+        from ensepro.cln import termos_relevantes
+        self.__termos_relevantes = termos_relevantes.get(self)
+        return self.__termos_relevantes
 
     @property
     def voz(self):
@@ -94,7 +94,7 @@ class Frase:
             "arvore": str(self.__arvore),
             "tipo": self.__tipo,
             "locucao_verbal": self.__locucao_verbal,
-            "palavras_relevantes": [palavra.__to_json__() for palavra in self.__palavras_relevantes] if self.__palavras_relevantes else None,
+            "termos_relevantes": [palavra.__to_json__() for palavra in self.__termos_relevantes] if self.__termos_relevantes else None,
             "voz": str(self.__voz),
             "complementos_nominais": self.__complementos_nominais
         }

@@ -37,7 +37,7 @@ def get_args():
 
     parser.add_argument("-ms", "--mostrar-sinonimos",
                         dest="mostrar_sinonimos",
-                        help="Busca e salva os sinônimos das palavras_relevantes.",
+                        help="Busca e salva os sinônimos dos termos relevantes.",
                         action="store_true",
                         default=False)
 
