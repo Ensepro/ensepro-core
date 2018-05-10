@@ -34,7 +34,7 @@ frases = [
 
 frases_analisada = ensepro.analisar_frases(frases)
 for frase_analisada in frases_analisada:
-    ensepro.frase_pretty_print(frase_analisada, mostrar_sinonimos=True)
+    ensepro.frase_pretty_print(frase_analisada, sinonimos=True)
 # print(json.dumps(frase_analisada, indent=4, sort_keys=False), file=open("../../frase.json", mode="w", encoding="UTF-8"))
 
 
