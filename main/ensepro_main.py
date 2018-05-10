@@ -43,11 +43,12 @@ frases_analisadas = ensepro.analisar_frases(frases_texto)
 for frase_analisada in frases_analisadas:
     t = frase_analisada.tipo
     t = frase_analisada.voz
+
     if args.termos_relevantes or args.verbose:
         t = frase_analisada.palavras_relevantes
-
-    if args.sinonimos or args.verbose:
-        t = frase_analisada.sinonimos
+        if args.sinonimos or args.verbose:
+            for palavra in frase_analisada.palavras_relevantes:
+                t = palavra.sinonimos
 
     if args.complementos_nominais or args.verbose:
         t = frase_analisada.complementos_nominais
