@@ -5,14 +5,14 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
+import os
 import sys
 
-from main import main_path
+# Seta no path do sistema a pasta que a pasta deste arquivo está contido
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from main import main_utils
 from main import main_params
-
-sys.path.append(main_path.get_ensepro_path(__file__))
-
 import ensepro
 
 if len(sys.argv) < 2:
