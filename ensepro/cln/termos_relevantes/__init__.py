@@ -6,4 +6,4 @@
 
 """
 
-from .palavras_relevantes import get
+from .termos_relevantes import get

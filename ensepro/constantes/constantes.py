@@ -55,7 +55,7 @@ class ConfiguracoesConstantes:
     REGEX_VOZ_PASSIVA = REGEX + ".voz_passiva"
     REGEX_PALAVRA_VERBO = REGEX + ".palavra_verbo"
     REGEX_PALAVRA_ADJETIVO = REGEX + ".palavra_adjetivo"
-    REGEX_PALAVRA_RELEVENTE = REGEX + ".palavra_relevante"
+    REGEX_TERMO_RELEVANTE = REGEX + ".termo_relevante"
     REGEX_PALAVRA_PREPOSICAO = REGEX + ".palavra_preposicao"
     REGEX_PALAVRA_SUBSTANTIVO = REGEX + ".palavra_substantivo"
     REGEX_PALAVRA_SUBSTANTIVO_PROPRIO = REGEX + ".palavra_substantivo_proprio"

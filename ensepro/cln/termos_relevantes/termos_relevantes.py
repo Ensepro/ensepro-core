@@ -12,7 +12,7 @@ from ensepro.cln.voz.voz import Voz
 from ensepro.cln.tipo_frases.chatterbothelper.chatterbothelper import termos_relevantes_agrupados_por_tipo
 from ensepro.utils.string_utils import remover_acentos
 
-regex_palavra_relevante = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_RELEVENTE))
+regex_termo_relevante = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_TERMO_RELEVANTE))
 verbos_ligacao = configuracoes.get_config(ConfiguracoesConstantes.VERBOS_DE_LIGACAO)
 palavras_dos_tipos = {}
 
@@ -23,13 +23,13 @@ def get(frase):
         palavra_tipo = __obtem_palavra_tipo(frase, palavras)
         if palavra_tipo:
             palavra_apos_tipo = __obtem_palavra_apos_tipo(palavras, palavra_tipo)
-            return frase.get_palavras(__is_palavra_relevante, tipo=palavra_tipo, palavra_apos_tipo=palavra_apos_tipo)
+            return frase.get_palavras(__is_termo_relevante, tipo=palavra_tipo, palavra_apos_tipo=palavra_apos_tipo)
 
     # Default ignora o tipo para busca de palavras relevantes
-    return frase.get_palavras(__is_palavra_relevante)
+    return frase.get_palavras(__is_termo_relevante)
 
 
-def __is_palavra_relevante(frase, palavra, *args):
+def __is_termo_relevante(frase, palavra, *args):
     # 1. Palavras que possuem palavraOriginal vazia.
     if not palavra.palavra_original:
         return False
@@ -48,7 +48,7 @@ def __is_palavra_relevante(frase, palavra, *args):
             return False
 
     # 3. tagInicial da palavra deve bater com a regex de palavras relevantes
-    if not regex_palavra_relevante.search(palavra.tag_inicial):
+    if not regex_termo_relevante.search(palavra.tag_inicial):
         return False
 
     # 4. Quando a frase estiver a voz passiva, o verbo 'ser' deve ser ignorado.
