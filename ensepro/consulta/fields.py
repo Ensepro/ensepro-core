@@ -15,9 +15,9 @@ def create_field(name, key):
 
 
 class Field(Enum):
-    FULL_MATCH_SUJEITO = create_field("sujeito.conceito", "+S")
-    FULL_MATCH_PREDICADO = create_field("predicado.conceito", "+P")
-    FULL_MATCH_OBJETO = create_field("objeto.conceito", "+O")
-    PARTIAL_MATCH_SUJEITO = create_field("sujeito.ngram_conceito", "+s")
-    PARTIAL_MATCH_PREDICADO = create_field("predicado.ngram_conceito", "+p")
-    PARTIAL_MATCH_OBJETO = create_field("objeto.ngram_conceito", "+o")
+    FULL_MATCH_SUJEITO = create_field("sujeito.conceito", "S")
+    FULL_MATCH_PREDICADO = create_field("predicado.conceito", "P")
+    FULL_MATCH_OBJETO = create_field("objeto.conceito", "O")
+    PARTIAL_MATCH_SUJEITO = create_field("sujeito.ngram_conceito", "s")
+    PARTIAL_MATCH_PREDICADO = create_field("predicado.ngram_conceito", "p")
+    PARTIAL_MATCH_OBJETO = create_field("objeto.ngram_conceito", "o")

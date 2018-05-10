@@ -15,6 +15,7 @@ confiancas = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CONSULTA)
 
 
+# TODO Validar se a utilização do parcial_match aqui é melhor ou não(conversar com Denis) (fazer experimentos para validar)
 def busca_no_elasticsearch(substantivo_proprio):
     search_result = full_match_serach(fields, substantivo_proprio)
     if search_result["keys"]:
@@ -89,6 +90,8 @@ actions = [
     encontrar_entidade_spotlight_en,
     encontrar_entidade_google_knowledge_graph_pt,
     encontrar_entidade_google_knowledge_graph_en
+    # TODO adicionar a busca simples ao ES com o substantivo_proprio. Se spotlight retornou entidade == :prop, vai buscar no ES, se não encontrar ali,
+    # não vai encontrrar neste método também
 ]
 
 

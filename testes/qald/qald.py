@@ -20,13 +20,17 @@ def execute(file, resultados, mostrar_sinonimos):
         if tem_pergunta_pt_br(qald_question):
             frases.append(qald_question["question"]["string"])
 
-    ensepro.analisar_frases_and_execute(
-            frases,
-            __command,
-            file=open(resultados, mode='w', encoding="UTF-8") if resultados else None,
-            mostrar_sinonimos=mostrar_sinonimos
-    )
+    frases_analisdas = ensepro.analisar_frases(frases)
 
+    file = open(resultados + ".txt", mode='w', encoding="UTF-8") if resultados else None
+    for frase_analisada in frases_analisdas:
+        command(
+                frase_analisada,
+                file=file,
+                mostrar_sinonimos=mostrar_sinonimos
+        )
+
+    print(json.dumps(frases_analisdas, indent=4, sort_keys=False, ensure_ascii=False), file=open(resultados + ".json", mode='w', encoding="UTF-8"))
 
 def tem_pergunta_pt_br(qald_question):
     for lang_question in qald_question["question"]:
@@ -37,6 +41,6 @@ def tem_pergunta_pt_br(qald_question):
     return False
 
 
-def __command(frase_analisada, *args):
-    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"], mostrar_sinonimos=args[0]["mostrar_sinonimos"])
-    print("#" * 150, file=args[0]["file"], end="\n\n")
+def command(frase_analisada, file, mostrar_sinonimos):
+    ensepro.frase_pretty_print(frase_analisada, file=file, mostrar_sinonimos=mostrar_sinonimos)
+    print("#" * 150, file=file, end="\n\n")

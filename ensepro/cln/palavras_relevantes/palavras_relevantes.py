@@ -71,11 +71,14 @@ def __obtem_palavra_tipo(frase, palavras):
     :param frase: frase sendo analisada
     :return: objeto do tipo Palavra que é a palavra que determinou o tipo
     """
-    termos_relevantes_tipo = termos_relevantes_agrupados_por_tipo[frase.tipo.tipo]
-    termos_relevantes_tipo = [remover_acentos(termo) for termo in termos_relevantes_tipo]
-    for palavra in palavras:
-        if __is_palavra_tipo(palavra, termos_relevantes_tipo):
-            return palavra
+    try:
+        termos_relevantes_tipo = termos_relevantes_agrupados_por_tipo[frase.tipo.tipo]
+        termos_relevantes_tipo = [remover_acentos(termo) for termo in termos_relevantes_tipo]
+        for palavra in palavras:
+            if __is_palavra_tipo(palavra, termos_relevantes_tipo):
+                return palavra
+    except Exception:
+        return None
 
     return None
 

@@ -20,7 +20,7 @@ class Sinonimo:
     def is_mesma_classe_gramatical(self, palavra):
         return self.classe_gramatical == palavra.classe_gramatical
 
-    def to_json(self):
+    def __to_json__(self):
         return self.__dict__
 
     def __hash__(self):

@@ -6,9 +6,4 @@
 """
 
 from .substantivos_proprios import ReferenciasSubstantivosProprios
-
-
-
-
-
-
+from .substantivos_comuns import ReferenciasSubstantivosComuns

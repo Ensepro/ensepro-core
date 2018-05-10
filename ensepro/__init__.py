@@ -85,4 +85,8 @@ def frase_pretty_print(frase: Frase, file=None, mostrar_sinonimos=False):
     else:
         print("----> Nenhum.", file=file)
 
+    print("--> Tags das palavras", file=file)
+    for palavra in frase.palavras:
+        print("Palavra[{:>3}] {:>20} - {:>20}: {}".format(palavra.id,palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)), file=file)
+
     frase.arvore.to_nltk_tree().pretty_print(stream=file)

@@ -86,7 +86,7 @@ class Palavra:
         return hash(str(self.as_text))
 
     def __eq__(self, other):
-        return str(self.as_text) == str(other.as_text)
+        return str(self.palavra_original) == str(other.palavra_original)
 
     def __str__(self):
         if self.palavra_original:
