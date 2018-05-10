@@ -14,10 +14,10 @@ class SpotlightResponse:
         self.as_json = response.json()
 
     def __to_json__(self):
-        return self.__dict__
+        return self.as_json
 
     def __str__(self):
-        return str(self.__dict__)
+        return str(self.__to_json__())
 
     def __repr__(self):
         return self.__str__()

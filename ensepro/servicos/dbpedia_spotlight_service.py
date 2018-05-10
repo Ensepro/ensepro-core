@@ -16,10 +16,10 @@ endpoint = configuracoes.get_config(DBPediaSpotlightConstantes.ENDPOINT)
 servico_spotlight = configuracoes.get_config(DBPediaSpotlightConstantes.SERVICO_SPOTLIGHT)
 
 
-def spotlight(request: SpotlightRequest) -> SpotlightResponse:
+def spotlight(request: SpotlightRequest, lang="pt") -> SpotlightResponse:
     logger.info("Service Spotlight request: [request=%s]", request)
 
-    url = __build_url([endpoint, servico_spotlight])
+    url = __build_url([endpoint, servico_spotlight.format(lang=lang)])
     params = request.__dict__
     headers = {"Accept": "application/json"}
     logger.debug("Executando request [url=%s, params=%s, headers=%s]", url, params, headers)
@@ -37,6 +37,10 @@ def spotlight(request: SpotlightRequest) -> SpotlightResponse:
 
     logger.exception(exception, exc_info=False)
     raise exception
+
+
+def spotlight_list(requests, lang="pt"):
+    return [spotlight(request, lang=lang) for request in requests]
 
 
 def __build_url(values):

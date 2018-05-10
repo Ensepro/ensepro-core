@@ -15,6 +15,7 @@ regex_palavra_verbo = re.compile(configuracoes.get_config(ConfiguracoesConstante
 regex_palavra_adjetivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_ADJETIVO))
 regex_palavra_preposicao = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_PREPOSICAO))
 regex_palavra_substantivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO))
+regex_palavra_substantivo_proprio = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO_PROPRIO))
 
 
 class Palavra:
@@ -43,7 +44,8 @@ class Palavra:
         for linguagem in linguagens:
             lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
             lista_sinonimos = Sinonimo.from_list_string(lista_sinonimo_string)
-            self.__sinonimos[linguagem] = list(set([sinonimo for sinonimo in lista_sinonimos if sinonimo.classe_gramatical == self.classe_gramatical]))
+            self.__sinonimos[linguagem] = list(
+                    set([sinonimo for sinonimo in lista_sinonimos if sinonimo.classe_gramatical == self.classe_gramatical]))
 
         return self.__sinonimos
 
@@ -66,6 +68,9 @@ class Palavra:
     def is_substantivo(self):
         return bool(regex_palavra_substantivo.search(self.tag_inicial))
 
+    def is_substantivo_proprio(self):
+        return bool(regex_palavra_substantivo_proprio.search(self.tag_inicial))
+
     def __to_json__(self):
         return {
             "id": self.id,
@@ -81,7 +86,7 @@ class Palavra:
         return hash(str(self.as_text))
 
     def __eq__(self, other):
-        return str(self.as_text) == str(other.as_text)
+        return str(self.palavra_original) == str(other.palavra_original)
 
     def __str__(self):
         if self.palavra_original:

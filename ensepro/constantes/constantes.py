@@ -58,6 +58,7 @@ class ConfiguracoesConstantes:
     REGEX_PALAVRA_RELEVENTE = REGEX + ".palavra_relevante"
     REGEX_PALAVRA_PREPOSICAO = REGEX + ".palavra_preposicao"
     REGEX_PALAVRA_SUBSTANTIVO = REGEX + ".palavra_substantivo"
+    REGEX_PALAVRA_SUBSTANTIVO_PROPRIO = REGEX + ".palavra_substantivo_proprio"
 
     # Lista de verbos de ligação
     VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
@@ -94,6 +95,8 @@ class ElasticSearchConstantes:
 
     USERNAME = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".username").format(servidor=SERVIDOR_NOME)
     PASSWORD = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".password").format(servidor=SERVIDOR_NOME)
+    INDEX_NAME = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".index_name").format(servidor=SERVIDOR_NOME)
+    INDEX_TYPE = (ConfiguracoesConstantes.CONFIGURACOES_SERVIDOR + ".index_type").format(servidor=SERVIDOR_NOME)
 
 
 class LoggerConstantes:
@@ -116,6 +119,7 @@ class LoggerConstantes:
     MODULO_ARVORE = "arvore"
     MODULO_SERVICOS = "servicos"
     MODULO_SINONIMOS = "sinonimos"
+    MODULO_CONSULTA = "consulta"
     MODULO_TIPO_FRASES = MODULO_CLN + ".tipo_frases"
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
@@ -125,14 +129,13 @@ class LoggerConstantes:
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 
-
     MODULO_ELASTIC_SEARCH = "elasticsearch"
     MODULO_ES_CONNECTION = MODULO_ELASTIC_SEARCH + ".connection"
-    MODULO_ES_CONSULTA = MODULO_ELASTIC_SEARCH + ".consulta"
+    MODULO_ES_CONSULTA = MODULO_ELASTIC_SEARCH + ".searches"
     MODULO_ES_HELPERS = MODULO_ELASTIC_SEARCH + ".helpers"
     MODULO_ES_LOADERS = MODULO_ELASTIC_SEARCH + ".loaders"
+    MODULO_ES_QUERIES = MODULO_ELASTIC_SEARCH + ".queries"
     MODULO_ES_DATASET = MODULO_ES_LOADERS + ".dataset"
-
 
     # Nivel de logs por modulo
     NIVEL_LOG_MODULO = MODULOS + ".{modulo}" + NIVEL_LOG

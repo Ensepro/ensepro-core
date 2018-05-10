@@ -20,32 +20,22 @@ def ensepro_path():
 sys.path.append(ensepro_path())
 
 import ensepro
+import json
 
 frases = [
-    "Já fez alguma coisa que teve vontade de sair gritando na rua?"
+    "Qual é o nome completo de Abraham_lincoln?",
+    "Quem é a esposa do presidente americano Abraham_lincoln?",
+    "Qual é o maior lago da America_latina?",
+    "Qual é o pais mais populoso da America_latina?",
+    "Qual é o local de nascimento de Augusta_treveroro?"
     # "Quem é o presidente do Egito?"
 ]
 
 
-def __command(frase_analisada, *args):
-    ensepro.frase_pretty_print(frase_analisada, file=args[0]["file"], mostrar_sinonimos=True)
-    print("#" * 150, file=args[0]["file"], end="\n\n")
+frases_analisada = ensepro.analisar_frases(frases)
+for frase_analisada in frases_analisada:
+    ensepro.frase_pretty_print(frase_analisada, mostrar_sinonimos=True)
+# print(json.dumps(frase_analisada, indent=4, sort_keys=False), file=open("../../frase.json", mode="w", encoding="UTF-8"))
 
 
-def carregar_frases():
-    global frases
-    frases = []
-    with open("../../arquivos/frases/frases.txt", encoding="UTF-8") as frases_in_text:
-        for frase in frases_in_text:
-            frase = frase.replace("\n", "")
 
-            if not frase:
-                continue
-
-            if frase.startswith("#"):
-                continue
-
-            frases.append(frase)
-
-
-ensepro.analisar_frases_and_execute(frases, __command, file=None)

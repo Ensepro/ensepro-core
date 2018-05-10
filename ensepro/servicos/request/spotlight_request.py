@@ -21,3 +21,6 @@ class SpotlightRequest:
 
     def __repr__(self):
         return self.__str__()
+
+    def replicate_for_confidences(self, confidences):
+        return [SpotlightRequest(self.text, confidence=confidence) for confidence in confidences]
