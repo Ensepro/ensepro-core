@@ -187,7 +187,9 @@
                 "em": "#em <clb> <*>",
                 "cidade": "#cidade <Lciv> F S",
                 "dia": "#dia <temp> <dur> <per> <unit> M S",
-                "vez": "#vez <temp> F P"
+                "vez": "#vez <temp> F P",
+                "ser": "#ser <vK> <mv> PR 3S IND VFIN",
+                "um": "#um <arti> M S"
             },
             "mapeamento": {
                 "alguem": [
@@ -195,6 +197,9 @@
                 ],
                 "algum": [
                     "$algum"
+                ],
+                "eh_um": [
+                    "$ser $um"
                 ],
                 "quanto": [
                     "$quanto",
