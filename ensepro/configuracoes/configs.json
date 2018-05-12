@@ -145,6 +145,8 @@
             "name": "TipoFrases",
             "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
             "trainer": "chatterbot.trainers.ListTrainer",
+            "show_training_progress": false,
+            "read_only": true,
             "logic_adapters": [
                 {
                     "import_path": "chatterbot.logic.BestMatch",
@@ -162,7 +164,7 @@
             "dicionario": {
                 "alguem": "#alguém M S",
                 "algum": "#algum <quant> DET",
-                "quanto": "#quanto <clb> <interr> <quant> DET",
+                "quanto": "#quanto <clb> <interr> <quant> DET F P",
                 "quando": "#quando <clb> <interr>",
                 "o_que": "#o_que <clb> <interr> M S",
                 "qual": "#qual <clb> <interr> DET M/F",
@@ -184,7 +186,8 @@
                 "dar": "#dar <mv> PR 3S SUBJ VFIN",
                 "em": "#em <clb> <*>",
                 "cidade": "#cidade <Lciv> F S",
-                "dia": "#dia <temp> <dur> <per> <unit> M S"
+                "dia": "#dia <temp> <dur> <per> <unit> M S",
+                "vez": "#vez <temp> F P"
             },
             "mapeamento": {
                 "alguem": [
@@ -194,7 +197,8 @@
                     "$algum"
                 ],
                 "quanto": [
-                    "$quanto"
+                    "$quanto",
+                    "$quanto $vez"
                 ],
                 "quando": [
                     "$quando",
