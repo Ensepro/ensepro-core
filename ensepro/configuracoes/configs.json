@@ -16,8 +16,17 @@
             "continuar",
             "parecer",
             "tornar",
-            "ficar"
-        ]
+            "ficar",
+            "possuir",
+            "ter",
+            "precisar"
+        ],
+        "termos_relevantes": {
+            "ignorar": [
+                "existir",
+                "vir"
+            ]
+        }
     },
     "sinonimos": {
         "linguagens": [
@@ -47,7 +56,6 @@
             "endpoint": "http://api.dbpedia-spotlight.org",
             "servicos": {
                 "spotlight": "/{lang}/annotate/"
-
             }
         },
         "knowledge_graph_search": {
