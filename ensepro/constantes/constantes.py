@@ -62,6 +62,8 @@ class ConfiguracoesConstantes:
 
     # Lista de verbos de ligação
     VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
+    TERMOS_RELEVANTES = FRASES + ".termos_relevantes"
+    TERMOS_RELEVANTES_IGNORAR = TERMOS_RELEVANTES + ".ignorar"
 
     # Serviços
     PORTA = SERVIDOR + ".porta"
