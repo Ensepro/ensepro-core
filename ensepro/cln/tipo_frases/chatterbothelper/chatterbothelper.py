@@ -44,6 +44,7 @@ def criar_chatterbot():
     storage_adapter = configuracoes.get_config(ChaterbotConstantes.STORAGE_ADAPTER)
     logic_adapters = configuracoes.get_config(ChaterbotConstantes.LOGIC_ADAPTERS)
     trainer = configuracoes.get_config(ChaterbotConstantes.TRAINER)
+    show_training_progress = configuracoes.get_config(ChaterbotConstantes.SHOW_TRAINING_PROGRESS)
 
     logger.debug("Configurações carregadas para criação do Chatterbot: "
                  "[name=%s, storage_adapter=%s, logic_adapters=%s, trainer=%s]",
@@ -55,7 +56,7 @@ def criar_chatterbot():
             storage_adapter=storage_adapter,
             logic_adapters=logic_adapters,
             trainer=trainer,
-            show_training_progress=False
+            show_training_progress=show_training_progress
     )
 
     logger.info("Chatterbot criado.")
@@ -68,6 +69,7 @@ def iniciar_treinamento():
     logger.info("Iniciando treinamento chatterbot")
 
     treinamento_carregado = configuracoes.get_config(ChaterbotConstantes.TREINAMENTO)
+    read_only = configuracoes.get_config(ChaterbotConstantes.READ_ONLY)
     logger.debug("Treinamento carregado: [%s]", treinamento_carregado)
 
     dicionario = treinamento_carregado["dicionario"]
@@ -79,7 +81,7 @@ def iniciar_treinamento():
     logger.info("Treinando....")
     chatter_bot.train(treinamento_normalizado)
     # TODO passar True para arquivo de configuração
-    chatter_bot.read_only = True  # após treinamento inicial, bloqueia auto-aprendizagem
+    chatter_bot.read_only = read_only
 
     logger.info("Treinamento executado")
 

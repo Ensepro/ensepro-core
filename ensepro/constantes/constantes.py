@@ -172,6 +172,8 @@ class ChaterbotConstantes:
     TRAINER = CONFIGURACOES + ".trainer"
     LOGIC_ADAPTERS = CONFIGURACOES + ".logic_adapters"
     STORAGE_ADAPTER = CONFIGURACOES + ".storage_adapter"
+    SHOW_TRAINING_PROGRESS = CONFIGURACOES + ".show_training_progress"
+    READ_ONLY = CONFIGURACOES + ".read_only"
 
     # Termos
     TIPO_DESCONHECIDO = "desconhecido"
