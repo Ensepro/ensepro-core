@@ -79,30 +79,30 @@
                 "nivel": "INFO"
             },
             "consulta": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "localizar_referencia_substantivo_proprio": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "elasticsearch": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "connection": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "helpers": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "loaders": {
-                    "nivel": "DEBUG",
+                    "nivel": "INFO",
                     "dataset": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     }
                 },
                 "queries": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "searches": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "cln": {

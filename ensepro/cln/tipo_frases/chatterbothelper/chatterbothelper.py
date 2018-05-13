@@ -15,22 +15,32 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)
 
 chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
-termos_relevantes = set()
-termos_relevantes_agrupados_por_tipo = {}
+termos_relevantes = {}
 
-KEY_WORDS = ["#"]
+# TODO revisar necessidade de ter os termos relevantes agrupados por tipo
+# pois agora existe os ids das palavras que indicaram o tipo.
+tr_agrupados_tipo = {}
+
+PALAVRAS_CHAVE = {
+    "termo_relevante": "#"
+}
 
 
 def get_tipo(frase):
     if not chatter_bot:
         criar_chatterbot()
         iniciar_treinamento()
+        logger.debug("termos_relevantes: %s", termos_relevantes)
+        logger.debug("termos_relevantes_agrupados_por_tipo: %s", tr_agrupados_tipo)
 
     logger.info("Obtendo tipo da frase: %s", frase)
-    frase_string = __get_termos_relevantes(frase)
+    frase_termos_relevantes = __get_termos_relevantes(frase)
+
+    frase_string = frase_termos_relevantes["termos"]
+    ids = frase_termos_relevantes["ids"]
 
     st = chatter_bot.get_response(frase_string)
-    tipo = TipoFrase(st)
+    tipo = TipoFrase(st, ids)
 
     logger.debug("Retorno do chatter_bot: [%s]", st)
     logger.info("Tipo obtido: [%s]", tipo)
@@ -80,63 +90,95 @@ def iniciar_treinamento():
 
     logger.info("Treinando....")
     chatter_bot.train(treinamento_normalizado)
-    # TODO passar True para arquivo de configuração
     chatter_bot.read_only = read_only
 
     logger.info("Treinamento executado")
 
 
-def __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario):
-    termo = Template(map_termo).substitute(dicionario)
-    logger.debug("Termo '%s' normalizado: %s", map_termo, termo)
-
-    __add_termo_relevante(tipo, termo)
-    termo = __remover_palavras_chaves(termo)
-    treinamento_normalizado.append(termo)
-    treinamento_normalizado.append(tipo)
-
-
 def __normalizar_treinamento(dicionario, mapeamento):
     treinamento_normalizado = []
     for tipo in mapeamento:
-        for map_termo in mapeamento[tipo]:
-            __add_termo_para_treinamento(map_termo, tipo, treinamento_normalizado, dicionario)
+        for padrao in mapeamento[tipo]:
+            padrao_normalizado = __normalizar_padrao(padrao, tipo, dicionario)
+            treinamento_normalizado.append(padrao_normalizado)
+            treinamento_normalizado.append(tipo)
+
     return treinamento_normalizado
 
 
-def __remover_palavras_chaves(termo):
-    for keyword in KEY_WORDS:
-        termo = termo.replace(keyword, "")
-    return termo
+def __normalizar_padrao(padrao, tipo, dicionario):
+    padrao_normalizado = Template(padrao).substitute(dicionario)
+    logger.debug("Padrão'%s' normalizado: '%s'", padrao, padrao_normalizado)
+    __extrair_termos_relevantes(padrao_normalizado, tipo)
+    return __remover_palavras_chaves(padrao_normalizado)
 
 
-def __add_termo_relevante(tipo: str, termos: str):
-    for termo in termos.split(' '):
-        if termo[0] == KEY_WORDS[0]:
-            __add_termo_relevante_lista(termo[1:])
-            __add_termo_relevante_agrupado_por_tipo(tipo, termo[1:])
+def __extrair_termos_relevantes(padrao, tipo):
+    logger.info("Extraindo termos relevantes")
+
+    termos_relevantes_temp = termos_relevantes
+    if tipo not in tr_agrupados_tipo:
+        tr_agrupados_tipo[tipo] = {}
+
+    tr_agrupados_tipo_temp = tr_agrupados_tipo[tipo]
+
+    for trecho in padrao.split():
+        if trecho[0] == PALAVRAS_CHAVE["termo_relevante"]:
+            termo = trecho[1:]
+            logger.debug("Termo relevante: %s", termo)
+
+            if termo not in termos_relevantes_temp:
+                termos_relevantes_temp[termo] = {}
+            if termo not in tr_agrupados_tipo_temp:
+                tr_agrupados_tipo_temp[termo] = {}
+
+            termos_relevantes_temp = termos_relevantes_temp[termo]
+            tr_agrupados_tipo_temp = tr_agrupados_tipo_temp[termo]
+
+            termos_relevantes_temp["fim"] = termos_relevantes_temp.get("fim", False)
+            tr_agrupados_tipo_temp["fim"] = tr_agrupados_tipo_temp.get("fim", False)
+
+    termos_relevantes_temp["fim"] = True
+    tr_agrupados_tipo_temp["fim"] = True
 
 
-def __add_termo_relevante_agrupado_por_tipo(tipo, termo):
-    global termos_relevantes_agrupados_por_tipo
-    if not tipo in termos_relevantes_agrupados_por_tipo:
-        termos_relevantes_agrupados_por_tipo[tipo] = []
-    termos_relevantes_agrupados_por_tipo[tipo].append(termo)
+def __remover_palavras_chaves(padrao):
+    for nome, palavra_chave in PALAVRAS_CHAVE.items():
+        padrao = padrao.replace(palavra_chave, "")
+    return padrao
 
 
-def __add_termo_relevante_lista(termo: str):
-    global termos_relevantes
-    termos_relevantes.add(termo)
-    logger.debug("Termo relevante adicionado. [termo='%s']", termo)
-
-
+# TODO revisar e verificar alguma possível otimização...
 def __get_termos_relevantes(frase):
     logger.debug("Montando frase em texto com apenas termos relevantes")
+    termos_relevantes_temp = termos_relevantes
     frase_string = ""
+    frase_string_temp = ""
+    ids = []
+    ids_temp = []
 
-    for palavra in frase.palavras:
-        if palavra.palavra_canonica in termos_relevantes:
-            frase_string = ' '.join([frase_string, palavra.palavra_canonica, ' '.join(palavra.tags), ''])
+    for palavra in frase.get_palavras(__possui_palavra_original):
+        if palavra.palavra_canonica in termos_relevantes_temp:
+            termos_relevantes_temp = termos_relevantes_temp[palavra.palavra_canonica]
 
-    logger.debug("String da frase criada: [frase_string='%s']", frase_string)
-    return frase_string.strip(' ')
+            frase_string_temp = ' '.join([frase_string_temp.strip(), palavra.palavra_canonica, ' '.join(palavra.tags), ''])
+            ids_temp.append(palavra.id)
+
+            if termos_relevantes_temp["fim"]:
+                frase_string = str(frase_string_temp)
+                ids = list(ids_temp)
+
+        else:
+            # Se achou partes de um tipo mas não foi um tipo completo
+            if (len(ids_temp) > 0):
+                break
+
+    logger.debug("String da frase criada: [frase_string='%s', ids=%s]", frase_string, ids)
+    return {
+        "termos": frase_string,
+        "ids": ids
+    }
+
+
+def __possui_palavra_original(frase, palavra, *args):
+    return bool(palavra.palavra_original)
