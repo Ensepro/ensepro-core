@@ -9,7 +9,7 @@ import re
 from ensepro import configuracoes
 from ensepro.constantes import ConfiguracoesConstantes, ChaterbotConstantes
 from ensepro.cln.voz.voz import Voz
-from ensepro.cln.tipo_frases.chatterbothelper.chatterbothelper import termos_relevantes_agrupados_por_tipo
+from ensepro.cln.tipo_frases.chatterbothelper.chatterbothelper import tr_agrupados_tipo
 from ensepro.utils.string_utils import remover_acentos
 
 regex_termo_relevante = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_TERMO_RELEVANTE))
@@ -72,7 +72,7 @@ def __obtem_palavra_tipo(frase, palavras):
     :return: objeto do tipo Palavra que é a palavra que determinou o tipo
     """
     try:
-        termos_relevantes_tipo = termos_relevantes_agrupados_por_tipo[frase.tipo.tipo]
+        termos_relevantes_tipo = tr_agrupados_tipo[frase.tipo.tipo]
         termos_relevantes_tipo = [remover_acentos(termo) for termo in termos_relevantes_tipo]
         for palavra in palavras:
             if __is_palavra_tipo(palavra, termos_relevantes_tipo):
