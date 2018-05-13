@@ -113,6 +113,9 @@
                 "locucao_verbal": {
                     "nivel": "INFO"
                 },
+                "termos_relevantes": {
+                    "nivel": "INFO"
+                },
                 "tipo_frases": {
                     "nivel": "INFO",
                     "chatterbot_helper": {

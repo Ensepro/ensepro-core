@@ -126,6 +126,7 @@ class LoggerConstantes:
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
+    MODULO_TERMOS_RELEVANTES = MODULO_CLN + ".termos_relevantes"
     MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"

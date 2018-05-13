@@ -17,10 +17,6 @@ chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
 termos_relevantes = {}
 
-# TODO revisar necessidade de ter os termos relevantes agrupados por tipo
-# pois agora existe os ids das palavras que indicaram o tipo.
-tr_agrupados_tipo = {}
-
 PALAVRAS_CHAVE = {
     "termo_relevante": "#"
 }
@@ -31,7 +27,6 @@ def get_tipo(frase):
         criar_chatterbot()
         iniciar_treinamento()
         logger.debug("termos_relevantes: %s", termos_relevantes)
-        logger.debug("termos_relevantes_agrupados_por_tipo: %s", tr_agrupados_tipo)
 
     logger.info("Obtendo tipo da frase: %s", frase)
     frase_termos_relevantes = __get_termos_relevantes(frase)
@@ -114,14 +109,7 @@ def __normalizar_padrao(padrao, tipo, dicionario):
 
 
 def __extrair_termos_relevantes(padrao, tipo):
-    logger.info("Extraindo termos relevantes")
-
     termos_relevantes_temp = termos_relevantes
-    if tipo not in tr_agrupados_tipo:
-        tr_agrupados_tipo[tipo] = {}
-
-    tr_agrupados_tipo_temp = tr_agrupados_tipo[tipo]
-
     for trecho in padrao.split():
         if trecho[0] == PALAVRAS_CHAVE["termo_relevante"]:
             termo = trecho[1:]
@@ -129,17 +117,11 @@ def __extrair_termos_relevantes(padrao, tipo):
 
             if termo not in termos_relevantes_temp:
                 termos_relevantes_temp[termo] = {}
-            if termo not in tr_agrupados_tipo_temp:
-                tr_agrupados_tipo_temp[termo] = {}
 
             termos_relevantes_temp = termos_relevantes_temp[termo]
-            tr_agrupados_tipo_temp = tr_agrupados_tipo_temp[termo]
-
             termos_relevantes_temp["fim"] = termos_relevantes_temp.get("fim", False)
-            tr_agrupados_tipo_temp["fim"] = tr_agrupados_tipo_temp.get("fim", False)
 
     termos_relevantes_temp["fim"] = True
-    tr_agrupados_tipo_temp["fim"] = True
 
 
 def __remover_palavras_chaves(padrao):
