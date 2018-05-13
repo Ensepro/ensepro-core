@@ -7,94 +7,89 @@
 """
 import re
 from ensepro import configuracoes
-from ensepro.constantes import ConfiguracoesConstantes, ChaterbotConstantes
-from ensepro.cln.voz.voz import Voz
-from ensepro.cln.tipo_frases.chatterbothelper.chatterbothelper import tr_agrupados_tipo
-from ensepro.utils.string_utils import remover_acentos
+from ensepro.constantes import ConfiguracoesConstantes, LoggerConstantes
 
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_TERMOS_RELEVANTES)
 regex_termo_relevante = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_TERMO_RELEVANTE))
 verbos_ligacao = configuracoes.get_config(ConfiguracoesConstantes.VERBOS_DE_LIGACAO)
-palavras_dos_tipos = {}
+termos_ignorar = configuracoes.get_config(ConfiguracoesConstantes.TERMOS_RELEVANTES_IGNORAR)
 
 
-def get(frase):
-    if __possui_tipo(frase):
-        palavras = frase.get_palavras(__possui_palavra_original)
-        palavra_tipo = __obtem_palavra_tipo(frase, palavras)
-        if palavra_tipo:
-            palavra_apos_tipo = __obtem_palavra_apos_tipo(palavras, palavra_tipo)
-            return frase.get_palavras(__is_termo_relevante, tipo=palavra_tipo, palavra_apos_tipo=palavra_apos_tipo)
-
-    # Default ignora o tipo para busca de palavras relevantes
-    return frase.get_palavras(__is_termo_relevante)
-
-
-def __is_termo_relevante(frase, palavra, *args):
-    # 1. Palavras que possuem palavraOriginal vazia.
-    if not palavra.palavra_original:
+def __is_termo_relevante_base(frase, palavra, *args):
+    # 1. Deve ter palavra_canonica
+    if not palavra.palavra_canonica:
+        logger.debug("'__is_termo_relevante_base' -> palavra '%s' sem palavra canônica", palavra.id)
         return False
 
-    # 2. Se possuir tipo
-    if args[0]:
-        tipo_id = args[0]["tipo"].id
-        palavra_apos_tipo_id = args[0]["palavra_apos_tipo"].id
-
-        # 2.1. Palavras não deve fazer parte do tipo da frase
-        if tipo_id >= palavra.id:
-            return False
-
-        # 2.2. Se a primeira palavra após o tipo for um verbo de ligação, ignora-lá
-        if palavra_apos_tipo_id == palavra.id and palavra.palavra_canonica in verbos_ligacao:
-            return False
-
-    # 3. tagInicial da palavra deve bater com a regex de palavras relevantes
+    # 3. tagInicial da palavra deve bater com a regex de termos relevantes
     if not regex_termo_relevante.search(palavra.tag_inicial):
+        logger.debug("'__is_termo_relevante_base' -> '%s|%s' não está de acordo com a regex de termos relevantes", palavra.id,
+                     palavra.palavra_canonica)
         return False
 
-    # 4. Quando a frase estiver a voz passiva, o verbo 'ser' deve ser ignorado.
-    if frase.voz == Voz.PASSIVA and palavra.palavra_canonica == "ser":
+    # 4. Não deve ser um verbo de ligação
+    if palavra.palavra_canonica in verbos_ligacao:
+        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um verbo de ligação", palavra.id, palavra.palavra_canonica)
         return False
 
-    # 5. Quando houver locução verbal, o(s) verbo(s) auxiliar(es) deve ser desconsiderado.
+    # 5. Não deve estar na lista de termos a serem ignorados
+    if palavra.palavra_canonica in termos_ignorar:
+        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um termo que deve ser ignorado", palavra.id, palavra.palavra_canonica)
+        return False
+
+    # 6. Quando houver locução verbal, o(s) verbo(s) auxiliar(es) deve ser desconsiderado.
     #    O verbo relevante SEMPRE será o último.
     if frase.locucao_verbal:
         for locucao_verbal in frase.locucao_verbal:
             if palavra in locucao_verbal[:-1]:
+                logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' parte de uma locução verbal e não é relevante", palavra.id,
+                             palavra.palavra_canonica)
                 return False
 
+    logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é relevante", palavra.id, palavra.palavra_canonica)
     return True
 
 
-def __obtem_palavra_tipo(frase, palavras):
-    """
-    Este método irá determinar qual a palavra que definiu o tipo.
-    :param frase: frase sendo analisada
-    :return: objeto do tipo Palavra que é a palavra que determinou o tipo
-    """
-    try:
-        termos_relevantes_tipo = tr_agrupados_tipo[frase.tipo.tipo]
-        termos_relevantes_tipo = [remover_acentos(termo) for termo in termos_relevantes_tipo]
-        for palavra in palavras:
-            if __is_palavra_tipo(palavra, termos_relevantes_tipo):
-                return palavra
-    except Exception:
-        return None
+def __is_termo_relevante_default(frase, palavra, *args):
+    # 1. validar base.
+    if not __is_termo_relevante_base(frase, palavra, args):
+        return False
 
-    return None
+    # 2. Deve estar após o tipo
+    if frase.tipo.ids and palavra.id <= frase.tipo.ids[-1]:
+        logger.debug("__is_termo_relevante_default -> palavra '%s|%s' esta antes do tipo da frase", palavra.id, palavra.palavra_canonica)
+        return False
+
+    logger.debug("'__is_termo_relevante_default' -> palavra '%s|%s' é relevante ", palavra.id, palavra.palavra_canonica)
+    return True
 
 
-def __obtem_palavra_apos_tipo(palavras, palavra_tipo):
-    index = palavras.index(palavra_tipo)
-    return palavras[index + 1]
+def __is_termo_relevante_eh_um(frase, palavra, *args):
+    # 1. validar base.
+    if not __is_termo_relevante_base(frase, palavra, args):
+        return False
+
+    # 2. Não deve fazer parte do tipo
+    if frase.tipo.ids and palavra.id in frase.tipo.ids:
+        logger.debug("'__is_termo_relevante_eh_um' -> palavra '%s|%s' faz parte do tipo da frase", palavra.id, palavra.palavra_canonica)
+        return False
+
+    logger.debug("'__is_termo_relevante_eh_um' -> palavra '%s|%s' é relevante", palavra.id, palavra.palavra_canonica)
+    return True
 
 
-def __is_palavra_tipo(palavra, termos_do_tipo):
-    return remover_acentos(palavra.palavra_canonica) in termos_do_tipo
+algoritmo_por_tipo = {
+    "eh_um": __is_termo_relevante_eh_um
+}
 
 
-def __possui_tipo(frase):
-    return frase.tipo and frase.tipo.tipo != ChaterbotConstantes.TIPO_DESCONHECIDO
+def get(frase):
+    logger.info("Obtendo termos relevantes")
 
+    algoritmo = algoritmo_por_tipo.get(frase.tipo.tipo, __is_termo_relevante_default)
+    logger.debug("Usando algoritmo '%s'", algoritmo.__name__)
 
-def __possui_palavra_original(frase, palavra, *args):
-    return bool(palavra.palavra_original)
+    termos = frase.get_palavras(algoritmo)
+    logger.debug("Termos relevantes: %s", termos)
+
+    return termos

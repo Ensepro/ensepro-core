@@ -40,7 +40,7 @@ class Frase:
 
     @property
     def locucao_verbal(self):
-        if self.__locucao_verbal:
+        if self.__locucao_verbal is None:
             return self.__locucao_verbal
 
         from ensepro.cln import locucao_verbal
@@ -67,7 +67,7 @@ class Frase:
 
     @property
     def complementos_nominais(self):
-        if self.__complementos_nominais:
+        if self.__complementos_nominais is None:
             return self.__complementos_nominais
 
         from ensepro.cln import complementos_nominais
