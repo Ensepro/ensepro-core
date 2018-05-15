@@ -27,6 +27,12 @@ def simple_query_term_search(field, value):
     logger.info("Criando QueryTerm")
     return execute_search(connection(), query)
 
+def simple_query_terms_search(field, values):
+    query_term = QueryTermsSearch(field, values)
+    query = Query.build_default(query_term.build_query())
+    logger.info("Criando QueryTerms")
+    return execute_search(connection(), query)
+
 
 def simple_query_terms_search(field, values):
     query_term = QueryTermsSearch(field, values)
@@ -60,7 +66,6 @@ def full_match_serach(fields, value):
 
 def parcial_match_search(fields, value):
     return search(fields, value, simple_query_term_search)
-
 
 def list_parcial_match_search(fields, values):
     return search(fields, values, simple_query_terms_search)

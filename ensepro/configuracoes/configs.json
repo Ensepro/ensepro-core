@@ -70,76 +70,76 @@
         "nome_arquivo": "/ensepro_log.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        "default_logger_nivel": "INFO",
+        "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             },
             "configuracoes": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             },
             "consulta": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "localizar_referencia_substantivo_proprio": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "elasticsearch": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "connection": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "helpers": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "loaders": {
-                    "nivel": "INFO",
+                    "nivel": "DEBUG",
                     "dataset": {
-                        "nivel": "INFO"
+                        "nivel": "DEBUG"
                     }
                 },
                 "queries": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "searches": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "cln": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "complementos_nominais": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "locucao_verbal": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "termos_relevantes": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "tipo_frases": {
-                    "nivel": "INFO",
+                    "nivel": "DEBUG",
                     "chatterbot_helper": {
-                        "nivel": "INFO"
+                        "nivel": "DEBUG"
                     }
                 },
                 "voz": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "servicos": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "palavras_service": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "dbpedia_spotlight_service": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "knowledge_graph_search_service": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "sinonimos": {
-                "nivel": "INFO"
+                "nivel": "DEBUG"
             }
         }
     },
