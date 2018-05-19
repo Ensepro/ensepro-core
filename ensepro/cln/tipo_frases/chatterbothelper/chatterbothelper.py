@@ -91,24 +91,65 @@ def iniciar_treinamento():
 
 
 def __normalizar_treinamento(dicionario, mapeamento):
+    """
+    Cria a lista de treinamento do chatterbot.
+    Formato da lista: [padrão, tipo, padrão, tipo, ...]
+                      [entrada do usuário, resposta do chatterbot, ....]
+    :param dicionario:
+    :param mapeamento:
+    :return:
+    """
     treinamento_normalizado = []
     for tipo in mapeamento:
         for padrao in mapeamento[tipo]:
-            padrao_normalizado = __normalizar_padrao(padrao, tipo, dicionario)
+            padrao_normalizado = __normalizar_padrao(padrao, dicionario)
             treinamento_normalizado.append(padrao_normalizado)
             treinamento_normalizado.append(tipo)
 
     return treinamento_normalizado
 
 
-def __normalizar_padrao(padrao, tipo, dicionario):
+def __normalizar_padrao(padrao, dicionario):
+    """
+    Troca as variáveis do padrão pelo seu respectivo valor do dicionário.
+    Exemplo:
+        dicionario: { "quando": "#quando <clb> <interr>" }
+        padrão: "$quando"
+        padrão normalizado: "#quando <clb> <interr>"
+
+    :param padrao: padrão que indica um tipo
+    :param dicionario:
+    :return:
+    """
     padrao_normalizado = Template(padrao).substitute(dicionario)
     logger.debug("Padrão'%s' normalizado: '%s'", padrao, padrao_normalizado)
-    __extrair_termos_relevantes(padrao_normalizado, tipo)
+    __extrair_termos_relevantes(padrao_normalizado)
     return __remover_palavras_chaves(padrao_normalizado)
 
 
-def __extrair_termos_relevantes(padrao, tipo):
+def __extrair_termos_relevantes(padrao):
+    """
+    Extrai os termos relevantes do padrão dos tipos
+    padrão 1:
+        map: $quanto
+        normalizado: "#quanto <clb> <interr> <quant> DET F P"
+        termos_relevantes = { "quanto": {"fim": True} }
+
+    padrão 2:
+        map: "$quanto $vez"
+        normalizado: "#quanto <clb> <interr> <quant> DET F P #vez <temp> F P"
+        termos_relevantes = { "quanto": { "fim": False, "vez": { "fim": True } } }
+
+    padrão 3:
+        map: "$em $que $dia"
+        normalizado: "#em <clb> <*> #que <clb> <interr> DET #dia <temp> <dur> <per> <unit> M S"
+        termos_relevantes:  { "em": { "fim": False, "que": { "fim": False, "dia": { "fim": True } } } }
+
+    padrão 1 + padrão 2:
+        termos_relevantes = { "quanto": { "fim": True, "vez": { "fim": True } } }
+
+    :param padrao: padrão que indica um tipo
+    """
     termos_relevantes_temp = termos_relevantes
     for trecho in padrao.split():
         if trecho[0] == PALAVRAS_CHAVE["termo_relevante"]:
