@@ -9,6 +9,8 @@ import os
 import sys
 
 # Seta no path do sistema a pasta que a pasta deste arquivo está contido
+from requests import HTTPError
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from main import main_utils
@@ -38,7 +40,13 @@ if args.frase:
 if not args.quiet:
     print("Analisando frase(s)... ", end="", flush=True)
 
-frases_analisadas = ensepro.analisar_frases(frases_texto)
+frases_analisadas = []
+
+try:
+    frases_analisadas = ensepro.analisar_frases(frases_texto)
+except Exception as ex:
+    print("\n\n{}".format(ex))
+    exit(1)
 
 for frase_analisada in frases_analisadas:
     _ = frase_analisada.tipo

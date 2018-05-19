@@ -15,7 +15,7 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CHATTERBOT_HELPER)
 
 chatter_bot = None
 # termos_relevantes = Lista de palavras que devem ser consideradas para obtenção do tipo da frase
-termos_relevantes = {}
+attention_termos_relevantes = {}
 
 PALAVRAS_CHAVE = {
     "termo_relevante": "#"
@@ -26,7 +26,7 @@ def get_tipo(frase):
     if not chatter_bot:
         criar_chatterbot()
         iniciar_treinamento()
-        logger.debug("termos_relevantes: %s", termos_relevantes)
+        logger.debug("termos_relevantes: %s", attention_termos_relevantes)
 
     logger.info("Obtendo tipo da frase: %s", frase)
     frase_termos_relevantes = __get_termos_relevantes(frase)
@@ -150,19 +150,19 @@ def __extrair_termos_relevantes(padrao):
 
     :param padrao: padrão que indica um tipo
     """
-    termos_relevantes_temp = termos_relevantes
+    attention_tr_temp = attention_termos_relevantes
     for trecho in padrao.split():
         if trecho[0] == PALAVRAS_CHAVE["termo_relevante"]:
             termo = trecho[1:]
             logger.debug("Termo relevante: %s", termo)
 
-            if termo not in termos_relevantes_temp:
-                termos_relevantes_temp[termo] = {}
+            if termo not in attention_tr_temp:
+                attention_tr_temp[termo] = {}
 
-            termos_relevantes_temp = termos_relevantes_temp[termo]
-            termos_relevantes_temp["fim"] = termos_relevantes_temp.get("fim", False)
+            attention_tr_temp = attention_tr_temp[termo]
+            attention_tr_temp["fim"] = attention_tr_temp.get("fim", False)
 
-    termos_relevantes_temp["fim"] = True
+    attention_tr_temp["fim"] = True
 
 
 def __remover_palavras_chaves(padrao):
@@ -172,29 +172,37 @@ def __remover_palavras_chaves(padrao):
 
 
 # TODO revisar e verificar alguma possível otimização...
+# TODO 2. Não gostei da solução (funciona, mas não está legal... refatorar...)
 def __get_termos_relevantes(frase):
     logger.debug("Montando frase em texto com apenas termos relevantes")
-    termos_relevantes_temp = termos_relevantes
+    attention_tr_temp = attention_termos_relevantes
     frase_string = ""
     frase_string_temp = ""
     ids = []
     ids_temp = []
 
-    for palavra in frase.get_palavras(__possui_palavra_original):
-        if palavra.palavra_canonica in termos_relevantes_temp:
-            termos_relevantes_temp = termos_relevantes_temp[palavra.palavra_canonica]
+    palavras = frase.get_palavras(__possui_palavra_original)
+    index = 0
+    while index < len(palavras):
+        palavra = palavras[index]
+        index += 1
+        if palavra.palavra_canonica in attention_tr_temp:
+            attention_tr_temp = attention_tr_temp[palavra.palavra_canonica]
 
-            frase_string_temp = ' '.join([frase_string_temp.strip(), palavra.palavra_canonica, ' '.join(palavra.tags), ''])
+            frase_string_temp = ' '.join(filter(None, [frase_string_temp.strip(), palavra.palavra_canonica, ' '.join(palavra.tags)]))
             ids_temp.append(palavra.id)
 
-            if termos_relevantes_temp["fim"]:
-                frase_string = str(frase_string_temp)
-                ids = list(ids_temp)
+            if attention_tr_temp["fim"]:
+                frase_string = ' '.join(filter(None, [frase_string, frase_string_temp]))
+                ids = merge(ids, ids_temp)
 
         else:
-            # Se achou partes de um tipo mas não foi um tipo completo
+            # Se achou partes de um tipo mas não foi um tipo completo, reseta valores..
             if (len(ids_temp) > 0):
-                break
+                index -= 1
+                attention_tr_temp = attention_termos_relevantes
+                ids_temp = []
+                frase_string_temp = ""
 
     logger.debug("String da frase criada: [frase_string='%s', ids=%s]", frase_string, ids)
     return {
@@ -205,3 +213,8 @@ def __get_termos_relevantes(frase):
 
 def __possui_palavra_original(frase, palavra, *args):
     return bool(palavra.palavra_original)
+
+
+# TODO super temp.... remover isto assim que der...
+def merge(list1, list2):
+    return list1 + list(set(list2) - set(list1))
