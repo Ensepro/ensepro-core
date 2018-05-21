@@ -7,23 +7,26 @@
 
 from ensepro import LoggerConstantes
 
-query = {
-    "query": {
-        "term": {
-        }
-    }
-}
-
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ES_QUERIES)
 
 
-class SimpleQueryTermSearch:
+class QueryTermSearch:
 
     def __init__(self, field, value):
         self.__field = field
         self.__value = value
 
+    def __query(self):
+        return {
+            "size": 10000,
+            "query": {
+                "term": {
+                }
+            }
+        }
+
     def build_query(self):
+        query = self.__query()
         query["query"]["term"][self.__field] = self.__value
-        logger.debug("SimpleQueryTermSearch criada: %s", query)
+        logger.debug("QueryTermSearch criada: %s", query)
         return query
