@@ -157,7 +157,7 @@ def combinacoes(T):
 def do_combinacoes_2(combinacoes, T, t):
     for t1 in T:
         add_combinacao_2(combinacoes, t, t1)
-        do_combinacoes_3(combinacoes, T, t, t1)
+        #do_combinacoes_3(combinacoes, T, t, t1)
 
 
 def do_combinacoes_3(combinacoes, T, t, t1):
@@ -278,7 +278,7 @@ def sort(T):
 def print_resultados(resultado_anterior):
     print("\n\nExibindo os 20 melhores resultados para:", TERMOS_RELEVANTES)
     resultados_para_printar = resultado_anterior[:20]
-
+    v = set()
     print()
     for resultado in resultados_para_printar:
         for tripla in resultado:
@@ -286,8 +286,13 @@ def print_resultados(resultado_anterior):
                 for index in range(len(tripla)):
                     if tripla[index][0] == "z":
                         tripla[index] = _get_var_value(tripla[index])
+                    elif tripla[index][0] == "x":
+                        v.add(tripla[index])
 
         print(resultado)
+
+    for v1 in v:
+        print(v1, "=", _get_var_value(v1))
 
 
 steps = [
@@ -297,10 +302,17 @@ steps = [
     sort,
     print_resultados
 ]
+
 resultado_anterior = TERMOS_RELEVANTES
 import time
-
+from ensepro import save_as_json
+valor = 1
 for step in steps:
     start = time.time()
     resultado_anterior = step(resultado_anterior)
+    save_as_json(resultado_anterior, "resultado"+str(valor)+".json")
+    valor += 1
     print(" -> ", time.time() - start)
+
+
+save_as_json(map_var_to_resource, "variaveis.json")

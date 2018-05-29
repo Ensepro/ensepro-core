@@ -23,7 +23,7 @@ sys.path.append(ensepro_path())
 
 import ensepro
 import json
-from ensepro.consulta import ReferenciasSubstantivosProprios, ReferenciasSubstantivosComuns
+# from ensepro.consulta import ReferenciasSubstantivosProprios, ReferenciasSubstantivosComuns
 
 # frase = "Obtenha o nome completo da mulher americana Anatole france."
 # frase = "Obtenha uma imagem da Angola."
@@ -39,38 +39,38 @@ from ensepro.consulta import ReferenciasSubstantivosProprios, ReferenciasSubstan
 # frase = "Qual é o pais mais rico da América latina?"
 # frase = "Qual é p numero de paises da América latina?"
 
-frase = "Quem é a esposa do presidente americano Lincoln?"
+# frase = "Quem é a esposa do presidente americano Lincoln?"
+#
+# args = sys.argv
+# # frase = sys.argv[1]
+#
+# print_dados = False
+# if len(sys.argv) > 2:
+#     print_dados = sys.argv[2] == "-p"
+#
+# frase_processada = ensepro.analisar_frase(frase)
+# if print_dados or True:
+#     ensepro.frase_pretty_print(frase_processada)
 
-args = sys.argv
-# frase = sys.argv[1]
-
-print_dados = False
-if len(sys.argv) > 2:
-    print_dados = sys.argv[2] == "-p"
-
-frase_processada = ensepro.analisar_frase(frase)
-if print_dados or True:
-    ensepro.frase_pretty_print(frase_processada)
-
-substantivos_proprios = ReferenciasSubstantivosProprios(frase_processada)
-result_substantivos_proprios = substantivos_proprios.localizar()
-print(json.dumps(result_substantivos_proprios, indent=4, sort_keys=False, ensure_ascii=False),
-      file=open("substantivo_proprio.json", mode="w", encoding="UTF-8"))
-
-for substantivo in result_substantivos_proprios:
-    substantivo = result_substantivos_proprios[substantivo]
-    if "nova_frase" in substantivo:
-        frase = substantivo["nova_frase"]
-        frase_processada = ensepro.analisar_frase(frase)
-        ensepro.frase_pretty_print(frase_processada)
-        break
-
-
-
-substantivos_comuns = ReferenciasSubstantivosComuns(frase_processada)
-result_substantivos_comuns = substantivos_comuns.localizar()
-
-
-print(json.dumps(result_substantivos_comuns, indent=4, sort_keys=False, ensure_ascii=False),
-      file=open("substantivo_comuns.json", mode="w", encoding="UTF-8"))
-# print(result)
+# substantivos_proprios = ReferenciasSubstantivosProprios(frase_processada)
+# result_substantivos_proprios = substantivos_proprios.localizar()
+# print(json.dumps(result_substantivos_proprios, indent=4, sort_keys=False, ensure_ascii=False),
+#       file=open("substantivo_proprio.json", mode="w", encoding="UTF-8"))
+#
+# for substantivo in result_substantivos_proprios:
+#     substantivo = result_substantivos_proprios[substantivo]
+#     if "nova_frase" in substantivo:
+#         frase = substantivo["nova_frase"]
+#         frase_processada = ensepro.analisar_frase(frase)
+#         ensepro.frase_pretty_print(frase_processada)
+#         break
+#
+#
+#
+# substantivos_comuns = ReferenciasSubstantivosComuns(frase_processada)
+# result_substantivos_comuns = substantivos_comuns.localizar()
+#
+#
+# print(json.dumps(result_substantivos_comuns, indent=4, sort_keys=False, ensure_ascii=False),
+#       file=open("substantivo_comuns.json", mode="w", encoding="UTF-8"))
+# # print(result)
