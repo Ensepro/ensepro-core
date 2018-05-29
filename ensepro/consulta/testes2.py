@@ -21,7 +21,7 @@ fields_partial_match = [
     Field.PARTIAL_MATCH_OBJETO
 ]
 
-TERMOS_RELEVANTES_PESOS = ["volume", 1, "america_latina", 1]
+TERMOS_RELEVANTES_PESOS = ["volume", '1', "america_latina", '1']
 if len(sys.argv) > 1:
     TERMOS_RELEVANTES_PESOS = [remover_acentos(tr.lower()) for tr in sys.argv[1:]]
 
@@ -30,7 +30,7 @@ PESOS = {}
 
 for index, termo in enumerate(TERMOS_RELEVANTES_PESOS):
     if (index + 1) % 2 == 0:
-        PESOS[TERMOS_RELEVANTES_PESOS[index - 1]] = termo
+        PESOS[TERMOS_RELEVANTES_PESOS[index - 1]] = int(termo)
     else:
         TERMOS_RELEVANTES.append(termo)
 
@@ -166,11 +166,9 @@ def do_combinacoes_3(combinacoes, T, t, t1):
 
 
 def add_combinacao_3(combinacoes, tripla1, tripla2, tripla3):
-
-    #4.5. (Z1      )(Z1    Z2)(      Z2)
-    #4.6. (Z1      )(Z1    Z2)(Z2      )
-    #4.7. (      Z1)(Z1 Z2   )(Z1 Z2   )
-
+    # 4.5. (Z1      )(Z1    Z2)(      Z2)
+    # 4.6. (Z1      )(Z1    Z2)(Z2      )
+    # 4.7. (      Z1)(Z1 Z2   )(Z1 Z2   )
 
     sujeito1_igual_sujeito2 = tripla1[0] == tripla2[0]
     sujeito2_igual_sujeito3 = tripla2[0] == tripla3[0]
@@ -195,7 +193,6 @@ def add_combinacao_3(combinacoes, tripla1, tripla2, tripla3):
     predicados_todos_diferentes = not predicado1_igual_predicado2 and not predicado2_igual_predicado3 and not predicado1_igual_predicado3
     objetos_todos_diferentes = not objeto1_igual_objeto2 and not objeto2_igual_objeto3 and not objeto1_igual_objeto3
 
-
     if sujeitos_iguais and predicados_iguais and objetos_iguais:
         return
 
@@ -204,21 +201,23 @@ def add_combinacao_3(combinacoes, tripla1, tripla2, tripla3):
         combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
         return
 
-    if sujeito1_igual_sujeito2 and objeto2_igual_sujeito3 and predicados_todos_diferentes and objetos_todos_diferentes and not sujeito2_igual_sujeito3:
-        #4.6.
+    if sujeito1_igual_sujeito2 and objeto2_igual_sujeito3 and predicados_todos_diferentes and objetos_todos_diferentes and not \
+            sujeito2_igual_sujeito3:
+        # 4.6.
         combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
         return
 
-    if objeto1_igual_sujeito2 and sujeito2_igual_sujeito3 and predicado2_igual_predicado3 and objetos_todos_diferentes and not predicado1_igual_predicado2 and not sujeitos_iguais:
+    if objeto1_igual_sujeito2 and sujeito2_igual_sujeito3 and predicado2_igual_predicado3 and objetos_todos_diferentes and not \
+            predicado1_igual_predicado2 and not sujeitos_iguais:
         # 4.7.
         combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
         return
 
-def add_combinacao_2(combinacoes, tripla1, tripla2):
 
-    #4.1.(Z1      ) (Z1      )
-    #4.2.(      Z1) (Z1      )
-    #4.3.(   Z1 Z2) (   Z1 Z2)
+def add_combinacao_2(combinacoes, tripla1, tripla2):
+    # 4.1.(Z1      ) (Z1      )
+    # 4.2.(      Z1) (Z1      )
+    # 4.3.(   Z1 Z2) (   Z1 Z2)
 
     sujeito_igual = tripla1[0] == tripla2[0]
     predicado_igual = tripla1[1] == tripla2[1]
@@ -241,8 +240,6 @@ def add_combinacao_2(combinacoes, tripla1, tripla2):
     if sujeito_diferente and predicado_igual and objeto_igual:
         combinacoes.append(calcular_metricas([tripla1, tripla2]))
         return
-
-
 
 
 # 5. Fazer cálculos
