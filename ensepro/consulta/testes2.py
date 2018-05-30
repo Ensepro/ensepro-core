@@ -43,8 +43,8 @@ var_id = 1
 var_prefixes = {True: "z", False: "x"}
 
 
-def _get_var_name(_resource, is_tr=False):
-    # _resource = resource.lower()
+def _get_var_name(resource, is_tr=False):
+    _resource = resource.lower()
     if _resource in map_resource_to_var:
         return map_resource_to_var[_resource]
 
@@ -73,8 +73,8 @@ def _calcular_distancia_edicao(termo_relevante, var_name):
     return de
 
 
-def _termo_relevante_from_resource(_resource):
-    # _resource = resource.lower()
+def _termo_relevante_from_resource(resource):
+    _resource = resource.lower()
 
     tr = map_resource_to_tr.get(_resource, None)
 
@@ -270,7 +270,7 @@ def calcular_metricas(combinacao):
 # 6. Ordenar
 def sort(T):
     print("ordenando(ranquenado) triplas... ", end="")
-    t_sorted = sorted(T, key=lambda x: (-x[-2], x[-1], x[-3]))
+    t_sorted = sorted(T, key=lambda x: (x[-1], -x[-2], x[-3]))
     print("done.", end="")
     return t_sorted
 
