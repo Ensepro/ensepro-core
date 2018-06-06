@@ -270,7 +270,10 @@ def calcular_metricas(combinacao):
 # 6. Ordenar
 def sort(T):
     print("ordenando(ranquenado) triplas... ", end="")
-    t_sorted = sorted(T, key=lambda x: (x[-1], -x[-2], x[-3]))
+    # dist , TRs, var
+    #t_sorted = sorted(T, key=lambda x: (x[-1], -x[-2], x[-3]))
+    # TRs, dist, var
+    t_sorted = sorted(T, key=lambda x: (-x[-2], x[-1], x[-3]))
     print("done.", end="")
     return t_sorted
 
