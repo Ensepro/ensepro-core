@@ -15,25 +15,44 @@ sys.path.append(THIS_PATH)
 from ensepro.consulta.v2.steps.elastic_search_step import elastic_search_step
 from ensepro.consulta.v2.steps.normalizar_step import normalizar_step, normalizar_value_step
 from ensepro.consulta.v2.steps.gerar_queries_step import gerar_queries, gerar_queries_value
+from ensepro.consulta.v2.steps.calcular_metricas_step import calcular_metricas_step, calcular_metricas_value
 from ensepro.consulta.v2.steps.print_resultado_step import print_resultado, print_resultado_value
 from ensepro.consulta.v2.steps.ranquear_step import ranquear_step, ranquear_step_value
 from ensepro.consulta.v2.steps.show_help import show_help
+from ensepro.consulta.v2.steps.gerar_queries_java_2_step import gerar_queries_value_java2
+from ensepro.consulta.v2.steps.gerar_queries_java_3_step import gerar_queries_value_java3
 
 actions = {
     "-help": show_help,
     "-elasticsearch": elastic_search_step,
     "-normalizar": normalizar_step,
     "-gerar": gerar_queries,
+    "-calcular": calcular_metricas_step,
     "-ranquear": ranquear_step,
-    "-printar-resultados": print_resultado
+    "-printar-resultados": print_resultado,
+
+    "-elasticsearch-java2": elastic_search_step,
+    "-elasticsearch-java3": elastic_search_step,
+    "-gerar-java2": gerar_queries_value_java2,
+    "-gerar-java3": gerar_queries_value_java3
 }
 
 actions_next = {
     "-help": (None, None),
     "-elasticsearch": (normalizar_value_step, "-normalizar"),
     "-normalizar": (gerar_queries_value, "-gerar"),
-    "-gerar": (ranquear_step_value, "-ranquear"),
-    "-ranquear": (print_resultado_value, None)
+    "-gerar": (calcular_metricas_value, "-calcular"),
+    "-calcular": (ranquear_step_value, "-ranquear"),
+    "-ranquear": (print_resultado_value, None),
+
+    "-elasticsearch-java2": (normalizar_value_step, "-normalizar-java2"),
+    "-elasticsearch-java3": (normalizar_value_step, "-normalizar-java3"),
+
+    "-normalizar-java2": (gerar_queries_value_java2, "-gerar-java2"),
+    "-normalizar-java3": (gerar_queries_value_java3, "-gerar-java3"),
+
+    "-gerar-java2": (calcular_metricas_step, "-calcular"),
+    "-gerar-java3": (calcular_metricas_step, "-calcular")
 }
 
 if len(sys.argv) <= 1:

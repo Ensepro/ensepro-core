@@ -23,6 +23,14 @@ def show_help(params, step, steps):
 
     print()
 
+    print("-elasticsearch-java2:", "1.1ª ação, inícia o processo do início utilizando a geração de queries(2 triplas) via Java")
+
+    print()
+
+    print("-elasticsearch-java3:", "1.2ª ação, inícia o processo do início utilizando a geração de queries(3 triplas) via Java")
+
+    print()
+
     print("-normalizar:", "2ª ação, é executa automaticamente após a 1ª. Mas pode ser iniciada a partir do arquivo gerado na 1ª")
     print("      Exemplo: query_generator.py -normalizar ARQUIVO")
     print("      ARQUIVO default elastic_search_step.json")
@@ -32,6 +40,14 @@ def show_help(params, step, steps):
     print("-gerar:", "3ª ação, é executa automaticamente após a 2ª. Mas pode ser iniciada a partir do arquivo gerado na 2ª")
     print("      Exemplo: query_generator.py -gerar ARQUIVO")
     print("      ARQUIVO default resultado_normalizado.json")
+
+    print()
+
+    print("-gerar-java2:", "3.1ª ação, é executa automaticamente após a 2ª. Mas pode ser iniciada a partir do arquivo gerado na 2ª. Executa a geração de queries(2 triplas) via Java")
+
+    print()
+
+    print("-gerar-java3:", "3.2ª ação, é executa automaticamente após a 2ª. Mas pode ser iniciada a partir do arquivo gerado na 2ª. Executa a geração de queries(3 triplas) via Java")
 
     print()
 

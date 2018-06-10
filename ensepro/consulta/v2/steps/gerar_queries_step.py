@@ -20,7 +20,7 @@ def gerar_queries_value(params, step, steps):
 
     queries = []
     for t in triplas:
-        queries.append(calcular_metricas([t]))
+        queries.append([t])
         do_combinacoes_2(queries, triplas, t)
 
     print("done -> size=", len(queries))
@@ -46,7 +46,7 @@ def combinacoes(T):
     print("gerando combinações e calculando valores... ", end="", flush=True)
     combinacoes = []
     for t in T:
-        combinacoes.append(calcular_metricas([t]))
+        combinacoes.append([t])
         do_combinacoes_2(combinacoes, T, t)
 
     print("done -> size=", len(combinacoes), end="")
@@ -97,19 +97,19 @@ def add_combinacao_3(combinacoes, tripla1, tripla2, tripla3):
 
     if sujeito1_igual_sujeito2 and objeto2_igual_objeto3 and predicados_todos_diferentes and not objeto1_igual_objeto2:
         # 4.5.
-        combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
+        combinacoes.append([tripla1, tripla2, tripla3])
         return
 
     if sujeito1_igual_sujeito2 and objeto2_igual_sujeito3 and predicados_todos_diferentes and objetos_todos_diferentes and not \
             sujeito2_igual_sujeito3:
         # 4.6.
-        combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
+        combinacoes.append([tripla1, tripla2, tripla3])
         return
 
     if objeto1_igual_sujeito2 and sujeito2_igual_sujeito3 and predicado2_igual_predicado3 and objetos_todos_diferentes and not \
             predicado1_igual_predicado2 and not sujeitos_iguais:
         # 4.7.
-        combinacoes.append(calcular_metricas([tripla1, tripla2, tripla3]))
+        combinacoes.append([tripla1, tripla2, tripla3])
         return
 
 
@@ -129,38 +129,13 @@ def add_combinacao_2(combinacoes, tripla1, tripla2):
     sujeito_igual_objeto = tripla1[0] == tripla2[2]
 
     if sujeito_igual and predicado_diferente and objeto_diferente:
-        combinacoes.append(calcular_metricas([tripla1, tripla2]))
+        combinacoes.append([tripla1, tripla2])
         return
 
     if sujeito_diferente and predicado_diferente and objeto_diferente and sujeito_igual_objeto:
-        combinacoes.append(calcular_metricas([tripla1, tripla2]))
+        combinacoes.append([tripla1, tripla2])
         return
 
     if sujeito_diferente and predicado_igual and objeto_igual:
-        combinacoes.append(calcular_metricas([tripla1, tripla2]))
+        combinacoes.append([tripla1, tripla2])
         return
-
-
-# 5. Fazer cálculos
-def calcular_metricas(combinacao):
-    var_count = 0
-    tr_elements = set()
-    some_distancias = 0
-    for tripla in combinacao:
-        for resource_var_name in tripla:
-            tr = helper._termo_relevante_from_var(resource_var_name)
-            if tr:
-                some_distancias += helper._calcular_distancia_edicao(tr[0], resource_var_name)
-                tr_elements.add(tr)
-            else:
-                var_count += 1
-
-    calc_tr = 0
-    for t in tr_elements:
-        calc_tr += t[1]
-
-    combinacao.append(var_count)
-    combinacao.append(calc_tr)
-    combinacao.append(some_distancias)
-
-    return combinacao

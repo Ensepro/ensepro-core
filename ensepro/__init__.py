@@ -108,5 +108,6 @@ def save_as_json(value, filename, indent=4, sort_keys=False):
     import json
     print(
             json.dumps(value, indent=indent, sort_keys=sort_keys, ensure_ascii=False),
-            file=open(filename, mode='w', encoding="UTF-8")
+            file=open(filename, mode='w', encoding="UTF-8"),
+            flush=True
     )
