@@ -27,6 +27,7 @@ def get_args():
     -lv
     -arvore
     -tags
+    -resposta
     -verbose
     -quiet
     """
@@ -91,6 +92,12 @@ def get_args():
     parser.add_argument("-tags",
                         dest="tags",
                         help="Indica para printar/salvar os as tags das frases no arquivo txt",
+                        action="store_true",
+                        default=False)
+
+    parser.add_argument("-resposta",
+                        dest="resposta",
+                        help="Indica se deve buscar uma resposta",
                         action="store_true",
                         default=False)
 

@@ -19,6 +19,7 @@ class Frase:
         self.__termos_relevantes = None
         self.__voz = None
         self.__complementos_nominais = None
+        self.__resposta = None
 
     @property
     def arvore(self):
@@ -74,6 +75,15 @@ class Frase:
         self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
+    @property
+    def resposta(self):
+        if self.__resposta:
+            return self.__resposta
+
+        from ensepro.consulta.v2 import query_generator as consulta
+        self.__resposta = consulta.get(self)
+        return self.__resposta
+
     def get_palavras(self, condicao, **args):
         """
         Percorre a lista de palavras da frase validando a condicao passada.
@@ -96,7 +106,8 @@ class Frase:
             "locucao_verbal": self.__locucao_verbal,
             "termos_relevantes": [palavra.__to_json__() for palavra in self.__termos_relevantes] if self.__termos_relevantes else None,
             "voz": str(self.__voz),
-            "complementos_nominais": self.__complementos_nominais
+            "complementos_nominais": self.__complementos_nominais,
+            "resposta": self.__resposta
         }
 
     def __hash__(self):

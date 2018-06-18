@@ -12,8 +12,9 @@ from ensepro.consulta.v2 import helper
 from ensepro.utils.string_utils import remover_acentos
 
 
-def normalizar_value_step(params, step, steps):
-    print("normalizando resultados... ", end="")
+def normalizar_value_step(params, step, steps, log=False):
+    if log:
+        print("normalizando resultados... ", end="")
     helper.init_helper(params["helper"])
 
     triplas = {}
@@ -35,23 +36,25 @@ def normalizar_value_step(params, step, steps):
                 alterar_para_variaveis(tripla)
                 result_normalized.append(tripla)
 
-    print("done -> size=", len(result_normalized))
+    if log:
+        print("done -> size=", len(result_normalized))
     helper_values = helper.save_helper()
 
-    values = {}
-    values["helper"] = helper_values
-    values["values"] = result_normalized
-
-    save_as_json(values, "resultado_normalizado.json")
     if steps.get(step, None):
-        steps[step][0](values, steps[step][1], steps)
+        values = {}
+        values["values"] = result_normalized
+        values["helper"] = helper_values
+        save_as_json(values, "resultado_normalizado.json")
+        return steps[step][0](values, steps[step][1], steps, log=log)
+    else:
+        return result_normalized
 
 
-def normalizar_step(params, step, steps):
+def normalizar_step(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
 
-    normalizar_value_step(value, step, steps)
+    return normalizar_value_step(value, step, steps, log=log)
 
 
 # 3. Remover todas os valores que não são TR, passando estes para um dicionário -> { variável : TR }

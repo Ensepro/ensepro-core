@@ -60,6 +60,7 @@ def frase_pretty_print(frase: Frase,
                        locucoes_verbais=False,
                        tags=False,
                        arvore=False,
+                       resposta=False,
                        verbose=False):
     if not isinstance(frase, Frase):
         raise Exception("Não é um objeto Frase.")
@@ -97,11 +98,17 @@ def frase_pretty_print(frase: Frase,
     if tags or verbose:
         print("--> Tags das palavras", file=file)
         for palavra in frase.palavras:
-            print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica, str(palavra.tags)),
+            print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica,
+                                                                      str(palavra.tags)),
                   file=file)
 
     if arvore or verbose:
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
+
+    if resposta or verbose:
+        print("\nMelhores respostas:", file=file)
+        for index, tripla in enumerate(frase.resposta):
+            print(str(index) + "- " ,tripla, file=file)
 
 
 def save_as_json(value, filename, indent=4, sort_keys=False):

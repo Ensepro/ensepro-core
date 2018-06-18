@@ -11,30 +11,35 @@ import json
 from ensepro.consulta.v2 import helper
 
 
-def calcular_metricas_value(params, step, steps):
-    print("calculando metricas... ", end="")
+def calcular_metricas_value(params, step, steps, log=False):
     helper.init_helper(params["helper"])
     triplas = params["values"]
+
+    if log:
+        print("calculando metricas... [", len(triplas), "]", end="")
 
     for t in triplas:
         calcular(t)
 
-    values = {}
-    values["helper"] = helper.save_helper()
-    values["values"] = triplas
+    if log:
+        print("done")
 
-    save_as_json(values, "calcular_metricas_step.json")
-    print("done")
     if steps.get(step, None):
-        steps[step][0](values, steps[step][1], steps)
+        values = {}
+        values["helper"] = helper.save_helper()
+        values["values"] = triplas
+        save_as_json(values, "calcular_metricas_step.json")
+        return steps[step][0](values, steps[step][1], steps, log=log)
+    else:
+        return triplas
 
 
-
-def calcular_metricas_step(params, step, steps):
+def calcular_metricas_step(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
 
-    calcular_metricas_value(value, step, steps)
+    return calcular_metricas_value(value, step, steps, log=log)
+
 
 # 5. Fazer cálculos
 def calcular(combinacao):

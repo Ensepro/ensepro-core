@@ -6,11 +6,12 @@
 
 """
 
-import os
-import sys
+if __name__ == '__main__':
+    import os
+    import sys
 
-THIS_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-sys.path.append(THIS_PATH)
+    THIS_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    sys.path.append(THIS_PATH)
 
 from ensepro.consulta.v2.steps.elastic_search_step import elastic_search_step
 from ensepro.consulta.v2.steps.normalizar_step import normalizar_step, normalizar_value_step
@@ -55,14 +56,28 @@ actions_next = {
     "-gerar-java3": (calcular_metricas_step, "-calcular")
 }
 
-if len(sys.argv) <= 1:
-    print("Passagem de parametros obrigatória. -help para ajuda")
-    exit(10)
+if __name__ == '__main__':
 
-action_selected = sys.argv[1]
-action_to_execute = actions.get(action_selected, None)
+    if len(sys.argv) <= 1:
+        print("Passagem de parametros obrigatória. -help para ajuda")
+        exit(10)
 
-if action_to_execute:
-    action_to_execute(sys.argv[2:], action_selected, actions_next)
-else:
-    print("Ação não mapeada.")
+    action_selected = sys.argv[1]
+    action_to_execute = actions.get(action_selected, None)
+
+    if action_to_execute:
+        action_to_execute(sys.argv[2:], action_selected, actions_next, log=True)
+    else:
+        print("Ação não mapeada.")
+
+start_at = "-elasticsearch-java2"
+
+
+def get(frase):
+    action_to_execute = actions.get(start_at)
+    termos_relevantes = obtem_termos_relevantes_frase(frase)
+    return action_to_execute(termos_relevantes, start_at, actions_next)
+
+
+def obtem_termos_relevantes_frase(frase):
+    return [palavra.palavra_canonica for palavra in frase.termos_relevantes]

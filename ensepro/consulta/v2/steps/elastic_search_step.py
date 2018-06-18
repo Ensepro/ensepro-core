@@ -19,24 +19,28 @@ fields_partial_match = [
 ]
 
 
-def elastic_search_step(params, step, steps):
+def elastic_search_step(params, step, steps, log=False):
     obtem_termos_relevantes(params)
 
     if not helper.termos_relevantes:
-        print("Nenhum termo relevante indicado.")
+        if log:
+            print("Nenhum termo relevante indicado.")
         exit(1)
 
     tr = [t[0] for t in helper.termos_relevantes]
     # 1. Search in elasticsearch todos as triplas que contém algum TR
-    print("consultando triplas... ", end="")
+    if log:
+        print("consultando triplas... ", end="")
     result = list_parcial_match_search(fields_partial_match, tr)
     if result["keys"]:
-        print("done.")
-        result["helper"] = helper.save_helper()
-        save_as_json(result, "elastic_search_step.json")
+        if log:
+            print("done.")
         if steps.get(step, None):
-            steps[step][0](result, steps[step][1], steps)
-            return
+            result["helper"] = helper.save_helper()
+            save_as_json(result, "elastic_search_step.json")
+            return steps[step][0](result, steps[step][1], steps, log=log)
+        else:
+            return result
 
     raise Exception("Nenhuma tripla encontrada para termos relevantes: ", tr)
 

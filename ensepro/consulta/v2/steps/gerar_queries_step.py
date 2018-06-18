@@ -11,8 +11,9 @@ import json
 from ensepro.consulta.v2 import helper
 
 
-def gerar_queries_value(params, step, steps):
-    print("gerando combinações e calculando valores... ", end="")
+def gerar_queries_value(params, step, steps, log=False):
+    if log:
+        print("gerando combinações e calculando valores... ", end="")
 
     helper.init_helper(params["helper"])
 
@@ -23,34 +24,24 @@ def gerar_queries_value(params, step, steps):
         queries.append([t])
         do_combinacoes_2(queries, triplas, t)
 
-    print("done -> size=", len(queries))
+    if log:
+        print("done -> size=", len(queries))
 
-    values = {}
-    values["helper"] = helper.save_helper()
-    values["values"] = queries
-
-    save_as_json(values, "gerar_queries_step.json")
     if steps.get(step, None):
-        steps[step][0](values, steps[step][1], steps)
+        values = {}
+        values["helper"] = helper.save_helper()
+        values["values"] = queries
+        save_as_json(values, "gerar_queries_step.json")
+        return steps[step][0](values, steps[step][1], steps, log=log)
+    else:
+        return queries
 
 
-def gerar_queries(params, step, steps):
+def gerar_queries(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
 
-    gerar_queries_value(value, step, steps)
-
-
-# 4. Realizar "combinações"
-def combinacoes(T):
-    print("gerando combinações e calculando valores... ", end="", flush=True)
-    combinacoes = []
-    for t in T:
-        combinacoes.append([t])
-        do_combinacoes_2(combinacoes, T, t)
-
-    print("done -> size=", len(combinacoes), end="")
-    return combinacoes
+    return gerar_queries_value(value, step, steps, log=log)
 
 
 def do_combinacoes_2(combinacoes, T, t):

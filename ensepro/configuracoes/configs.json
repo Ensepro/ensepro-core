@@ -1,5 +1,6 @@
 {
     "frases": {
+        "namlex": "../../arquivos/namlex-pt.txt",
         "regex": {
             "termo_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",

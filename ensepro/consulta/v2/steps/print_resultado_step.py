@@ -11,10 +11,11 @@ from ensepro import save_as_json
 from ensepro.consulta.v2 import helper
 
 
-def print_resultado_value(params, step, steps):
+def print_resultado_value(params, step, steps, log=False):
     helper.init_helper(params["helper"])
 
-    print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
+    if log:
+        print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
     values_to_print = params["values"][:20]
 
     v = set()
@@ -26,28 +27,34 @@ def print_resultado_value(params, step, steps):
                     if tripla[index][0] == "z":
                         tripla[index] = helper._get_var_value(tripla[index])
                     elif tripla[index][0] == "x":
-                        v.add(tripla[index])
+                        if log:
+                            v.add(tripla[index])
+                        else:
+                            tripla[index] = helper._get_var_value(tripla[index])
 
-        print(value)
+        if log:
+            print(value)
 
     vars_values = []
-    for v1 in v:
-        var_value = helper._get_var_value(v1)
-        print(v1, "=", var_value)
-        vars_values.append((v1, var_value))
+    if log:
+        for v1 in v:
+            var_value = helper._get_var_value(v1)
+            print(v1, "=", var_value)
+            vars_values.append((v1, var_value))
 
-    values = {}
-    values["values"] = values_to_print
-    values["vars"] = vars_values
-    values["helper"] = helper.save_helper()
-
-    save_as_json(values, "melhores_resultados.json")
     if steps.get(step, None):
-        steps[step][0](values, steps[step][1], steps)
+        values = {}
+        values["values"] = values_to_print
+        values["vars"] = vars_values
+        values["helper"] = helper.save_helper()
+        save_as_json(values, "melhores_resultados.json")
+        return steps[step][0](values, steps[step][1], steps, log=log)
+    else:
+        return values_to_print
 
 
-def print_resultado(params, step, steps):
+def print_resultado(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
 
-    print_resultado_value(value, step, steps)
+    return print_resultado_value(value, step, steps, log=log)
