@@ -52,8 +52,8 @@ actions_next = {
     "-normalizar-java2": (gerar_queries_value_java2, "-gerar-java2"),
     "-normalizar-java3": (gerar_queries_value_java3, "-gerar-java3"),
 
-    "-gerar-java2": (calcular_metricas_step, "-calcular"),
-    "-gerar-java3": (calcular_metricas_step, "-calcular")
+    "-gerar-java2": (print_resultado, None),
+    "-gerar-java3": (print_resultado, None)
 }
 
 if __name__ == '__main__':

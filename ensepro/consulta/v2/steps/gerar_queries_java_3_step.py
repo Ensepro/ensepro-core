@@ -6,8 +6,10 @@
 
 """
 
+import os
 import subprocess
 
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def gerar_queries_value_java3(params, step, steps, log=False):
     if (len(params) == 1):
@@ -15,7 +17,7 @@ def gerar_queries_value_java3(params, step, steps, log=False):
     else:
         file_name = "resultado_normalizado.json"
 
-    comando = "java -jar querygenerator3.jar " + file_name
+    comando = "java -jar " + parent_dir + "/querygenerator3.jar " + file_name
     if log:
         print("gerando combinações e calculando valores via Java[", comando, "]...", end="")
 
@@ -23,4 +25,4 @@ def gerar_queries_value_java3(params, step, steps, log=False):
     if steps.get(step, None):
         if log:
             print("done.")
-        return steps[step][0](["gerar_queries_step.json"], steps[step][1], steps, log=log)
+        return steps[step][0](["queries_renqueadas.json"], steps[step][1], steps, log=log)

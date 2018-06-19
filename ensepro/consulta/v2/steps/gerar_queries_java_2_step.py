@@ -19,10 +19,10 @@ def gerar_queries_value_java2(params, step, steps, log=False):
 
     comando = "java -jar " + parent_dir + "/querygenerator2.jar " + file_name
     if log:
-        print("gerando combinações e calculando valores via Java[", comando, "]...", end="")
+        print("gerando combinações e calculando valores via Java[", comando, "]...", end="", flush=True)
 
     subprocess.check_output(comando, shell=True)
     if steps.get(step, None):
         if log:
             print("done.")
-        return steps[step][0](["gerar_queries_step.json"], steps[step][1], steps, log=log)
+        return steps[step][0](["queries_renqueadas.json"], steps[step][1], steps, log=log)
