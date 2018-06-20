@@ -17,9 +17,9 @@ def gerar_queries_value_java3(params, step, steps, log=False):
     else:
         file_name = "resultado_normalizado.json"
 
-    comando = "java -jar " + parent_dir + "/querygenerator3.jar " + file_name
+    comando = "java -jar " + parent_dir + "/querygenerator.jar " + file_name + " do3"
     if log:
-        print("gerando combinações e calculando valores via Java[", comando, "]...", end="")
+        print("gerando combinações e calculando valores via Java[", comando, "]...", end="", flush=True)
 
     subprocess.check_output(comando, shell=True)
     if steps.get(step, None):
