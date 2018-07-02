@@ -80,8 +80,8 @@ class Frase:
         if self.__resposta:
             return self.__resposta
 
-        from ensepro.consulta.v2 import query_generator as consulta
-        self.__resposta = consulta.get(self)
+        from ensepro.cbc import consultar
+        self.__resposta = consultar(self)
         return self.__resposta
 
     def get_palavras(self, condicao, **args):

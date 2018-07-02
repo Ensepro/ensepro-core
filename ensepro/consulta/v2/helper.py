@@ -14,6 +14,8 @@ map_var_to_resource = {}
 map_distancias_edicao = {}
 map_resource_to_tr = {}
 termos_relevantes = []
+termos_relacionados = {}
+sinonimos = {}
 
 var_id = 1
 var_prefixes = {True: "z", False: "x"}
@@ -25,12 +27,16 @@ def init_helper(values):
     global map_distancias_edicao
     global map_resource_to_tr
     global termos_relevantes
+    global termos_relacionados
+    global sinonimos
 
     map_resource_to_var = values.get("map_resource_to_var", map_resource_to_var)
     map_var_to_resource = values.get("map_var_to_resource", map_var_to_resource)
     map_distancias_edicao = values.get("map_distancias_edicao", map_distancias_edicao)
     map_resource_to_tr = values.get("map_resource_to_tr", map_resource_to_tr)
     termos_relevantes = values.get("termos_relevantes", termos_relevantes)
+    termos_relacionados = values.get("termos_relacionados", termos_relacionados)
+    sinonimos = values.get("sinonimos", sinonimos)
 
 
 def save_helper():
@@ -40,6 +46,8 @@ def save_helper():
     helper["map_distancias_edicao"] = map_distancias_edicao
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
+    helper["termos_relacionados"] = termos_relacionados
+    helper["sinonimos"] = sinonimos
 
     # save_as_json(helper, "helper.json")
     return helper

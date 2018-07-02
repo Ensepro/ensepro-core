@@ -46,6 +46,7 @@ class ConfiguracoesConstantes:
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
     CHATTERBOT = "chatterbot"
+    CONSULTA = "consulta"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
@@ -200,3 +201,15 @@ class KnowledgeGraphSearchConstantes:
             servidor=SERVIDOR_NOME,
             nome_servico="search"
     )
+
+
+class ConsultaConstantes:
+    PESOS = ConfiguracoesConstantes.CONSULTA + ".pesos"
+
+    PESO_VERBO = PESOS + ".verbo"
+    PESO_VERBO_SINONIMO = PESOS + ".verbo_sinonimo"
+    PESO_VERBO_NOMILIZADO = PESOS + ".verbo_nomilizado"
+    PESO_SUBSANTIVO_COMUM = PESOS + ".substantivo_comum"
+    PESO_SUBSANTIVO_PROPRIO = PESOS + ".substantivo_proprio"
+    PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS + ".substantivo_comum_sinonimo"
+    PESO_VERBO_NOMILIZADO_SINONIMO = PESOS + ".verbo_nomilizado_sinonimo"

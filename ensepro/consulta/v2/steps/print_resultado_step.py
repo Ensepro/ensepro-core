@@ -25,7 +25,7 @@ def print_resultado_value(params, step, steps, log=False):
             if type(tripla) is list:
                 for index in range(len(tripla)):
                     if tripla[index][0] == "z":
-                        tripla[index] = helper._get_var_value(tripla[index])
+                        tripla[index] = "*"+helper._get_var_value(tripla[index])
                     elif tripla[index][0] == "x":
                         if log:
                             v.add(tripla[index])

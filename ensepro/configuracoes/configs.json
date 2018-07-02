@@ -35,6 +35,17 @@
             "eng"
         ]
     },
+    "consulta": {
+        "pesos": {
+            "substantivo_proprio": 7,
+            "substantivo_comum": 6,
+            "substantivo_comum_sinonimo": 4,
+            "verbo": 5,
+            "verbo_sinonimo": 3,
+            "verbo_nomilizado": 2,
+            "verbo_nomilizado_sinonimo": 1
+        }
+    },
     "servidores": {
         "palavras": {
             "endpoint": "http://127.0.0.1",
@@ -61,7 +72,7 @@
         },
         "knowledge_graph_search": {
             "endpoint": "https://kgsearch.googleapis.com/v1/entities",
-            "key_file": "../../.key",
+            "key_file": "../.key",
             "servicos": {
                 "search": ":search"
             }
@@ -149,7 +160,7 @@
             "name": "TipoFrases",
             "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
             "trainer": "chatterbot.trainers.ListTrainer",
-            "show_training_progress": false,
+            "show_training_progress": true,
             "read_only": true,
             "logic_adapters": [
                 {
