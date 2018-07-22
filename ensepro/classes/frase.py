@@ -40,7 +40,7 @@ class Frase:
 
     @property
     def locucao_verbal(self):
-        if self.__locucao_verbal is None:
+        if self.__locucao_verbal:
             return self.__locucao_verbal
 
         from ensepro.cln import locucao_verbal
