@@ -49,7 +49,8 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     es_result = busca_no_elasticsearch(entity_name)
                     if es_result:
                         return {
-                            "nova_frase": frase_original.replace(entity["@surfaceForm"], entity_name[:1].upper() + entity_name[1:].lower()),
+                            "nova_frase": frase_original.replace(entity["@surfaceForm"],
+                                                                 entity_name[:1].upper() + entity_name[1:].lower()),
                             "resultado": es_result
                         }
 
@@ -68,7 +69,7 @@ def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_propri
                     end = init + len(substantivo_proprio)
                     surfaseFrom = frase_original[init:end]
                     novo_termo = (entity[:1].upper() + entity[1:].lower()).replace(" ", "_")
-                    return{
+                    return {
                         "nova_frase": frase_original.replace(surfaseFrom, novo_termo),
                     }
 
@@ -99,6 +100,25 @@ actions = [
 ]
 
 
+def remover_cn_justaposto(ensepro_result: Frase):
+    palavras = ensepro_result.palavras
+    size = len(palavras)
+    i = 0
+
+    frase_sem_cn_justaposto = []
+
+    while i < size - 1:
+        palavra = palavras[i]
+        nextPalavra = palavras[i + 1]
+        if "<np-close>" not in nextPalavra.tags and palavra.palavra_original:
+            frase_sem_cn_justaposto.append(palavra.palavra_original)
+        i += 1
+    if palavras[-1].palavra_original:
+        frase_sem_cn_justaposto.append(palavras[-1].palavra_original)
+
+    return ' '.join(frase_sem_cn_justaposto)
+
+
 def atualizar_frase(frase: Frase):
     substantivos_proprios = __list_substantivos_proprios(frase)
     if not substantivos_proprios:
@@ -113,13 +133,10 @@ def atualizar_frase(frase: Frase):
                 if result:
                     import ensepro
                     substantivo_proprio_result = ensepro.analisar_frase(result)
-                    break
-
-    if substantivo_proprio_result:
-        return substantivo_proprio_result
+                    frase_sem_cn_justaposto = remover_cn_justaposto(substantivo_proprio_result)
+                    return ensepro.analisar_frase(frase_sem_cn_justaposto)
 
     return frase
-
 
 
 def __list_substantivos_proprios(frase):
@@ -128,3 +145,9 @@ def __list_substantivos_proprios(frase):
 
 def __is_substantivo_proprio(frase, palavra, *args):
     return bool(palavra.is_substantivo_proprio())
+
+
+def __condicao_palavra_original_nao_vazia(frase, palavra, *args) -> bool:
+    if palavra.palavra_original and palavra.palavra_original.strip():
+        return True
+    return False
