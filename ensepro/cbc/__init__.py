@@ -56,8 +56,9 @@ def __sub_comum_from_frase(frase: Frase):
 
         for lang, sinonimos in lang_group_sinonimos.items():
             for sinonimo in sinonimos:
-                lista_subsantivos_comuns.append(remover_acentos(sinonimo.sinonimo).lower())
-                lista_subsantivos_comuns.append(peso_substantivo_comum_sinonimo)
+                if len(sinonimo.sinonimo) > 2:
+                    lista_subsantivos_comuns.append(remover_acentos(sinonimo.sinonimo).lower())
+                    lista_subsantivos_comuns.append(peso_substantivo_comum_sinonimo)
 
     logger.debug("Substantivos comuns (+sinonimos) da frase: %s", lista_subsantivos_comuns)
     return lista_subsantivos_comuns
@@ -76,10 +77,11 @@ def __verbos_from_frase(frase: Frase):
 
         for lang, sinonimos in lang_group_sinonimos.items():
             for sinonimo in sinonimos:
-                lista_verbos.append(remover_acentos(sinonimo.sinonimo).lower())
-                lista_verbos.append(peso_substantivo_comum_sinonimo)
+                if len(sinonimo.sinonimo) > 2:
+                    lista_verbos.append(remover_acentos(sinonimo.sinonimo).lower())
+                    lista_verbos.append(peso_substantivo_comum_sinonimo)
 
-                ##Obter verbos nomolizados e seus sinonimos
+                ##Obter verbos nominalizados e seus sinonimos
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_verbos)
     return lista_verbos
