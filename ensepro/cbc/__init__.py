@@ -12,6 +12,7 @@ from ensepro.configuracoes import get_config
 from ensepro.constantes import ConsultaConstantes
 from ensepro.consulta.v2 import query_generator
 from ensepro.utils.string_utils import remover_acentos
+from ensepro.constantes import LoggerConstantes
 
 peso_subsatntivo_proprio = get_config(ConsultaConstantes.PESO_SUBSANTIVO_PROPRIO)
 peso_substantivo_comum = get_config(ConsultaConstantes.PESO_SUBSANTIVO_COMUM)
@@ -23,11 +24,15 @@ peso_verbo_nomilizado = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO)
 peso_verbo_nomilizado_sinonimo = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO_SINONIMO)
 
 
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CBC)
+
+
 def __nominalizar_verbos(frase: Frase):
     pass
 
 
 def __sub_proprio_from_frase(frase: Frase):
+    logger.debug("Obtendo substantivos próprios da frase.")
     lista_subsantivos_proprios = []
     substantivos_proprios = [palavra for palavra in frase.termos_relevantes if palavra.is_substantivo_proprio()]
 
@@ -35,10 +40,12 @@ def __sub_proprio_from_frase(frase: Frase):
         lista_subsantivos_proprios.append(remover_acentos(substantivo.palavra_canonica).lower())
         lista_subsantivos_proprios.append(peso_subsatntivo_proprio)
 
+    logger.debug("Substantivos próprios(+sinonimos) da frase: %s", lista_subsantivos_proprios)
     return lista_subsantivos_proprios
 
 
 def __sub_comum_from_frase(frase: Frase):
+    logger.debug("Obtendo substantivos comuns da frase.")
     lista_subsantivos_comuns = []
     substantivos_comuns = [palavra for palavra in frase.termos_relevantes if palavra.is_substantivo()]
 
@@ -52,10 +59,12 @@ def __sub_comum_from_frase(frase: Frase):
                 lista_subsantivos_comuns.append(remover_acentos(sinonimo.sinonimo).lower())
                 lista_subsantivos_comuns.append(peso_substantivo_comum_sinonimo)
 
+    logger.debug("Substantivos comuns (+sinonimos) da frase: %s", lista_subsantivos_comuns)
     return lista_subsantivos_comuns
 
 
 def __verbos_from_frase(frase: Frase):
+    logger.debug("Obtendo verbos da frase.")
     lista_verbos = []
     verbos = [palavra for palavra in frase.termos_relevantes if palavra.is_verbo()]
 
@@ -72,10 +81,12 @@ def __verbos_from_frase(frase: Frase):
 
                 ##Obter verbos nomolizados e seus sinonimos
 
+    logger.debug("Verbos(+sinonimos) da frase: %s", lista_verbos)
     return lista_verbos
 
 
 def consultar(frase: Frase):
+    logger.info("Executando consulta e montagem das queries da frase")
     frase_atualizada = atualizar_frase(frase)
     if not frase_atualizada:
         return None

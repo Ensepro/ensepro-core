@@ -118,6 +118,7 @@ class LoggerConstantes:
 
     # Lista de modulos
     MODULO_CLN = "cln"
+    MODULO_CBC = "cbc"
     MODULO_VOZ = MODULO_CLN + ".voz"
     MODULO_ARVORE = "arvore"
     MODULO_SERVICOS = "servicos"

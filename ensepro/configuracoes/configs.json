@@ -37,13 +37,13 @@
     },
     "consulta": {
         "pesos": {
-            "substantivo_proprio": 7,
-            "substantivo_comum": 6,
-            "substantivo_comum_sinonimo": 4,
-            "verbo": 5,
-            "verbo_sinonimo": 3,
-            "verbo_nomilizado": 2,
-            "verbo_nomilizado_sinonimo": 1
+            "substantivo_proprio": 10,
+            "substantivo_comum": 7,
+            "substantivo_comum_sinonimo": 7,
+            "verbo": 7,
+            "verbo_sinonimo": 5,
+            "verbo_nomilizado": 6,
+            "verbo_nomilizado_sinonimo": 4
         }
     },
     "servidores": {
@@ -85,6 +85,9 @@
         "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
+                "nivel": "DEBUG"
+            },
+            "cbc": {
                 "nivel": "DEBUG"
             },
             "configuracoes": {

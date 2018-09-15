@@ -14,7 +14,7 @@ from ensepro.servicos.request import SpotlightRequest, KnowledgeGraphSearchReque
 
 fields = [Field.FULL_MATCH_SUJEITO, Field.FULL_MATCH_PREDICADO, Field.FULL_MATCH_OBJETO]
 confiancas = [0.8, 0.5]
-logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CONSULTA)
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CBC)
 
 
 def busca_no_elasticsearch(substantivo_proprio):
@@ -37,22 +37,26 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
 
             for entity in entities_found:
                 uri = entity["@URI"]
-                entity_name = uri[uri.rfind("/") + 1:].lower()
+                entity_name = uri[uri.rfind("/") + 1:]
+                entity_name_lower = entity_name.lower()
 
-                if (entity_name == substantivo_proprio):
-                    es_result = busca_no_elasticsearch(entity_name)
+                if (entity_name_lower == substantivo_proprio):
+                    # es_result = busca_no_elasticsearch(entity_name)
+                    logger.debug("Substantivo próprio encontrado no spotlight igual ao da frase.")
                     return {
-                        "nova_frase": frase_original
+                        "nova_frase": frase_original,
+                        "reanalisar": False
                     }
 
                 if (substantivo_proprio.replace("_", " ") in entity["@surfaceForm"].lower()):
-                    es_result = busca_no_elasticsearch(entity_name)
+                    logger.debug("Substantivo próprio do spotlight contém o substantivo próprio da frase")
+                    es_result = busca_no_elasticsearch(entity_name_lower)
                     if es_result:
                         return {
-                            "nova_frase": frase_original.replace(entity["@surfaceForm"],
-                                                                 entity_name[:1].upper() + entity_name[1:].lower()),
+                            "nova_frase": frase_original.replace(entity["@surfaceForm"], entity_name),
                             "resultado": es_result
                         }
+                    logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
 
 def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_proprio, lang):
@@ -63,6 +67,7 @@ def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_propri
         if "name" in item["result"]:
             entity = item["result"]["name"].lower()
             if (substantivo_proprio.replace("_", " ") in entity.lower()):
+                logger.debug("Substantivo próprio do GKG contém o substantivo próprio da frase")
                 es_result = busca_no_elasticsearch(entity)
                 if es_result:
                     init = frase_original.lower().index(substantivo_proprio)
@@ -72,23 +77,28 @@ def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_propri
                     return {
                         "nova_frase": frase_original.replace(surfaseFrom, novo_termo),
                     }
+                logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
         return None
 
 
 def encontrar_entidade_google_knowledge_graph_pt(frase_original, substantivo_proprio):
+    logger.debug("Buscando substantivo próprio no GKG-PT")
     return encontrar_entidade_google_knowledge_graph(frase_original, substantivo_proprio, "pt")
 
 
 def encontrar_entidade_google_knowledge_graph_en(frase_original, substantivo_proprio):
+    logger.debug("Buscando substantivo próprio no GKG-EN")
     return encontrar_entidade_google_knowledge_graph(frase_original, substantivo_proprio, "en")
 
 
 def encontrar_entidade_spotlight_pt(frase_original, substantivo_proprio):
+    logger.debug("Buscando substantivo próprio no Spotlight-PT")
     return encontrar_entidade_spotlight(frase_original, substantivo_proprio, "pt")
 
 
 def encontrar_entidade_spotlight_en(frase_original, substantivo_proprio):
+    logger.debug("Buscando substantivo próprio no Spotlight-EN")
     return encontrar_entidade_spotlight(frase_original, substantivo_proprio, "en")
 
 
@@ -113,6 +123,7 @@ def remover_cn_justaposto(ensepro_result: Frase):
         if "<np-close>" not in nextPalavra.tags and palavra.palavra_original:
             frase_sem_cn_justaposto.append(palavra.palavra_original)
         i += 1
+
     if palavras[-1].palavra_original:
         frase_sem_cn_justaposto.append(palavras[-1].palavra_original)
 
@@ -120,19 +131,24 @@ def remover_cn_justaposto(ensepro_result: Frase):
 
 
 def atualizar_frase(frase: Frase):
+    logger.info("Atualizando frase.")
     substantivos_proprios = __list_substantivos_proprios(frase)
     if not substantivos_proprios:
         return frase
 
-    substantivo_proprio_result = None
+    substantivo_proprio_result = frase
     for substantivo_proprio in substantivos_proprios:
         for action in actions:
+            logger.debug("Atualizando substantivo próprio (%s)com action: %s", substantivo_proprio, action.__name__)
             result = action(frase.frase_original, substantivo_proprio.palavra_canonica.lower())
+            logger.debug("Resultado da action (%s): %s", action.__name__, result)
             if result:
+                reanalisar = result.get("reanalisar", True)
                 result = result.get("nova_frase", None)
                 if result:
                     import ensepro
-                    substantivo_proprio_result = ensepro.analisar_frase(result)
+                    if reanalisar:
+                        substantivo_proprio_result = ensepro.analisar_frase(result)
                     frase_sem_cn_justaposto = remover_cn_justaposto(substantivo_proprio_result)
                     return ensepro.analisar_frase(frase_sem_cn_justaposto)
 
