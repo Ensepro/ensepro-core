@@ -66,6 +66,7 @@
         },
         "dbpedia_spotlight": {
             "endpoint": "http://api.dbpedia-spotlight.org",
+            "confiancas": [0.8, 0.3],
             "servicos": {
                 "spotlight": "/{lang}/annotate/"
             }

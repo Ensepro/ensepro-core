@@ -6,14 +6,15 @@
 
 """
 
-from ensepro import LoggerConstantes, Frase
+from ensepro import LoggerConstantes, Frase, DBPediaSpotlightConstantes
 from ensepro.consulta.fields import Field
 from ensepro.elasticsearch.searches import full_match_serach
 from ensepro.servicos import dbpedia_spotlight_service, knowledge_graph_search_service
 from ensepro.servicos.request import SpotlightRequest, KnowledgeGraphSearchRequest
+from ensepro import configuracoes
 
 fields = [Field.FULL_MATCH_SUJEITO, Field.FULL_MATCH_PREDICADO, Field.FULL_MATCH_OBJETO]
-confiancas = [0.8, 0.5]
+confiancas = configuracoes.get_config(DBPediaSpotlightConstantes.CONFIANCAS)
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CBC)
 
 

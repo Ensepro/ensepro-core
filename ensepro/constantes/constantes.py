@@ -192,6 +192,8 @@ class DBPediaSpotlightConstantes:
             nome_servico="spotlight"
     )
 
+    CONFIANCAS = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".confiancas"
+
 
 class KnowledgeGraphSearchConstantes:
     SERVIDOR_NOME = "knowledge_graph_search"
