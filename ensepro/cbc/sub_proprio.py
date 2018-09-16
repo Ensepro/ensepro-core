@@ -137,21 +137,24 @@ def atualizar_frase(frase: Frase):
     if not substantivos_proprios:
         return frase
 
-    substantivo_proprio_result = frase
+    frase_original = frase.frase_original
+    atualizou = False
     for substantivo_proprio in substantivos_proprios:
         for action in actions:
             logger.debug("Atualizando substantivo próprio (%s)com action: %s", substantivo_proprio, action.__name__)
-            result = action(frase.frase_original, substantivo_proprio.palavra_canonica.lower())
+            result = action(frase_original , substantivo_proprio.palavra_canonica.lower())
             logger.debug("Resultado da action (%s): %s", action.__name__, result)
             if result:
-                reanalisar = result.get("reanalisar", True)
                 result = result.get("nova_frase", None)
                 if result:
-                    import ensepro
-                    if reanalisar:
-                        substantivo_proprio_result = ensepro.analisar_frase(result)
-                    frase_sem_cn_justaposto = remover_cn_justaposto(substantivo_proprio_result)
-                    return ensepro.analisar_frase(frase_sem_cn_justaposto)
+                    atualizou = True
+                    frase_original = result
+
+    if atualizou:
+        import ensepro
+        substantivo_proprio_result = ensepro.analisar_frase(frase_original)
+        frase_sem_cn_justaposto = remover_cn_justaposto(substantivo_proprio_result)
+        return ensepro.analisar_frase(frase_sem_cn_justaposto)
 
     return frase
 

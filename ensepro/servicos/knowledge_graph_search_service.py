@@ -32,7 +32,7 @@ def search(request: KnowledgeGraphSearchRequest) -> KnowledgeGraphSearchResponse
     logger.info("Service Knowledge Graph Search response: [response=%s]", response)
 
     if (response.ok):
-        logger.debug("Response as json: [response=%s]", response.json())
+        # logger.debug("Response as json: [response=%s]", response.json())
         return KnowledgeGraphSearchResponse(response)
 
     # Se respose não OK, lança exception

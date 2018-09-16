@@ -15,9 +15,16 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_DBPEDIA_SPOTLIGHT_S
 endpoint = configuracoes.get_config(DBPediaSpotlightConstantes.ENDPOINT)
 servico_spotlight = configuracoes.get_config(DBPediaSpotlightConstantes.SERVICO_SPOTLIGHT)
 
+cache = {}
 
 def spotlight(request: SpotlightRequest, lang="pt") -> SpotlightResponse:
     logger.info("Service Spotlight request: [request=%s]", request)
+
+    value_in_cache = cache.get(request.hash(), None)
+    if value_in_cache:
+        logger.info("Retornando valor em cache")
+        logger.debug("CACHE: %s", value_in_cache)
+        return value_in_cache
 
     url = __build_url([endpoint, servico_spotlight.format(lang=lang)])
     params = request.__dict__
@@ -29,7 +36,9 @@ def spotlight(request: SpotlightRequest, lang="pt") -> SpotlightResponse:
 
     if (response.ok):
         logger.debug("Response as json: [response=%s]", response.json())
-        return SpotlightResponse(response)
+        spotlight_response = SpotlightResponse(response)
+        cache[request.hash()] = spotlight_response
+        return spotlight_response
 
     # Se respose não OK, lança exception
     exception = Exception("Erro ao chamar servico do spotlight: [status_code={0}, reason={1}, response_text={2}]" \
