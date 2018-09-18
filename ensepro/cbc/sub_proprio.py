@@ -71,7 +71,7 @@ def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_propri
                 logger.debug("Substantivo próprio do GKG contém o substantivo próprio da frase")
                 es_result = busca_no_elasticsearch(entity)
                 if es_result:
-                    init = frase_original.lower().index(substantivo_proprio)
+                    init = frase_original.lower().index(substantivo_proprio.replace("_", " "))
                     end = init + len(substantivo_proprio)
                     surfaseFrom = frase_original[init:end]
                     novo_termo = (entity[:1].upper() + entity[1:].lower()).replace(" ", "_")
@@ -149,6 +149,7 @@ def atualizar_frase(frase: Frase):
                 if result:
                     atualizou = True
                     frase_original = result
+                    break
 
     if atualizou:
         import ensepro
