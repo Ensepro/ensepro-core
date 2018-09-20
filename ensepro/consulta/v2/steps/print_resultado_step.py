@@ -9,6 +9,10 @@
 import json
 from ensepro import save_as_json
 from ensepro.consulta.v2 import helper
+import ensepro.configuracoes as configuracoes
+from ensepro import ConsultaConstantes
+
+numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
 
 
 def print_resultado_value(params, step, steps, log=False):
@@ -16,7 +20,7 @@ def print_resultado_value(params, step, steps, log=False):
 
     if log:
         print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
-    values_to_print = params["values"][:20]
+    values_to_print = params["values"][:numero_respostas]
 
     v = set()
     print()

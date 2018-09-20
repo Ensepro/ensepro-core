@@ -216,3 +216,5 @@ class ConsultaConstantes:
     PESO_SUBSANTIVO_PROPRIO = PESOS + ".substantivo_proprio"
     PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS + ".substantivo_comum_sinonimo"
     PESO_VERBO_NOMILIZADO_SINONIMO = PESOS + ".verbo_nomilizado_sinonimo"
+
+    NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"

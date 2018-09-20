@@ -44,7 +44,8 @@
             "verbo_sinonimo": 5,
             "verbo_nomilizado": 6,
             "verbo_nomilizado_sinonimo": 4
-        }
+        },
+        "numero_respostas": 100
     },
     "servidores": {
         "palavras": {
