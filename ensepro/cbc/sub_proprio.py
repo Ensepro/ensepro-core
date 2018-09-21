@@ -121,9 +121,14 @@ def remover_cn_justaposto(ensepro_result: Frase):
     while i < size - 1:
         palavra = palavras[i]
         nextPalavra = palavras[i + 1]
-        if "<np-close>" not in nextPalavra.tags and palavra.palavra_original:
-            frase_sem_cn_justaposto.append(palavra.palavra_original)
         i += 1
+
+        canConsiderToIgnore = palavra.is_adjetivo() or palavra.is_substantivo()
+        if "<np-close>" in nextPalavra.tags and canConsiderToIgnore:
+            continue
+
+        if palavra.palavra_original:
+            frase_sem_cn_justaposto.append(palavra.palavra_original)
 
     if palavras[-1].palavra_original:
         frase_sem_cn_justaposto.append(palavras[-1].palavra_original)
@@ -142,7 +147,7 @@ def atualizar_frase(frase: Frase):
     for substantivo_proprio in substantivos_proprios:
         for action in actions:
             logger.debug("Atualizando substantivo próprio (%s)com action: %s", substantivo_proprio, action.__name__)
-            result = action(frase_original , substantivo_proprio.palavra_canonica.lower())
+            result = action(frase_original, substantivo_proprio.palavra_canonica.lower())
             logger.debug("Resultado da action (%s): %s", action.__name__, result)
             if result:
                 result = result.get("nova_frase", None)
