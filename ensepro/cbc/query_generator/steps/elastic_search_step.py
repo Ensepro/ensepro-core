@@ -6,11 +6,11 @@
 
 """
 
-from ensepro.consulta.fields import Field
+from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import list_parcial_match_search
 from ensepro.utils.string_utils import remover_acentos
 from ensepro import save_as_json
-from ensepro.consulta.v2 import helper
+from ensepro.cbc.query_generator import helper
 
 fields_partial_match = [
     Field.PARTIAL_MATCH_SUJEITO,

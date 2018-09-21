@@ -46,7 +46,7 @@ class ConfiguracoesConstantes:
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
     CHATTERBOT = "chatterbot"
-    CONSULTA = "consulta"
+    CONSULTA = "cbc"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
@@ -64,6 +64,7 @@ class ConfiguracoesConstantes:
     # Lista de verbos de ligação
     VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
     TERMOS_RELEVANTES = FRASES + ".termos_relevantes"
+    ARQUIVO_NOMINALIZACAO = FRASES + ".nominalizacao"
     TERMOS_RELEVANTES_IGNORAR = TERMOS_RELEVANTES + ".ignorar"
 
     # Serviços
@@ -125,6 +126,7 @@ class LoggerConstantes:
     MODULO_SINONIMOS = "sinonimos"
     MODULO_CONSULTA = "consulta"
     MODULO_TIPO_FRASES = MODULO_CLN + ".tipo_frases"
+    MODULO_NOMINALIZACAO = MODULO_CLN + ".nominalizacao"
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"

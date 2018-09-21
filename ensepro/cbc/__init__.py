@@ -10,9 +10,10 @@ from ensepro.cbc.fields import Field
 from ensepro.cbc.sub_proprio import atualizar_frase
 from ensepro.configuracoes import get_config
 from ensepro.constantes import ConsultaConstantes
-from ensepro.consulta.v2 import query_generator
+from ensepro.cbc.query_generator import query_generator
 from ensepro.utils.string_utils import remover_acentos
 from ensepro.constantes import LoggerConstantes
+from ensepro.cln import nominalizacao
 
 peso_subsatntivo_proprio = get_config(ConsultaConstantes.PESO_SUBSANTIVO_PROPRIO)
 peso_substantivo_comum = get_config(ConsultaConstantes.PESO_SUBSANTIVO_COMUM)
@@ -22,7 +23,6 @@ peso_verbo = get_config(ConsultaConstantes.PESO_VERBO)
 peso_verbo_sinonimo = get_config(ConsultaConstantes.PESO_VERBO_SINONIMO)
 peso_verbo_nomilizado = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO)
 peso_verbo_nomilizado_sinonimo = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO_SINONIMO)
-
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CBC)
 
@@ -75,13 +75,20 @@ def __verbos_from_frase(frase: Frase):
 
         lang_group_sinonimos = verbo.sinonimos
 
+        nominalizacoes_verbo = nominalizacao.get(verbo.palavra_canonica)
+
+        for nom in nominalizacoes_verbo:
+            if nom not in lista_verbos:
+                lista_verbos.append(remover_acentos(nom).lower())
+                lista_verbos.append(peso_verbo_nomilizado)
+
         for lang, sinonimos in lang_group_sinonimos.items():
             for sinonimo in sinonimos:
-                if len(sinonimo.sinonimo) > 2:
+                if len(sinonimo.sinonimo) > 2 and sinonimo.sinonimo not in lista_verbos:
                     lista_verbos.append(remover_acentos(sinonimo.sinonimo).lower())
                     lista_verbos.append(peso_substantivo_comum_sinonimo)
 
-                ##Obter verbos nominalizados e seus sinonimos
+                ##Obter verbos nominalizados dos sinonimos?
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_verbos)
     return lista_verbos

@@ -8,7 +8,7 @@
 
 import json
 from ensepro import save_as_json
-from ensepro.consulta.v2 import helper
+from ensepro.cbc.query_generator import helper
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes
 
@@ -29,7 +29,7 @@ def print_resultado_value(params, step, steps, log=False):
             if type(tripla) is list:
                 for index in range(len(tripla)):
                     if tripla[index][0] == "z":
-                        tripla[index] = "*"+helper._get_var_value(tripla[index])
+                        tripla[index] = "*" + helper._get_var_value(tripla[index])
                     elif tripla[index][0] == "x":
                         if log:
                             v.add(tripla[index])

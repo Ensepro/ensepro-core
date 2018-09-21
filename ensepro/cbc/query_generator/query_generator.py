@@ -13,15 +13,15 @@ if __name__ == '__main__':
     THIS_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     sys.path.append(THIS_PATH)
 
-from ensepro.consulta.v2.steps.elastic_search_step import elastic_search_step, elastic_search_integrado_step
-from ensepro.consulta.v2.steps.normalizar_step import normalizar_step, normalizar_value_step
-from ensepro.consulta.v2.steps.gerar_queries_step import gerar_queries, gerar_queries_value
-from ensepro.consulta.v2.steps.calcular_metricas_step import calcular_metricas_step, calcular_metricas_value
-from ensepro.consulta.v2.steps.print_resultado_step import print_resultado, print_resultado_value
-from ensepro.consulta.v2.steps.ranquear_step import ranquear_step, ranquear_step_value
-from ensepro.consulta.v2.steps.show_help import show_help
-from ensepro.consulta.v2.steps.gerar_queries_java_2_step import gerar_queries_value_java2
-from ensepro.consulta.v2.steps.gerar_queries_java_3_step import gerar_queries_value_java3
+from ensepro.cbc.query_generator.steps.elastic_search_step import elastic_search_step, elastic_search_integrado_step
+from ensepro.cbc.query_generator.steps.normalizar_step import normalizar_step, normalizar_value_step
+from ensepro.cbc.query_generator.steps.gerar_queries_step import gerar_queries, gerar_queries_value
+from ensepro.cbc.query_generator.steps.calcular_metricas_step import calcular_metricas_step, calcular_metricas_value
+from ensepro.cbc.query_generator.steps.print_resultado_step import print_resultado, print_resultado_value
+from ensepro.cbc.query_generator.steps.ranquear_step import ranquear_step, ranquear_step_value
+from ensepro.cbc.query_generator.steps.show_help import show_help
+from ensepro.cbc.query_generator.steps.gerar_queries_java_2_step import gerar_queries_value_java2
+from ensepro.cbc.query_generator.steps.gerar_queries_java_3_step import gerar_queries_value_java3
 
 actions = {
     "-help": show_help,

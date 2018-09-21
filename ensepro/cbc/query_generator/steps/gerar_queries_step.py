@@ -8,7 +8,7 @@
 
 from ensepro import save_as_json
 import json
-from ensepro.consulta.v2 import helper
+from ensepro.cbc.query_generator import helper
 
 
 def gerar_queries_value(params, step, steps, log=False):

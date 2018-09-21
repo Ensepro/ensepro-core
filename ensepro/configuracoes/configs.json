@@ -1,6 +1,6 @@
 {
     "frases": {
-        "namlex": "../../arquivos/namlex-pt.txt",
+        "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
         "regex": {
             "termo_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",
@@ -35,7 +35,7 @@
             "eng"
         ]
     },
-    "consulta": {
+    "cbc": {
         "pesos": {
             "substantivo_proprio": 10,
             "substantivo_comum": 7,
@@ -128,6 +128,9 @@
                     "nivel": "DEBUG"
                 },
                 "locucao_verbal": {
+                    "nivel": "DEBUG"
+                },
+                "nominalizacao":{
                     "nivel": "DEBUG"
                 },
                 "termos_relevantes": {

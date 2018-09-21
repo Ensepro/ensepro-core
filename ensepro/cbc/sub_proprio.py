@@ -7,7 +7,7 @@
 """
 
 from ensepro import LoggerConstantes, Frase, DBPediaSpotlightConstantes
-from ensepro.consulta.fields import Field
+from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import full_match_serach
 from ensepro.servicos import dbpedia_spotlight_service, knowledge_graph_search_service
 from ensepro.servicos.request import SpotlightRequest, KnowledgeGraphSearchRequest
