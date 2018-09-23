@@ -112,6 +112,7 @@ actions = [
 
 
 def remover_cn_justaposto(ensepro_result: Frase):
+    logger.info("Removendo complementos nominais justapostos")
     palavras = ensepro_result.palavras
     size = len(palavras)
     i = 0
@@ -125,6 +126,7 @@ def remover_cn_justaposto(ensepro_result: Frase):
 
         canConsiderToIgnore = palavra.is_adjetivo() or palavra.is_substantivo()
         if "<np-close>" in nextPalavra.tags and canConsiderToIgnore:
+            logger.debug("Complemento nominal justaposto ingorado: %s", palavra.palavra_original)
             continue
 
         if palavra.palavra_original:
@@ -133,7 +135,10 @@ def remover_cn_justaposto(ensepro_result: Frase):
     if palavras[-1].palavra_original:
         frase_sem_cn_justaposto.append(palavras[-1].palavra_original)
 
-    return ' '.join(frase_sem_cn_justaposto)
+    final_result = ' '.join(frase_sem_cn_justaposto)
+
+    logger.info("Frase após remoção complementos nominais justapostos: %s", final_result)
+    return final_result
 
 
 def atualizar_frase(frase: Frase):
@@ -156,13 +161,12 @@ def atualizar_frase(frase: Frase):
                     frase_original = result
                     break
 
+    import ensepro
     if atualizou:
-        import ensepro
-        substantivo_proprio_result = ensepro.analisar_frase(frase_original)
-        frase_sem_cn_justaposto = remover_cn_justaposto(substantivo_proprio_result)
-        return ensepro.analisar_frase(frase_sem_cn_justaposto)
+        frase = ensepro.analisar_frase(frase_original)
 
-    return frase
+    frase_sem_cn_justaposto = remover_cn_justaposto(frase)
+    return ensepro.analisar_frase(frase_sem_cn_justaposto)
 
 
 def __list_substantivos_proprios(frase):
