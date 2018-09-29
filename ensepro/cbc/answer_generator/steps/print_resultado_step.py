@@ -8,7 +8,7 @@
 
 import json
 from ensepro import save_as_json
-from ensepro.cbc.query_generator import helper
+from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes
 

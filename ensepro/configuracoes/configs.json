@@ -37,17 +37,30 @@
     },
     "cbc": {
         "pesos": {
-            "substantivo_proprio": 10,
-            "substantivo_comum": 5,
-            "substantivo_comum_sinonimo": 5,
-            "verbo": 6,
-            "verbo_sinonimo": 4,
-            "verbo_nomilizado": 6,
-            "verbo_nomilizado_sinonimo": 4
+            "classes": {
+                "substantivo_proprio": 10,
+                "substantivo_comum": 5,
+                "substantivo_comum_sinonimo": 5,
+                "verbo": 6,
+                "verbo_sinonimo": 4,
+                "verbo_nomilizado": 6,
+                "verbo_nomilizado_sinonimo": 4
+            },
+            "metricas": {
+                "m1": {
+                    "peso": 1,
+                    "policy": "WORST_MATCH"
+                },
+                "m2": {
+                    "peso": 1,
+                    "policy": "BEST_MATCH"
+                },
+                "m3": {
+                    "peso": 1,
+                    "policy": "AVG"
+                }
+            }
         },
-        "peso_m1": 1,
-        "peso_m2": 1,
-        "peso_m3": 1,
         "numero_respostas": 100
     },
     "servidores": {

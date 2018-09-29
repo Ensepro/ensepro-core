@@ -57,10 +57,10 @@ def save_helper():
     helper["sinonimos"] = sinonimos
     helper["substantivos_proprios_frase"] = substantivos_proprios_frase
 
-    helper["pesos"] = {}
-    helper["pesos"]["peso_m1"] = peso_m1
-    helper["pesos"]["peso_m2"] = peso_m2
-    helper["pesos"]["peso_m3"] = peso_m3
+    helper["metricas"] = {}
+    helper["metricas"]["m1"] = peso_m1
+    helper["metricas"]["m2"] = peso_m2
+    helper["metricas"]["m3"] = peso_m3
 
     # save_as_json(helper, "helper.json")
     return helper

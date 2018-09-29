@@ -10,7 +10,7 @@ from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import list_parcial_match_search
 from ensepro.utils.string_utils import remover_acentos
 from ensepro import save_as_json
-from ensepro.cbc.query_generator import helper
+from ensepro.cbc.answer_generator import helper
 
 fields_partial_match = [
     Field.PARTIAL_MATCH_SUJEITO,
@@ -60,7 +60,7 @@ def elastic_search_integrado_step(params, step, steps, log=False):
                 Field.PARTIAL_MATCH_SUJEITO,
                 Field.PARTIAL_MATCH_OBJETO
             ],
-            params["termos"]["substantivos_proprios"][::2]
+            params["termos"]["PROP"][::2]
     )
 
     busca_parte2 = list_parcial_match_search(
@@ -69,14 +69,14 @@ def elastic_search_integrado_step(params, step, steps, log=False):
                 Field.PARTIAL_MATCH_PREDICADO,
                 Field.PARTIAL_MATCH_OBJETO
             ],
-            params["termos"]["substantivos_comuns"][::2]
+            params["termos"]["SUB"][::2]
     )
 
     busca_parte3 = list_parcial_match_search(
             [
                 Field.PARTIAL_MATCH_PREDICADO
             ],
-            params["termos"]["verbos"][::2]
+            params["termos"]["VERB"][::2]
 
     )
     resultado = {}
@@ -135,10 +135,10 @@ def merge_consultas(values):
 
 def integrado_obtem_termos_relevantes(params):
     for key in params:
-        obtem_termos_relevantes(params[key])
+        obtem_termos_relevantes(params[key],key)
 
 
-def obtem_termos_relevantes(params):
+def obtem_termos_relevantes(params, key):
     i = 0
     while (i < len(params)):
         termo = remover_acentos(params[i]).lower()
@@ -153,7 +153,7 @@ def obtem_termos_relevantes(params):
         else:
             i += 2
 
-        helper.termos_relevantes.append((termo, peso))
+        helper.termos_relevantes.append((termo, peso, key))
 
 
 def is_int(s):

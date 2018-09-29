@@ -6,8 +6,8 @@
 
 """
 
-import subprocess
 import os
+import subprocess
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes
 
@@ -15,13 +15,13 @@ numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def gerar_queries_value_java2(params, step, steps, log=False):
+def gerar_queries_value_java3(params, step, steps, log=False):
     if (len(params) == 1):
         file_name = params[0]
     else:
         file_name = "resultado_normalizado.json"
 
-    comando = "java -jar " + parent_dir + "/querygenerator.jar " + file_name + " " + str(numero_respostas)
+    comando = "java -jar " + parent_dir + "/answergenerator.jar " + file_name + " " + str(numero_respostas) + " do3"
     if log:
         print("gerando combinações e calculando valores via Java[", comando, "]...", end="", flush=True)
 

@@ -8,7 +8,7 @@
 
 import json
 from ensepro import save_as_json
-from ensepro.cbc.query_generator import helper
+from ensepro.cbc.answer_generator import helper
 
 
 def ranquear_step_value(params, step, steps, log=False):

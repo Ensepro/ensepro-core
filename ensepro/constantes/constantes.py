@@ -212,16 +212,19 @@ class KnowledgeGraphSearchConstantes:
 class ConsultaConstantes:
     PESOS = ConfiguracoesConstantes.CONSULTA + ".pesos"
 
-    PESO_VERBO = PESOS + ".verbo"
-    PESO_VERBO_SINONIMO = PESOS + ".verbo_sinonimo"
-    PESO_VERBO_NOMILIZADO = PESOS + ".verbo_nomilizado"
-    PESO_SUBSANTIVO_COMUM = PESOS + ".substantivo_comum"
-    PESO_SUBSANTIVO_PROPRIO = PESOS + ".substantivo_proprio"
-    PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS + ".substantivo_comum_sinonimo"
-    PESO_VERBO_NOMILIZADO_SINONIMO = PESOS + ".verbo_nomilizado_sinonimo"
+    PESOS_CLASSES = PESOS + ".classes"
+    PESOS_METRICAS = PESOS + ".metricas"
 
-    PESO_M1 = ConfiguracoesConstantes.CONSULTA + ".peso_m1"
-    PESO_M2 = ConfiguracoesConstantes.CONSULTA + ".peso_m2"
-    PESO_M3 = ConfiguracoesConstantes.CONSULTA + ".peso_m3"
+    PESO_VERBO = PESOS_CLASSES + ".verbo"
+    PESO_VERBO_SINONIMO = PESOS_CLASSES + ".verbo_sinonimo"
+    PESO_VERBO_NOMILIZADO = PESOS_CLASSES + ".verbo_nomilizado"
+    PESO_SUBSANTIVO_COMUM = PESOS_CLASSES + ".substantivo_comum"
+    PESO_SUBSANTIVO_PROPRIO = PESOS_CLASSES + ".substantivo_proprio"
+    PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS_CLASSES + ".substantivo_comum_sinonimo"
+    PESO_VERBO_NOMILIZADO_SINONIMO = PESOS_CLASSES + ".verbo_nomilizado_sinonimo"
+
+    PESO_M1 = PESOS_METRICAS + ".m1"
+    PESO_M2 = PESOS_METRICAS + ".m2"
+    PESO_M3 = PESOS_METRICAS + ".m3"
 
     NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"

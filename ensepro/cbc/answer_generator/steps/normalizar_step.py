@@ -8,7 +8,7 @@
 
 from ensepro import save_as_json
 import json
-from ensepro.cbc.query_generator import helper
+from ensepro.cbc.answer_generator import helper
 from ensepro.utils.string_utils import remover_acentos
 
 
