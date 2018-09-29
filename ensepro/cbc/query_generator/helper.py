@@ -5,7 +5,8 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-from ensepro import save_as_json
+from ensepro.configuracoes import get_config
+from ensepro import ConsultaConstantes
 import editdistance
 import json
 
@@ -16,6 +17,10 @@ map_resource_to_tr = {}
 termos_relevantes = []
 termos_relacionados = {}
 sinonimos = {}
+substantivos_proprios_frase = []
+peso_m1 = get_config(ConsultaConstantes.PESO_M1)
+peso_m2 = get_config(ConsultaConstantes.PESO_M2)
+peso_m3 = get_config(ConsultaConstantes.PESO_M3)
 
 var_id = 1
 var_prefixes = {True: "z", False: "x"}
@@ -29,6 +34,7 @@ def init_helper(values):
     global termos_relevantes
     global termos_relacionados
     global sinonimos
+    global substantivos_proprios_frase
 
     map_resource_to_var = values.get("map_resource_to_var", map_resource_to_var)
     map_var_to_resource = values.get("map_var_to_resource", map_var_to_resource)
@@ -37,6 +43,7 @@ def init_helper(values):
     termos_relevantes = values.get("termos_relevantes", termos_relevantes)
     termos_relacionados = values.get("termos_relacionados", termos_relacionados)
     sinonimos = values.get("sinonimos", sinonimos)
+    substantivos_proprios_frase = values.get("substantivos_proprios_frase", substantivos_proprios_frase)
 
 
 def save_helper():
@@ -48,6 +55,12 @@ def save_helper():
     helper["termos_relevantes"] = termos_relevantes
     helper["termos_relacionados"] = termos_relacionados
     helper["sinonimos"] = sinonimos
+    helper["substantivos_proprios_frase"] = substantivos_proprios_frase
+
+    helper["pesos"] = {}
+    helper["pesos"]["peso_m1"] = peso_m1
+    helper["pesos"]["peso_m2"] = peso_m2
+    helper["pesos"]["peso_m3"] = peso_m3
 
     # save_as_json(helper, "helper.json")
     return helper

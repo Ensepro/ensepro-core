@@ -86,8 +86,8 @@ class PalavrasServidorConstantes:
 
     ANALISAR_FRASE_PARAM = "frase"
     SERVICO_ANALISAR_FRASE = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="analisar_frase"
+        servidor=SERVIDOR_NOME,
+        nome_servico="analisar_frase"
     )
 
 
@@ -155,7 +155,8 @@ class LoggerConstantes:
         import logging
         from ensepro import configuracoes
         logger = logging.getLogger(cls.GET_LOGGER_MODULO.format(modulo=modulo))
-        logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
+        logger.setLevel(
+            logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
         return logger
 
     @classmethod
@@ -190,8 +191,8 @@ class DBPediaSpotlightConstantes:
     ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
 
     SERVICO_SPOTLIGHT = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="spotlight"
+        servidor=SERVIDOR_NOME,
+        nome_servico="spotlight"
     )
 
     CONFIANCAS = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".confiancas"
@@ -203,8 +204,8 @@ class KnowledgeGraphSearchConstantes:
     API_KEY = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".key_file"
     ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
     SEARCH_SERVICE = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="search"
+        servidor=SERVIDOR_NOME,
+        nome_servico="search"
     )
 
 
@@ -218,5 +219,9 @@ class ConsultaConstantes:
     PESO_SUBSANTIVO_PROPRIO = PESOS + ".substantivo_proprio"
     PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS + ".substantivo_comum_sinonimo"
     PESO_VERBO_NOMILIZADO_SINONIMO = PESOS + ".verbo_nomilizado_sinonimo"
+
+    PESO_M1 = ConfiguracoesConstantes.CONSULTA + ".peso_m1"
+    PESO_M2 = ConfiguracoesConstantes.CONSULTA + ".peso_m2"
+    PESO_M3 = ConfiguracoesConstantes.CONSULTA + ".peso_m3"
 
     NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"

@@ -96,6 +96,10 @@ def elastic_search_integrado_step(params, step, steps, log=False):
 def termos_relecionados(frase):
     for tr in frase.termos_relevantes:
         termo_principal = remover_acentos(tr.palavra_canonica).lower()
+
+        if tr.is_substantivo_proprio():
+            helper.substantivos_proprios_frase.append(termo_principal)
+
         helper.termos_relacionados[termo_principal] = []
         helper.sinonimos[termo_principal] = termo_principal
         for key, sinonimos in tr.sinonimos.items():

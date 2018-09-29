@@ -105,19 +105,19 @@ def encontrar_entidade_spotlight_en(frase_original, substantivo_proprio):
 
 actions = [
     encontrar_entidade_spotlight_pt,
-    encontrar_entidade_spotlight_en,
-    encontrar_entidade_google_knowledge_graph_pt,
-    encontrar_entidade_google_knowledge_graph_en,
+    # encontrar_entidade_spotlight_en,
+    # encontrar_entidade_google_knowledge_graph_pt,
+    # encontrar_entidade_google_knowledge_graph_en,
 ]
 
 
-def remover_cn_justaposto(ensepro_result: Frase):
-    logger.info("Removendo complementos nominais justapostos")
+def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
+    logger.info("Removendo adjuntos adnominais justapostos")
     palavras = ensepro_result.palavras
     size = len(palavras)
     i = 0
 
-    frase_sem_cn_justaposto = []
+    frase_sem_aa_justaposto = []
 
     while i < size - 1:
         palavra = palavras[i]
@@ -126,18 +126,18 @@ def remover_cn_justaposto(ensepro_result: Frase):
 
         canConsiderToIgnore = palavra.is_adjetivo() or palavra.is_substantivo()
         if "<np-close>" in nextPalavra.tags and canConsiderToIgnore:
-            logger.debug("Complemento nominal justaposto ingorado: %s", palavra.palavra_original)
+            logger.debug("Adjunto adnominal justaposto ingorado: %s", palavra.palavra_original)
             continue
 
         if palavra.palavra_original:
-            frase_sem_cn_justaposto.append(palavra.palavra_original)
+            frase_sem_aa_justaposto.append(palavra.palavra_original)
 
     if palavras[-1].palavra_original:
-        frase_sem_cn_justaposto.append(palavras[-1].palavra_original)
+        frase_sem_aa_justaposto.append(palavras[-1].palavra_original)
 
-    final_result = ' '.join(frase_sem_cn_justaposto)
+    final_result = ' '.join(frase_sem_aa_justaposto)
 
-    logger.info("Frase após remoção complementos nominais justapostos: %s", final_result)
+    logger.info("Frase após remoção adjunto adnominais justapostos: %s", final_result)
     return final_result
 
 
@@ -165,8 +165,8 @@ def atualizar_frase(frase: Frase):
     if atualizou:
         frase = ensepro.analisar_frase(frase_original)
 
-    frase_sem_cn_justaposto = remover_cn_justaposto(frase)
-    return ensepro.analisar_frase(frase_sem_cn_justaposto)
+    frase_sem_aa_justaposto = remover_adjuntos_adnominais_justapostos(frase)
+    return ensepro.analisar_frase(frase_sem_aa_justaposto)
 
 
 def __list_substantivos_proprios(frase):

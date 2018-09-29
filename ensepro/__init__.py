@@ -106,9 +106,12 @@ def frase_pretty_print(frase: Frase,
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
 
     if resposta or verbose:
-        print("\nMelhores respostas:", file=file)
-        for index, tripla in enumerate(frase.resposta):
-            print(str(index) + "- " ,tripla, file=file)
+        if frase.resposta:
+            print("\nMelhores respostas:", file=file)
+            for index, tripla in enumerate(frase.resposta):
+                print(str(index) + "- " ,tripla, file=file)
+        else:
+            print("Nenhuma resposta encontrada.", file=file)
 
 
 def save_as_json(value, filename, indent=4, sort_keys=False):
