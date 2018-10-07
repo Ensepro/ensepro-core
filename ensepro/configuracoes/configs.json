@@ -61,7 +61,9 @@
                 }
             }
         },
-        "numero_respostas": 100
+        "numero_respostas": 100,
+        "resultado_resumido": false,
+        "remover_variaveis": true
     },
     "servidores": {
         "palavras": {

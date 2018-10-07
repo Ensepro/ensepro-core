@@ -228,3 +228,5 @@ class ConsultaConstantes:
     PESO_M3 = PESOS_METRICAS + ".m3"
 
     NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"
+    RESULTADO_RESUMIDO = ConfiguracoesConstantes.CONSULTA + ".resultado_resumido"
+    REMOVER_RESULTADOS = ConfiguracoesConstantes.CONSULTA + ".remover_variaveis"

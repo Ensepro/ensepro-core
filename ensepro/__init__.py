@@ -98,7 +98,8 @@ def frase_pretty_print(frase: Frase,
     if tags or verbose:
         print("--> Tags das palavras", file=file)
         for palavra in frase.palavras:
-            print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original, palavra.palavra_canonica,
+            print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original,
+                                                                      palavra.palavra_canonica,
                                                                       str(palavra.tags)),
                   file=file)
 
@@ -108,8 +109,34 @@ def frase_pretty_print(frase: Frase,
     if resposta or verbose:
         if frase.resposta:
             print("\nMelhores respostas:", file=file)
+            import ensepro.configuracoes as configuracoes
+            from ensepro import ConsultaConstantes
+            resultado_resumido = configuracoes.get_config(ConsultaConstantes.RESULTADO_RESUMIDO)
+
             for index, tripla in enumerate(frase.resposta):
-                print(str(index) + "- " ,tripla, file=file)
+                to_print = []
+                to_print.append("score:" + "{0:.3f}".format(tripla["score"]))
+                temp = []
+                for value in tripla["triples"]:
+                    for key in value:
+                        temp.append(value[key])
+
+                to_print.append("[" + ' | '.join(temp) + "]")
+                to_print.append(" ")
+                if not resultado_resumido:
+                    temp = []
+                    for value in tripla["details"]["metrics"]["scoreMetrics"]:
+                        temp.append("{0:.3f}".format(value))
+                    to_print.append("metrics: [" + ' '.join(temp) + "]")
+
+                    temp = []
+                    for value in tripla["details"]["metrics"]["metrics"]:
+                        temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
+                    to_print.append("metricsClass: [" + ','.join(temp) + "]")
+
+                print(str(index), "-", ' '.join(to_print), file=file)
+
+
         else:
             print("Nenhuma resposta encontrada.", file=file)
 
@@ -117,7 +144,7 @@ def frase_pretty_print(frase: Frase,
 def save_as_json(value, filename, indent=4, sort_keys=False):
     import json
     print(
-            json.dumps(value, indent=indent, sort_keys=sort_keys, ensure_ascii=False),
-            file=open(filename, mode='w', encoding="UTF-8"),
-            flush=True
+        json.dumps(value, indent=indent, sort_keys=sort_keys, ensure_ascii=False),
+        file=open(filename, mode='w', encoding="UTF-8"),
+        flush=True
     )
