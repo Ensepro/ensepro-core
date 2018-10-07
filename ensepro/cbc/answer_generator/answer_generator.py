@@ -15,23 +15,11 @@ if __name__ == '__main__':
 
 from ensepro.cbc.answer_generator.steps.elastic_search_step import elastic_search_step, elastic_search_integrado_step
 from ensepro.cbc.answer_generator.steps.normalizar_step import normalizar_step, normalizar_value_step
-from ensepro.cbc.answer_generator.steps.gerar_queries_step import gerar_queries, gerar_queries_value
-from ensepro.cbc.answer_generator.steps.calcular_metricas_step import calcular_metricas_step, calcular_metricas_value
 from ensepro.cbc.answer_generator.steps.print_resultado_step import print_resultado, print_resultado_value
-from ensepro.cbc.answer_generator.steps.ranquear_step import ranquear_step, ranquear_step_value
-from ensepro.cbc.answer_generator.steps.show_help import show_help
 from ensepro.cbc.answer_generator.steps.gerar_queries_java_2_step import gerar_queries_value_java2
 from ensepro.cbc.answer_generator.steps.gerar_queries_java_3_step import gerar_queries_value_java3
 
 actions = {
-    "-help": show_help,
-    "-elasticsearch": elastic_search_step,
-    "-normalizar": normalizar_step,
-    "-gerar": gerar_queries,
-    "-calcular": calcular_metricas_step,
-    "-ranquear": ranquear_step,
-    "-printar-resultados": print_resultado,
-
     "-elasticsearch-integrado": elastic_search_integrado_step,
     "-elasticsearch-java2": elastic_search_step,
     "-elasticsearch-java3": elastic_search_step,
@@ -42,13 +30,6 @@ actions = {
 }
 
 actions_next = {
-    "-help": (None, None),
-    "-elasticsearch": (normalizar_value_step, "-normalizar"),
-    "-normalizar": (gerar_queries_value, "-gerar"),
-    "-gerar": (calcular_metricas_value, "-calcular"),
-    "-calcular": (ranquear_step_value, "-ranquear"),
-    "-ranquear": (print_resultado_value, None),
-
     "-elasticsearch-integrado": (normalizar_value_step, "-normalizar-java2"),
     "-elasticsearch-java2": (normalizar_value_step, "-normalizar-java2"),
     "-elasticsearch-java3": (normalizar_value_step, "-normalizar-java3"),
