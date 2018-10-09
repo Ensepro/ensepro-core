@@ -155,7 +155,7 @@
                     "nivel": "INFO"
                 },
                 "termos_relevantes": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "tipo_frases": {
                     "nivel": "ERROR",
