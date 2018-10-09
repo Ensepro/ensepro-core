@@ -102,19 +102,19 @@
         }
     },
     "logger": {
-        "nome_arquivo": "/ensepro_log.log",
+        "nome_arquivo": "/ensepro.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
-                "nivel": "DEBUG"
+                "nivel": "ERROR"
             },
             "cbc": {
                 "nivel": "DEBUG"
             },
             "configuracoes": {
-                "nivel": "DEBUG"
+                "nivel": "ERROR"
             },
             "consulta": {
                 "nivel": "DEBUG",
@@ -149,7 +149,7 @@
                     "nivel": "DEBUG"
                 },
                 "locucao_verbal": {
-                    "nivel": "DEBUG"
+                    "nivel": "ERROR"
                 },
                 "nominalizacao": {
                     "nivel": "DEBUG"
@@ -158,17 +158,17 @@
                     "nivel": "DEBUG"
                 },
                 "tipo_frases": {
-                    "nivel": "DEBUG",
+                    "nivel": "ERROR",
                     "chatterbot_helper": {
-                        "nivel": "DEBUG"
+                        "nivel": "ERROR"
                     }
                 },
                 "voz": {
-                    "nivel": "DEBUG"
+                    "nivel": "ERROR"
                 }
             },
             "servicos": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "palavras_service": {
                     "nivel": "DEBUG"
                 },
@@ -176,11 +176,11 @@
                     "nivel": "DEBUG"
                 },
                 "knowledge_graph_search_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "sinonimos": {
-                "nivel": "DEBUG"
+                "nivel": "INFO"
             }
         }
     },
