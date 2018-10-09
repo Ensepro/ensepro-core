@@ -125,15 +125,15 @@
             "elasticsearch": {
                 "nivel": "DEBUG",
                 "connection": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "helpers": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "loaders": {
-                    "nivel": "DEBUG",
+                    "nivel": "INFO",
                     "dataset": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     }
                 },
                 "queries": {
@@ -144,15 +144,15 @@
                 }
             },
             "cln": {
-                "nivel": "DEBUG",
+                "nivel": "ERROR",
                 "complementos_nominais": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "locucao_verbal": {
-                    "nivel": "ERROR"
+                    "nivel": "INFO"
                 },
                 "nominalizacao": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "termos_relevantes": {
                     "nivel": "DEBUG"
@@ -168,12 +168,12 @@
                 }
             },
             "servicos": {
-                "nivel": "INFO",
+                "nivel": "ERROR",
                 "palavras_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "dbpedia_spotlight_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "knowledge_graph_search_service": {
                     "nivel": "INFO"
