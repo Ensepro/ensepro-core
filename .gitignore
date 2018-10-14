@@ -4,7 +4,7 @@
 **/__pycache__
 /venv/**
 \#*
-**/ensepro.log
+*.log
 *.sqlite*
 temp*
 .key
