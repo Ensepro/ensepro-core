@@ -10,7 +10,7 @@ from ensepro.cbc.fields import Field
 from ensepro.cbc.sub_proprio import atualizar_frase
 from ensepro.configuracoes import get_config
 from ensepro.constantes import ConsultaConstantes
-from ensepro.cbc.query_generator import query_generator
+from ensepro.cbc.answer_generator import answer_generator
 from ensepro.utils.string_utils import remover_acentos
 from ensepro.constantes import LoggerConstantes
 from ensepro.cln import nominalizacao
@@ -106,11 +106,11 @@ def consultar(frase: Frase):
 
     params = {}
     params["termos"] = {}
-    params["termos"]["substantivos_proprios"] = substantivos_proprios
-    params["termos"]["substantivos_comuns"] = substantivos_comuns
-    params["termos"]["verbos"] = verbos
+    params["termos"]["PROP"] = substantivos_proprios
+    params["termos"]["SUB"] = substantivos_comuns
+    params["termos"]["VERB"] = verbos
     params["frase"] = frase_atualizada
 
-    resultado_final = query_generator.execute_integration(params)
+    resultado_final = answer_generator.execute_integration(params)
 
     return resultado_final

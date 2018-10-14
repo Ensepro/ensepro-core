@@ -26,7 +26,7 @@ def analisar_frase(frase: str):
     logger.info("Analisando frase: [frase=%s]", frase)
 
     url = __build_url([endpoint, ":", porta, servico_analisar_frase])
-    params = {"frase": frase}
+    params = {"frase": frase.replace("(", "").replace(")", "")}
     logger.debug("Executando request [url=%s, params=%s]", url, params)
 
     response = requests.get(url, params=params)

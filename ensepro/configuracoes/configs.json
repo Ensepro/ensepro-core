@@ -37,15 +37,34 @@
     },
     "cbc": {
         "pesos": {
-            "substantivo_proprio": 10,
-            "substantivo_comum": 7,
-            "substantivo_comum_sinonimo": 7,
-            "verbo": 7,
-            "verbo_sinonimo": 5,
-            "verbo_nomilizado": 6,
-            "verbo_nomilizado_sinonimo": 4
+            "classes": {
+                "substantivo_proprio": 10,
+                "substantivo_comum": 5,
+                "substantivo_comum_sinonimo": 5,
+                "verbo": 6,
+                "verbo_sinonimo": 4,
+                "verbo_nomilizado": 6,
+                "verbo_nomilizado_sinonimo": 4
+            },
+            "metricas": {
+                "m1": {
+                    "peso": 1,
+                    "policy": "WORST_MATCH"
+                },
+                "m2": {
+                    "peso": 1,
+                    "policy": "BEST_MATCH"
+                },
+                "m3": {
+                    "peso": 1,
+                    "policy": "AVG"
+                }
+            }
         },
-        "numero_respostas": 100
+        "numero_respostas": 100,
+        "resultado_resumido": false,
+        "remover_variaveis": true,
+        "nivel_answer_generator": 2
     },
     "servidores": {
         "palavras": {
@@ -56,7 +75,7 @@
             }
         },
         "elastic_search": {
-            "endpoint": "127.0.0.1",
+            "endpoint": "172.17.0.2",
             "porta": "9200",
             "settings": {
                 "index_name": "ensepro_triplas",
@@ -66,34 +85,49 @@
             }
         },
         "dbpedia_spotlight": {
-            "endpoint": "http://api.dbpedia-spotlight.org",
-            "confiancas": [0.8, 0.3],
+            "endpoint": "http://172.17.0.1:2228",
+            "confiancas": [
+                0.8,
+                0.3
+            ],
             "servicos": {
-                "spotlight": "/{lang}/annotate/"
+                "spotlight": "/rest/annotate/"
             }
         },
         "knowledge_graph_search": {
             "endpoint": "https://kgsearch.googleapis.com/v1/entities",
-            "key_file": "../.key",
+            "key_file": "/root/alencar/ensepro/ensepro/configuracoes/kg.key",
             "servicos": {
                 "search": ":search"
             }
         }
     },
     "logger": {
-        "nome_arquivo": "/ensepro_log.log",
+        "nome_arquivo": "/ensepro.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
-                "nivel": "DEBUG"
+                "nivel": "ERROR"
             },
             "cbc": {
-                "nivel": "DEBUG"
+                "nivel": "DEBUG",
+                "answer_generator": {
+                    "nivel": "DEBUG",
+                    "elastic_search_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "answer_generator_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "normalizar_step": {
+                        "nivel": "DEBUG"
+                    }
+                }
             },
             "configuracoes": {
-                "nivel": "DEBUG"
+                "nivel": "ERROR"
             },
             "consulta": {
                 "nivel": "DEBUG",
@@ -104,15 +138,15 @@
             "elasticsearch": {
                 "nivel": "DEBUG",
                 "connection": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "helpers": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "loaders": {
-                    "nivel": "DEBUG",
+                    "nivel": "INFO",
                     "dataset": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     }
                 },
                 "queries": {
@@ -123,43 +157,43 @@
                 }
             },
             "cln": {
-                "nivel": "DEBUG",
+                "nivel": "ERROR",
                 "complementos_nominais": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "locucao_verbal": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
-                "nominalizacao":{
-                    "nivel": "DEBUG"
+                "nominalizacao": {
+                    "nivel": "INFO"
                 },
                 "termos_relevantes": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "tipo_frases": {
-                    "nivel": "DEBUG",
+                    "nivel": "ERROR",
                     "chatterbot_helper": {
-                        "nivel": "DEBUG"
+                        "nivel": "ERROR"
                     }
                 },
                 "voz": {
-                    "nivel": "DEBUG"
+                    "nivel": "ERROR"
                 }
             },
             "servicos": {
-                "nivel": "DEBUG",
+                "nivel": "ERROR",
                 "palavras_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "dbpedia_spotlight_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "knowledge_graph_search_service": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "sinonimos": {
-                "nivel": "DEBUG"
+                "nivel": "INFO"
             }
         }
     },
@@ -168,7 +202,7 @@
             "name": "TipoFrases",
             "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
             "trainer": "chatterbot.trainers.ListTrainer",
-            "show_training_progress": true,
+            "show_training_progress": false,
             "read_only": true,
             "logic_adapters": [
                 {
@@ -224,6 +258,9 @@
                 "eh_um": [
                     "$ser $um"
                 ],
+                "em_que": [
+                    "$em $que"
+                ],
                 "quanto": [
                     "$quanto",
                     "$quanto $vez"
@@ -244,8 +281,7 @@
                 ],
                 "onde": [
                     "$onde",
-                    "$aonde",
-                    "$em $que $cidade"
+                    "$aonde"
                 ],
                 "consulta": [
                     "$listar",

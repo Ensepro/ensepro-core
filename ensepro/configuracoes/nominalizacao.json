@@ -1482,6 +1482,7 @@
         "cartelização"
     ],
     "casar": [
+        "casado",
         "casador",
         "casamento"
     ],
@@ -6139,7 +6140,8 @@
     ],
     "localizar": [
         "localização",
-        "localizador"
+        "localizador",
+        "local"
     ],
     "locar": [
         "locação",
@@ -6513,6 +6515,7 @@
         "mordida"
     ],
     "morrer": [
+        "morto",
         "morte"
     ],
     "mostrar": [
@@ -7571,7 +7574,8 @@
         "qualificar"
     ],
     "publicar": [
-        "publicação"
+        "publicação",
+        "publicador"
     ],
     "pular": [
         "pulo"
