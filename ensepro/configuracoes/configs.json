@@ -63,7 +63,8 @@
         },
         "numero_respostas": 100,
         "resultado_resumido": false,
-        "remover_variaveis": true
+        "remover_variaveis": true,
+        "nivel_answer_generator": 2
     },
     "servidores": {
         "palavras": {
@@ -111,7 +112,19 @@
                 "nivel": "ERROR"
             },
             "cbc": {
-                "nivel": "DEBUG"
+                "nivel": "DEBUG",
+                "answer_generator": {
+                    "nivel": "DEBUG",
+                    "elastic_search_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "answer_generator_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "normalizar_step": {
+                        "nivel": "DEBUG"
+                    }
+                }
             },
             "configuracoes": {
                 "nivel": "ERROR"

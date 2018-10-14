@@ -5,57 +5,29 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 """
-
-if __name__ == '__main__':
-    import os
-    import sys
-
-    THIS_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    sys.path.append(THIS_PATH)
-
+from ensepro import LoggerConstantes
 from ensepro.cbc.answer_generator.steps.elastic_search_step import elastic_search_step, elastic_search_integrado_step
 from ensepro.cbc.answer_generator.steps.normalizar_step import normalizar_step, normalizar_value_step
-from ensepro.cbc.answer_generator.steps.print_resultado_step import print_resultado, print_resultado_value
-from ensepro.cbc.answer_generator.steps.gerar_queries_java_2_step import gerar_queries_value_java2
-from ensepro.cbc.answer_generator.steps.gerar_queries_java_3_step import gerar_queries_value_java3
+from ensepro.cbc.answer_generator.steps.print_resultado_step import print_resultado
+from ensepro.cbc.answer_generator.steps.answer_generator_step import answer_generator_step
+
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ANSWER_GENERATOR)
 
 actions = {
     "-elasticsearch-integrado": elastic_search_integrado_step,
-    "-elasticsearch-java2": elastic_search_step,
-    "-elasticsearch-java3": elastic_search_step,
-    "-normalizar-java2": normalizar_step,
-    "-normalizar-java3": normalizar_step,
-    "-gerar-java2": gerar_queries_value_java2,
-    "-gerar-java3": gerar_queries_value_java3
+    "-elasticsearch-java": elastic_search_step,
+    "-normalizar-java": normalizar_step,
+    "-gerar-java": answer_generator_step,
 }
 
 actions_next = {
-    "-elasticsearch-integrado": (normalizar_value_step, "-normalizar-java2"),
-    "-elasticsearch-java2": (normalizar_value_step, "-normalizar-java2"),
-    "-elasticsearch-java3": (normalizar_value_step, "-normalizar-java3"),
-
-    "-normalizar-java2": (gerar_queries_value_java2, "-gerar-java2"),
-    "-normalizar-java3": (gerar_queries_value_java3, "-gerar-java3"),
-
-    "-gerar-java2": (print_resultado, None),
-    "-gerar-java3": (print_resultado, None)
+    "-elasticsearch-integrado": (normalizar_value_step, "-normalizar-java"),
+    "-elasticsearch-java": (normalizar_value_step, "-normalizar-java"),
+    "-normalizar-java": (answer_generator_step, "-gerar-java"),
+    "-gerar-java": (print_resultado, None),
 }
 
-if __name__ == '__main__':
-
-    if len(sys.argv) <= 1:
-        print("Passagem de parametros obrigatória. -help para ajuda")
-        exit(10)
-
-    action_selected = sys.argv[1]
-    action_to_execute = actions.get(action_selected, None)
-
-    if action_to_execute:
-        action_to_execute(sys.argv[2:], action_selected, actions_next, log=True)
-    else:
-        print("Ação não mapeada.")
-
-start_at = "-elasticsearch-java2"
+start_at = "-elasticsearch-java"
 
 
 def get(frase):
@@ -67,6 +39,7 @@ def get(frase):
 def execute_integration(params):
     step = "-elasticsearch-integrado"
     action_to_execute = actions.get(step)
+    logger.debug("Answer Generator - Executando step %s", step)
     return action_to_execute(params, step, actions_next)
 
 

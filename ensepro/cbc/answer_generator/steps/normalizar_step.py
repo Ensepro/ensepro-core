@@ -6,15 +6,16 @@
 
 """
 
-from ensepro import save_as_json
+from ensepro import save_as_json, LoggerConstantes
 import json
 from ensepro.cbc.answer_generator import helper
 from ensepro.utils.string_utils import remover_acentos
 
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_NORMALIZAR_STEP)
 
-def normalizar_value_step(params, step, steps, log=False):
-    if log:
-        print("normalizando resultados... ", end="")
+
+def normalizar_value_step(params, step, steps):
+    logger.debug("normalizando resultados... ")
     helper.init_helper(params["helper"])
 
     triplas = {}
@@ -65,8 +66,7 @@ def normalizar_value_step(params, step, steps, log=False):
                 alterar_para_variaveis(tripla)
                 result_normalized.append(tripla)
 
-    if log:
-        print("done -> size=", len(result_normalized))
+    logger.debug("done -> size=%s", len(result_normalized))
     helper_values = helper.save_helper()
 
     if steps.get(step, None):
@@ -74,16 +74,16 @@ def normalizar_value_step(params, step, steps, log=False):
         values["values"] = result_normalized
         values["helper"] = helper_values
         save_as_json(values, "resultado_normalizado.json")
-        return steps[step][0](values, steps[step][1], steps, log=log)
+        return steps[step][0](values, steps[step][1], steps)
     else:
         return result_normalized
 
 
-def normalizar_step(params, step, steps, log=False):
+def normalizar_step(params, step, steps):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
 
-    return normalizar_value_step(value, step, steps, log=log)
+    return normalizar_value_step(value, step, steps)
 
 
 # 3. Remover todas os valores que não são TR, passando estes para um dicionário -> { variável : TR }
