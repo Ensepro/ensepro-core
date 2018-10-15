@@ -1,5 +1,6 @@
 {
     "frases": {
+        "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
         "regex": {
             "termo_relevante": ":(v-|adj|n|prop)",
             "palavra_adjetivo": ":adj$",
@@ -34,6 +35,37 @@
             "eng"
         ]
     },
+    "cbc": {
+        "pesos": {
+            "classes": {
+                "substantivo_proprio": 10,
+                "substantivo_comum": 5,
+                "substantivo_comum_sinonimo": 5,
+                "verbo": 6,
+                "verbo_sinonimo": 4,
+                "verbo_nomilizado": 6,
+                "verbo_nomilizado_sinonimo": 4
+            },
+            "metricas": {
+                "m1": {
+                    "peso": 1,
+                    "policy": "WORST_MATCH"
+                },
+                "m2": {
+                    "peso": 1,
+                    "policy": "BEST_MATCH"
+                },
+                "m3": {
+                    "peso": 1,
+                    "policy": "AVG"
+                }
+            }
+        },
+        "numero_respostas": 100,
+        "resultado_resumido": false,
+        "remover_variaveis": true,
+        "nivel_answer_generator": 2
+    },
     "servidores": {
         "palavras": {
             "endpoint": "http://127.0.0.1",
@@ -43,7 +75,7 @@
             }
         },
         "elastic_search": {
-            "endpoint": "127.0.0.1",
+            "endpoint": "172.17.0.2",
             "porta": "9200",
             "settings": {
                 "index_name": "ensepro_triplas",
@@ -53,39 +85,58 @@
             }
         },
         "dbpedia_spotlight": {
-            "endpoint": "http://api.dbpedia-spotlight.org",
+            "endpoint": "http://172.17.0.1:2228",
+            "confiancas": [
+                0.8,
+                0.3
+            ],
             "servicos": {
-                "spotlight": "/{lang}/annotate/"
+                "spotlight": "/rest/annotate/"
             }
         },
         "knowledge_graph_search": {
             "endpoint": "https://kgsearch.googleapis.com/v1/entities",
-            "key_file": "../../.key",
+            "key_file": "/root/alencar/ensepro/ensepro/configuracoes/kg.key",
             "servicos": {
                 "search": ":search"
             }
         }
     },
     "logger": {
-        "nome_arquivo": "/ensepro_log.log",
+        "nome_arquivo": "/ensepro.log",
         "modo_arquivo": "w",
         "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        "default_logger_nivel": "INFO",
+        "default_logger_nivel": "DEBUG",
         "modulos": {
             "arvore": {
-                "nivel": "INFO"
+                "nivel": "ERROR"
+            },
+            "cbc": {
+                "nivel": "DEBUG",
+                "answer_generator": {
+                    "nivel": "DEBUG",
+                    "elastic_search_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "answer_generator_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "normalizar_step": {
+                        "nivel": "DEBUG"
+                    }
+                }
             },
             "configuracoes": {
-                "nivel": "INFO"
+                "nivel": "ERROR"
             },
             "consulta": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "localizar_referencia_substantivo_proprio": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "elasticsearch": {
-                "nivel": "INFO",
+                "nivel": "DEBUG",
                 "connection": {
                     "nivel": "INFO"
                 },
@@ -99,35 +150,38 @@
                     }
                 },
                 "queries": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 },
                 "searches": {
-                    "nivel": "INFO"
+                    "nivel": "DEBUG"
                 }
             },
             "cln": {
-                "nivel": "INFO",
+                "nivel": "ERROR",
                 "complementos_nominais": {
                     "nivel": "INFO"
                 },
                 "locucao_verbal": {
                     "nivel": "INFO"
                 },
+                "nominalizacao": {
+                    "nivel": "INFO"
+                },
                 "termos_relevantes": {
                     "nivel": "INFO"
                 },
                 "tipo_frases": {
-                    "nivel": "INFO",
+                    "nivel": "ERROR",
                     "chatterbot_helper": {
-                        "nivel": "INFO"
+                        "nivel": "ERROR"
                     }
                 },
                 "voz": {
-                    "nivel": "INFO"
+                    "nivel": "ERROR"
                 }
             },
             "servicos": {
-                "nivel": "INFO",
+                "nivel": "ERROR",
                 "palavras_service": {
                     "nivel": "INFO"
                 },
@@ -204,6 +258,9 @@
                 "eh_um": [
                     "$ser $um"
                 ],
+                "em_que": [
+                    "$em $que"
+                ],
                 "quanto": [
                     "$quanto",
                     "$quanto $vez"
@@ -224,8 +281,7 @@
                 ],
                 "onde": [
                     "$onde",
-                    "$aonde",
-                    "$em $que $cidade"
+                    "$aonde"
                 ],
                 "consulta": [
                     "$listar",

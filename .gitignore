@@ -4,7 +4,10 @@
 **/__pycache__
 /venv/**
 \#*
-**/ensepro_log.log
+*.log
 *.sqlite*
 temp*
 .key
+/elastic_search_step.json
+/queries_renqueadas.json
+/resultado_normalizado.json

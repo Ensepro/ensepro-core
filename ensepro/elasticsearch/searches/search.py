@@ -16,5 +16,6 @@ def execute_search(client: Elasticsearch, query: Query):
     return client.search(
             index=query.index_name,
             doc_type=query.index_type,
-            body=query.query
+            body=query.query,
+            request_timeout=30
     )

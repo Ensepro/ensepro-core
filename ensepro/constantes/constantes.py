@@ -46,6 +46,7 @@ class ConfiguracoesConstantes:
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
     CHATTERBOT = "chatterbot"
+    CONSULTA = "cbc"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
@@ -63,6 +64,7 @@ class ConfiguracoesConstantes:
     # Lista de verbos de ligação
     VERBOS_DE_LIGACAO = FRASES + ".verbos_de_ligacao"
     TERMOS_RELEVANTES = FRASES + ".termos_relevantes"
+    ARQUIVO_NOMINALIZACAO = FRASES + ".nominalizacao"
     TERMOS_RELEVANTES_IGNORAR = TERMOS_RELEVANTES + ".ignorar"
 
     # Serviços
@@ -84,8 +86,8 @@ class PalavrasServidorConstantes:
 
     ANALISAR_FRASE_PARAM = "frase"
     SERVICO_ANALISAR_FRASE = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="analisar_frase"
+        servidor=SERVIDOR_NOME,
+        nome_servico="analisar_frase"
     )
 
 
@@ -117,18 +119,24 @@ class LoggerConstantes:
 
     # Lista de modulos
     MODULO_CLN = "cln"
+    MODULO_CBC = "cbc"
     MODULO_VOZ = MODULO_CLN + ".voz"
     MODULO_ARVORE = "arvore"
     MODULO_SERVICOS = "servicos"
     MODULO_SINONIMOS = "sinonimos"
     MODULO_CONSULTA = "consulta"
     MODULO_TIPO_FRASES = MODULO_CLN + ".tipo_frases"
+    MODULO_NOMINALIZACAO = MODULO_CLN + ".nominalizacao"
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
+    MODULO_ANSWER_GENERATOR = MODULO_CBC + ".answer_generator"
+    MODULO_NORMALIZAR_STEP = MODULO_ANSWER_GENERATOR + ".normalizar_step"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
     MODULO_TERMOS_RELEVANTES = MODULO_CLN + ".termos_relevantes"
     MODULO_CHATTERBOT_HELPER = MODULO_TIPO_FRASES + ".chatterbot_helper"
+    MODULO_ELASTIC_SEARCH_STEP = MODULO_ANSWER_GENERATOR + ".elastic_search_step"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
+    MODULO_ANSWER_GENERATOR_STEP = MODULO_ANSWER_GENERATOR + ".answer_generator_step"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 
@@ -151,7 +159,8 @@ class LoggerConstantes:
         import logging
         from ensepro import configuracoes
         logger = logging.getLogger(cls.GET_LOGGER_MODULO.format(modulo=modulo))
-        logger.setLevel(logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
+        logger.setLevel(
+            logging.getLevelName(configuracoes.get_config(cls.NIVEL_LOG_MODULO, path_params={"modulo": modulo})))
         return logger
 
     @classmethod
@@ -186,9 +195,11 @@ class DBPediaSpotlightConstantes:
     ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
 
     SERVICO_SPOTLIGHT = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="spotlight"
+        servidor=SERVIDOR_NOME,
+        nome_servico="spotlight"
     )
+
+    CONFIANCAS = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".confiancas"
 
 
 class KnowledgeGraphSearchConstantes:
@@ -197,6 +208,30 @@ class KnowledgeGraphSearchConstantes:
     API_KEY = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".key_file"
     ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
     SEARCH_SERVICE = ConfiguracoesConstantes.SERVICO.format(
-            servidor=SERVIDOR_NOME,
-            nome_servico="search"
+        servidor=SERVIDOR_NOME,
+        nome_servico="search"
     )
+
+
+class ConsultaConstantes:
+    PESOS = ConfiguracoesConstantes.CONSULTA + ".pesos"
+
+    PESOS_CLASSES = PESOS + ".classes"
+    PESOS_METRICAS = PESOS + ".metricas"
+
+    PESO_VERBO = PESOS_CLASSES + ".verbo"
+    PESO_VERBO_SINONIMO = PESOS_CLASSES + ".verbo_sinonimo"
+    PESO_VERBO_NOMILIZADO = PESOS_CLASSES + ".verbo_nomilizado"
+    PESO_SUBSANTIVO_COMUM = PESOS_CLASSES + ".substantivo_comum"
+    PESO_SUBSANTIVO_PROPRIO = PESOS_CLASSES + ".substantivo_proprio"
+    PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS_CLASSES + ".substantivo_comum_sinonimo"
+    PESO_VERBO_NOMILIZADO_SINONIMO = PESOS_CLASSES + ".verbo_nomilizado_sinonimo"
+
+    PESO_M1 = PESOS_METRICAS + ".m1"
+    PESO_M2 = PESOS_METRICAS + ".m2"
+    PESO_M3 = PESOS_METRICAS + ".m3"
+
+    NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"
+    RESULTADO_RESUMIDO = ConfiguracoesConstantes.CONSULTA + ".resultado_resumido"
+    REMOVER_RESULTADOS = ConfiguracoesConstantes.CONSULTA + ".remover_variaveis"
+    NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CONSULTA + ".nivel_answer_generator"

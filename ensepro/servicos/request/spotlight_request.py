@@ -13,6 +13,9 @@ class SpotlightRequest:
         self.confidence = confidence
         self.support = support
 
+    def hash(self):
+        return '-'.join([str(self.text), str(self.confidence), str(self.support)])
+
     def __to_json__(self):
         return self.__dict__
 

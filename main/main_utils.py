@@ -32,6 +32,6 @@ def print_frases(ensepro, frases, args, file=None):
                 locucoes_verbais=args.locucoes_verbais,
                 tags=args.tags,
                 arvore=args.arvore,
+                resposta=args.resposta,
                 verbose=args.verbose
-
         )

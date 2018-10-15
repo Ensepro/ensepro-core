@@ -27,6 +27,12 @@ def simple_query_term_search(field, value):
     logger.info("Criando QueryTerm")
     return execute_search(connection(), query)
 
+def simple_query_terms_search(field, values):
+    query_term = QueryTermsSearch(field, values)
+    query = Query.build_default(query_term.build_query())
+    logger.info("Criando QueryTerms")
+    return execute_search(connection(), query)
+
 
 def simple_query_terms_search(field, values):
     query_term = QueryTermsSearch(field, values)
@@ -38,15 +44,16 @@ def simple_query_terms_search(field, values):
 def search(fields, value, query):
     full_search_result = {}
     search_result_keys = ""
-    logger.info("Executando busca: [fields=%s, value=%s]", fields, value)
-    for field in fields:
-        field_name = field.value["name"]
-        field_key = field.value["key"]
-        search_result = query(field_name, value)
+    if value:
+        logger.info("Executando busca: [fields=%s, value=%s]", fields, value)
+        for field in fields:
+            field_name = field.value["name"]
+            field_key = field.value["key"]
+            search_result = query(field_name, value)
 
-        if search_result["hits"]["total"] > 0:
-            full_search_result[field_name] = search_result
-            search_result_keys += field_key
+            if search_result["hits"]["total"] > 0:
+                full_search_result[field_name] = search_result
+                search_result_keys += field_key
 
     return {
         "result": full_search_result,
@@ -60,7 +67,6 @@ def full_match_serach(fields, value):
 
 def parcial_match_search(fields, value):
     return search(fields, value, simple_query_term_search)
-
 
 def list_parcial_match_search(fields, values):
     return search(fields, values, simple_query_terms_search)

@@ -67,6 +67,9 @@ for frase_analisada in frases_analisadas:
     if args.arvore or args.verbose:
         _ = frase_analisada.arvore
 
+    if args.resposta or args.verbose:
+        _ = frase_analisada.resposta
+
 if not args.quiet:
     print("done")
 
