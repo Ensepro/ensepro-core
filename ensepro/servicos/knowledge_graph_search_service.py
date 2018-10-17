@@ -12,9 +12,15 @@ import ensepro.configuracoes as configuracoes
 from ensepro.constantes import LoggerConstantes, KnowledgeGraphSearchConstantes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE)
-api_key = open(configuracoes.get_config(KnowledgeGraphSearchConstantes.API_KEY)).read()
 endpoint = configuracoes.get_config(KnowledgeGraphSearchConstantes.ENDPOINT)
 search_service = configuracoes.get_config(KnowledgeGraphSearchConstantes.SEARCH_SERVICE)
+
+api_key = ""
+try:
+    api_key = open(configuracoes.get_config(KnowledgeGraphSearchConstantes.API_KEY)).read()
+except Exception as ex:
+    logger.info("Erro ao carregar arquivo com key de autenticação com GoogleKnowledgeGraph. ")
+    logger.exception(ex)
 
 
 def search(request: KnowledgeGraphSearchRequest) -> KnowledgeGraphSearchResponse:
@@ -36,8 +42,9 @@ def search(request: KnowledgeGraphSearchRequest) -> KnowledgeGraphSearchResponse
         return KnowledgeGraphSearchResponse(response)
 
     # Se respose não OK, lança exception
-    exception = Exception("Erro ao chamar servico do Knowledge Graph Search: [status_code={0}, reason={1}, response_text={2}]" \
-                          "".format(response.status_code, response.reason, response.text))
+    exception = Exception(
+        "Erro ao chamar servico do Knowledge Graph Search: [status_code={0}, reason={1}, response_text={2}]" \
+        "".format(response.status_code, response.reason, response.text))
 
     logger.exception(exception, exc_info=False)
     raise exception
