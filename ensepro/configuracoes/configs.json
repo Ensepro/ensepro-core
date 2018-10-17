@@ -64,7 +64,8 @@
         "numero_respostas": 100,
         "resultado_resumido": false,
         "remover_variaveis": true,
-        "nivel_answer_generator": 2
+        "nivel_answer_generator": 2,
+        "threads_answer_generator": 20
     },
     "servidores": {
         "palavras": {

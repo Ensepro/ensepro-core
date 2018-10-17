@@ -13,6 +13,7 @@ from ensepro import ConsultaConstantes, LoggerConstantes
 
 numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
 nivel = configuracoes.get_config(ConsultaConstantes.NIVEL_ANSWER_GENERATOR)
+threads = configuracoes.get_config(ConsultaConstantes.THREADS_ANSWER_GENERATOR)
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ANSWER_GENERATOR_STEP)
@@ -21,7 +22,14 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ANSWER_GENERATOR_ST
 def answer_generator_step(params, step, steps):
     file_name = params[0] if len(params) == 1 else "resultado_normalizado.json"
 
-    comando = ' '.join(["java -jar", parent_dir + "/answergenerator.jar", file_name, str(numero_respostas), str(nivel)])
+    comando = ' '.join([
+        "java -jar",
+        parent_dir + "/answergenerator.jar",
+        file_name,
+        str(numero_respostas),
+        str(threads),
+        str(nivel)
+    ])
 
     logger.debug("Gerando combinações e calculando valores via Java[%s]", comando)
 

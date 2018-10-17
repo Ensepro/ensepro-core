@@ -235,3 +235,4 @@ class ConsultaConstantes:
     RESULTADO_RESUMIDO = ConfiguracoesConstantes.CONSULTA + ".resultado_resumido"
     REMOVER_RESULTADOS = ConfiguracoesConstantes.CONSULTA + ".remover_variaveis"
     NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CONSULTA + ".nivel_answer_generator"
+    THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CONSULTA + ".threads_answer_generator"
