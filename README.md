@@ -13,6 +13,6 @@ O Ensepro é um sistema semântico de perguntas e respostas baseado em ontologia
     * Faça o download da collection `all-nltk`
 * Chatterbot [`pip install chatterbot`]
 * ElasticSearch [`pip install elasticsearch`]
-* Palavras Service [`git clone https://alencarrh@bitbucket.org/enseproteam/palavrasservice.git`]
+* Palavras Service
 
 
