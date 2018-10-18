@@ -21,11 +21,19 @@ def __is_termo_relevante_base(frase, palavra, *args):
         logger.debug("'__is_termo_relevante_base' -> palavra '%s' sem palavra canônica", palavra.id)
         return False
 
-    # 3. tagInicial da palavra deve bater com a regex de termos relevantes
+    # 2. tagInicial da palavra deve bater com a regex de termos relevantes
     if not regex_termo_relevante.search(palavra.tag_inicial):
         logger.debug("'__is_termo_relevante_base' -> '%s|%s' não está de acordo com a regex de termos relevantes", palavra.id,
                      palavra.palavra_canonica)
         return False
+
+    # 3. Quando palavra for um ADJ
+    # 3.1. Deve possuir a tag <n> e não deve possuir a tag <NUM-ord>
+    if palavra.is_adjetivo():
+        if "<n>" not in palavra.tags:
+            return False
+        if "<NUM-ord>" in palavra.tags:
+            return False
 
     # 4. Não deve ser um verbo de ligação
     if palavra.palavra_canonica in verbos_ligacao:
