@@ -177,8 +177,22 @@ def atualizar_frase(frase: Frase):
     if atualizou:
         frase = ensepro.analisar_frase(frase_original)
 
+    if not has_adjunto_nominal_justaposto(frase):
+        logger.info("Frase não possui adjuntos nominais justaposos.")
+        return frase
+
     frase_sem_aa_justaposto = remover_adjuntos_adnominais_justapostos(frase)
     return ensepro.analisar_frase(frase_sem_aa_justaposto)
+
+
+def has_adjunto_nominal_justaposto(frase: Frase):
+    palavras = frase.get_palavras(__condicao_palavra_original_nao_vazia)
+
+    for palavra in palavras:
+        if palavra.is_substantivo_proprio() and "<np-close>" in palavra.tags:
+            return True
+
+    return False
 
 
 def __list_substantivos_proprios(frase):
