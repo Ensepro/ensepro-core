@@ -47,7 +47,10 @@ def __sub_proprio_from_frase(frase: Frase):
 def __sub_comum_from_frase(frase: Frase):
     logger.debug("Obtendo substantivos comuns da frase.")
     lista_subsantivos_comuns = []
-    substantivos_comuns = [palavra for palavra in frase.termos_relevantes if palavra.is_substantivo()]
+    substantivos_comuns = [
+        palavra for palavra in frase.termos_relevantes
+        if palavra.is_substantivo() or palavra.is_adjetivo()
+    ]
 
     for substantivo in substantivos_comuns:
         lista_subsantivos_comuns.append(remover_acentos(substantivo.palavra_canonica).lower())
@@ -88,7 +91,7 @@ def __verbos_from_frase(frase: Frase):
                     lista_verbos.append(remover_acentos(sinonimo.sinonimo).lower())
                     lista_verbos.append(peso_substantivo_comum_sinonimo)
 
-                ##Obter verbos nominalizados dos sinonimos?
+                # Obter verbos nominalizados dos sinonimos?
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_verbos)
     return lista_verbos

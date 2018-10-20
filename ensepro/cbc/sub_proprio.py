@@ -114,31 +114,43 @@ actions = [
 def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
     logger.info("Removendo adjuntos adnominais justapostos")
     palavras = ensepro_result.palavras
-    size = len(palavras)
-    i = 0
+    index = len(palavras) - 1
 
-    frase_sem_aa_justaposto = []
+    nova_frase = []
 
-    while i < size - 1:
-        palavra = palavras[i]
-        nextPalavra = palavras[i + 1]
-        i += 1
+    while index >= 0:
+        atualPalavra = palavras[index]
+        index -= 1
 
-        canConsiderToIgnore = palavra.is_adjetivo() or palavra.is_substantivo()
-        if "<np-close>" in nextPalavra.tags and canConsiderToIgnore:
-            logger.debug("Adjunto adnominal justaposto ingorado: %s", palavra.palavra_original)
+        if atualPalavra.palavra_original:
+            nova_frase.append(atualPalavra)
+
+        if not atualPalavra.is_substantivo_proprio():
             continue
 
-        if palavra.palavra_original:
-            frase_sem_aa_justaposto.append(palavra.palavra_original)
+        if "<np-close>" not in atualPalavra.tags:
+            continue
 
-    if palavras[-1].palavra_original:
-        frase_sem_aa_justaposto.append(palavras[-1].palavra_original)
+        proximaPalavra = palavras[index]
+        index -= 1  # já sei que posso remover/ignorar a proximaPalavra
+        logger.info("Removendo adjunto nominal: %s", proximaPalavra)
 
-    final_result = ' '.join(frase_sem_aa_justaposto)
+        while index >= 0:
+            if "<np-close>" not in proximaPalavra.tags:
+                break
+            proximaPalavra = palavras[index]
+            index -= 1
 
-    logger.info("Frase após remoção adjunto adnominais justapostos: %s", final_result)
-    return final_result
+    resultado = ""
+    for palavra in nova_frase[::-1]:
+        palavra_original = palavra.palavra_original
+        if not palavra.is_substantivo_proprio():
+            palavra_original = palavra_original.replace("_", " ")
+
+        resultado += " " + palavra_original
+
+    logger.info("Frase após remoção adjunto adnominais justapostos: %s", resultado)
+    return resultado
 
 
 def atualizar_frase(frase: Frase):
@@ -165,8 +177,22 @@ def atualizar_frase(frase: Frase):
     if atualizou:
         frase = ensepro.analisar_frase(frase_original)
 
+    if not has_adjunto_nominal_justaposto(frase):
+        logger.info("Frase não possui adjuntos nominais justaposos.")
+        return frase
+
     frase_sem_aa_justaposto = remover_adjuntos_adnominais_justapostos(frase)
     return ensepro.analisar_frase(frase_sem_aa_justaposto)
+
+
+def has_adjunto_nominal_justaposto(frase: Frase):
+    palavras = frase.get_palavras(__condicao_palavra_original_nao_vazia)
+
+    for palavra in palavras:
+        if palavra.is_substantivo_proprio() and "<np-close>" in palavra.tags:
+            return True
+
+    return False
 
 
 def __list_substantivos_proprios(frase):

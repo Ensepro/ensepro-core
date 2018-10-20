@@ -88,7 +88,6 @@
         "dbpedia_spotlight": {
             "endpoint": "http://172.17.0.1:2228",
             "confiancas": [
-                0.8,
                 0.3
             ],
             "servicos": {
