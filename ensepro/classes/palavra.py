@@ -15,7 +15,8 @@ regex_palavra_verbo = re.compile(configuracoes.get_config(ConfiguracoesConstante
 regex_palavra_adjetivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_ADJETIVO))
 regex_palavra_preposicao = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_PREPOSICAO))
 regex_palavra_substantivo = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO))
-regex_palavra_substantivo_proprio = re.compile(configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO_PROPRIO))
+regex_palavra_substantivo_proprio = re.compile(
+    configuracoes.get_config(ConfiguracoesConstantes.REGEX_PALAVRA_SUBSTANTIVO_PROPRIO))
 
 
 class Palavra:
@@ -27,6 +28,14 @@ class Palavra:
         self.tag_inicial = dados_palavra["tag_inicial"] if dados_palavra else None
         self.palavra_original = dados_palavra["palavra_original"] if dados_palavra else None
         self.palavra_canonica = dados_palavra["palavra_canonica"] if dados_palavra else None
+
+        self.__is_verbo = bool(regex_palavra_verbo.search(self.tag_inicial))
+        self.__is_adjetivo = bool(regex_palavra_adjetivo.search(self.tag_inicial))
+        self.__is_preposicao = bool(regex_palavra_preposicao.search(self.tag_inicial))
+        self.__is_substantivo = bool(regex_palavra_substantivo.search(self.tag_inicial)) and "<prop>" not in self.tags
+        self.__is_substantivo_proprio = bool(regex_palavra_substantivo_proprio.search(self.tag_inicial)) \
+                                        or "<prop>" in self.tags
+
         self.__sinonimos = None
         self.__classe_gramatical = None
 
@@ -45,7 +54,7 @@ class Palavra:
             lista_sinonimo_string = sinonimos.get_sinonimos(self.palavra_canonica, linguagem)
             lista_sinonimos = Sinonimo.from_list_string(lista_sinonimo_string)
             self.__sinonimos[linguagem] = list(
-                    set([sinonimo for sinonimo in lista_sinonimos if sinonimo.classe_gramatical == self.classe_gramatical]))
+                set([sinonimo for sinonimo in lista_sinonimos if sinonimo.classe_gramatical == self.classe_gramatical]))
 
         return self.__sinonimos
 
@@ -57,19 +66,19 @@ class Palavra:
         return self.__classe_gramatical
 
     def is_verbo(self):
-        return bool(regex_palavra_verbo.search(self.tag_inicial))
+        return self.__is_verbo
 
     def is_adjetivo(self):
-        return bool(regex_palavra_adjetivo.search(self.tag_inicial))
+        return self.__is_adjetivo
 
     def is_preposicao(self):
-        return bool(regex_palavra_preposicao.search(self.tag_inicial))
+        return self.__is_preposicao
 
     def is_substantivo(self):
-        return bool(regex_palavra_substantivo.search(self.tag_inicial))
+        return self.__is_substantivo
 
     def is_substantivo_proprio(self):
-        return bool(regex_palavra_substantivo_proprio.search(self.tag_inicial))
+        return self.__is_substantivo_proprio
 
     def __to_json__(self):
         return {
@@ -101,10 +110,10 @@ class Palavra:
         return \
             "Palavra={{id={0}, tags={1}, nivel={2}, tag_inicial={3}, palavra_original={4}, palavra_canonica={5}}}" \
             "".format(
-                    str(self.id),
-                    str(self.tags),
-                    str(self.nivel),
-                    str(self.tag_inicial),
-                    str(self.palavra_original),
-                    str(self.palavra_canonica)
+                str(self.id),
+                str(self.tags),
+                str(self.nivel),
+                str(self.tag_inicial),
+                str(self.palavra_original),
+                str(self.palavra_canonica)
             )

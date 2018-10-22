@@ -57,7 +57,7 @@
                 },
                 "m3": {
                     "peso": 1,
-                    "policy": "AVG"
+                    "policy": "BEST_MATCH"
                 }
             }
         },
