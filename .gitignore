@@ -5,6 +5,7 @@
 /venv/**
 \#*
 *.log
+log_answergenerator.log.*
 *.sqlite*
 temp*
 .key
