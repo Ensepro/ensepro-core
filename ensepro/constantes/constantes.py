@@ -46,7 +46,7 @@ class ConfiguracoesConstantes:
     SINONIMOS = "sinonimos"
     SERVIDORES = "servidores"
     CHATTERBOT = "chatterbot"
-    CONSULTA = "cbc"
+    CBC = "cbc"
 
     # Segundo nivel
     REGEX = FRASES + ".regex"
@@ -214,7 +214,7 @@ class KnowledgeGraphSearchConstantes:
 
 
 class ConsultaConstantes:
-    PESOS = ConfiguracoesConstantes.CONSULTA + ".pesos"
+    PESOS = ConfiguracoesConstantes.CBC + ".pesos"
 
     PESOS_CLASSES = PESOS + ".classes"
     PESOS_METRICAS = PESOS + ".metricas"
@@ -231,8 +231,9 @@ class ConsultaConstantes:
     PESO_M2 = PESOS_METRICAS + ".m2"
     PESO_M3 = PESOS_METRICAS + ".m3"
 
-    NUMERO_RESPOSTAS = ConfiguracoesConstantes.CONSULTA + ".numero_respostas"
-    RESULTADO_RESUMIDO = ConfiguracoesConstantes.CONSULTA + ".resultado_resumido"
-    REMOVER_RESULTADOS = ConfiguracoesConstantes.CONSULTA + ".remover_variaveis"
-    NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CONSULTA + ".nivel_answer_generator"
-    THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CONSULTA + ".threads_answer_generator"
+    NUMERO_RESPOSTAS = ConfiguracoesConstantes.CBC + ".numero_respostas"
+    RESULTADO_RESUMIDO = ConfiguracoesConstantes.CBC + ".resultado_resumido"
+    REMOVER_RESULTADOS = ConfiguracoesConstantes.CBC + ".remover_variaveis"
+    NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".nivel_answer_generator"
+    THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".threads_answer_generator"
+    PATH_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".path_answer_generator"
