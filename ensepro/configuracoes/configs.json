@@ -36,6 +36,10 @@
         ]
     },
     "cbc": {
+        "numero_respostas": 100,
+        "path_answer_generator": "C:\\_a\\ensepro\\ensepro-answer-generator\\target\\ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
+        "nivel_answer_generator": 2,
+        "threads_answer_generator": 20,
         "pesos": {
             "classes": {
                 "substantivo_proprio": 10,
@@ -61,11 +65,8 @@
                 }
             }
         },
-        "numero_respostas": 100,
         "resultado_resumido": false,
-        "remover_variaveis": true,
-        "nivel_answer_generator": 2,
-        "threads_answer_generator": 20
+        "remover_variaveis": true
     },
     "servidores": {
         "palavras": {

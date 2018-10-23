@@ -14,7 +14,7 @@ from ensepro import ConsultaConstantes, LoggerConstantes
 numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
 nivel = configuracoes.get_config(ConsultaConstantes.NIVEL_ANSWER_GENERATOR)
 threads = configuracoes.get_config(ConsultaConstantes.THREADS_ANSWER_GENERATOR)
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path_answer_generator = configuracoes.get_config(ConsultaConstantes.PATH_ANSWER_GENERATOR)
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ANSWER_GENERATOR_STEP)
 
@@ -24,7 +24,7 @@ def answer_generator_step(params, step, steps):
 
     comando = ' '.join([
         "java -jar",
-        parent_dir + "/answergenerator.jar",
+        path_answer_generator,
         file_name,
         str(numero_respostas),
         str(threads),
