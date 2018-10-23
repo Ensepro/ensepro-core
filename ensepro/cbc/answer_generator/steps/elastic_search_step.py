@@ -6,10 +6,10 @@
 
 """
 
+from ensepro import save_as_json, LoggerConstantes
 from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import list_parcial_match_search
 from ensepro.utils.string_utils import remover_acentos
-from ensepro import save_as_json, LoggerConstantes
 from ensepro.cbc.answer_generator import helper
 
 fields_partial_match = [
