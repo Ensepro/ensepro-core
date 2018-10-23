@@ -99,20 +99,19 @@ def __verbos_from_frase(frase: Frase):
 
 def consultar(frase: Frase):
     logger.info("Executando consulta e montagem das queries da frase")
-    frase_atualizada = atualizar_frase(frase)
-    if not frase_atualizada:
+    if not frase:
         return None
 
-    substantivos_proprios = __sub_proprio_from_frase(frase_atualizada)
-    substantivos_comuns = __sub_comum_from_frase(frase_atualizada)
-    verbos = __verbos_from_frase(frase_atualizada)
+    substantivos_proprios = __sub_proprio_from_frase(frase)
+    substantivos_comuns = __sub_comum_from_frase(frase)
+    verbos = __verbos_from_frase(frase)
 
     params = {}
     params["termos"] = {}
     params["termos"]["PROP"] = substantivos_proprios
     params["termos"]["SUB"] = substantivos_comuns
     params["termos"]["VERB"] = verbos
-    params["frase"] = frase_atualizada
+    params["frase"] = frase
 
     resultado_final = answer_generator.execute_integration(params)
 

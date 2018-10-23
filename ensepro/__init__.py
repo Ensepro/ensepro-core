@@ -52,6 +52,21 @@ def analisar_frase(frase: str):
         raise ex
 
 
+def comparar_frase(frase1: Frase, frase2: Frase,
+                   file=None,
+                   termos_relevantes=False,
+                   sinonimos=False,
+                   complementos_nominais=False,
+                   locucoes_verbais=False,
+                   tags=False,
+                   arvore=False,
+                   resposta=False):
+    # TODO implementar
+    print("Método ainda não implementado")
+
+    pass
+
+
 def frase_pretty_print(frase: Frase,
                        file=None,
                        termos_relevantes=False,
@@ -59,9 +74,7 @@ def frase_pretty_print(frase: Frase,
                        complementos_nominais=False,
                        locucoes_verbais=False,
                        tags=False,
-                       arvore=False,
-                       resposta=False,
-                       verbose=False):
+                       arvore=False):
     if not isinstance(frase, Frase):
         raise Exception("Não é um objeto Frase.")
 
@@ -69,17 +82,17 @@ def frase_pretty_print(frase: Frase,
     print("--> Tipo:", frase.tipo, file=file)
     print("--> Voz:", frase.voz, file=file)
 
-    if termos_relevantes or verbose:
+    if termos_relevantes:
         print("--> Termos Relevantes:", file=file)
         if frase.termos_relevantes:
             for index, palavra in enumerate(frase.termos_relevantes):
                 print("----> TR {0}:".format(index), palavra, file=file)
-                if sinonimos or verbose:
+                if sinonimos:
                     print("--------> Sinonimos: " + str(palavra.sinonimos), file=file)
         else:
             print("----> Nenhuma.", file=file)
 
-    if complementos_nominais or verbose:
+    if complementos_nominais:
         print("--> Complementos Nominais:", file=file)
         if frase.complementos_nominais:
             for index, cn in enumerate(frase.complementos_nominais):
@@ -87,7 +100,7 @@ def frase_pretty_print(frase: Frase,
         else:
             print("----> Nenhum.", file=file)
 
-    if locucoes_verbais or verbose:
+    if locucoes_verbais:
         print("--> Locuções Verbais:", file=file)
         if frase.locucao_verbal:
             for index, lv in enumerate(frase.locucao_verbal):
@@ -95,7 +108,7 @@ def frase_pretty_print(frase: Frase,
         else:
             print("----> Nenhum.", file=file)
 
-    if tags or verbose:
+    if tags:
         print("--> Tags das palavras", file=file)
         for palavra in frase.palavras:
             print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original,
@@ -103,42 +116,41 @@ def frase_pretty_print(frase: Frase,
                                                                       str(palavra.tags)),
                   file=file)
 
-    if arvore or verbose:
+    if arvore:
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
 
-    if resposta or verbose:
-        if frase.resposta:
-            print("\nMelhores respostas:", file=file)
-            import ensepro.configuracoes as configuracoes
-            from ensepro import ConsultaConstantes
-            resultado_resumido = configuracoes.get_config(ConsultaConstantes.RESULTADO_RESUMIDO)
 
-            for index, tripla in enumerate(frase.resposta):
-                to_print = []
-                to_print.append("score:" + "{0:.3f}".format(tripla["score"]))
-                temp = []
-                for value in tripla["triples"]:
-                    for key in value:
-                        temp.append(value[key])
+def resposta_pretty_print(resposta, file=None):
+    if not resposta:
+        print("Nenhuma resposta encontrada.\n", file=file)
 
-                to_print.append("[" + ' | '.join(temp) + "]")
-                to_print.append(" ")
-                if not resultado_resumido:
-                    temp = []
-                    for value in tripla["details"]["metrics"]["scoreMetrics"]:
-                        temp.append("{0:.3f}".format(value))
-                    to_print.append("metrics: [" + ' '.join(temp) + "]")
+    print("\nMelhores respostas:", file=file)
+    import ensepro.configuracoes as configuracoes
+    from ensepro import ConsultaConstantes
+    resultado_resumido = configuracoes.get_config(ConsultaConstantes.RESULTADO_RESUMIDO)
 
-                    temp = []
-                    for value in tripla["details"]["metrics"]["metrics"]:
-                        temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
-                    to_print.append("metricsClass: [" + ','.join(temp) + "]")
+    for index, tripla in enumerate(resposta):
+        to_print = []
+        to_print.append("score:" + "{0:.3f}".format(tripla["score"]))
+        temp = []
+        for value in tripla["triples"]:
+            for key in value:
+                temp.append(value[key])
 
-                print(str(index), "-", ' '.join(to_print), file=file)
+        to_print.append("[" + ' | '.join(temp) + "]")
+        to_print.append(" ")
+        if not resultado_resumido:
+            temp = []
+            for value in tripla["details"]["metrics"]["scoreMetrics"]:
+                temp.append("{0:.3f}".format(value))
+            to_print.append("metrics: [" + ' '.join(temp) + "]")
 
+            temp = []
+            for value in tripla["details"]["metrics"]["metrics"]:
+                temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
+            to_print.append("metricsClass: [" + ','.join(temp) + "]")
 
-        else:
-            print("Nenhuma resposta encontrada.", file=file)
+        print(str(index), "-", ' '.join(to_print), file=file)
 
 
 def save_as_json(value, filename, indent=4, sort_keys=False):
