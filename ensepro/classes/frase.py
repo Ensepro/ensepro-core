@@ -75,13 +75,11 @@ class Frase:
         self.__complementos_nominais = complementos_nominais.get(self)
         return self.__complementos_nominais
 
+    def set_resposta(self, resposta):
+        self.__resposta = resposta
+
     @property
     def resposta(self):
-        if self.__resposta:
-            return self.__resposta
-
-        from ensepro.cbc import consultar
-        self.__resposta = consultar(self)
         return self.__resposta
 
     def get_palavras(self, condicao, **args):
@@ -104,7 +102,8 @@ class Frase:
             "arvore": str(self.__arvore),
             "tipo": self.__tipo,
             "locucao_verbal": self.__locucao_verbal,
-            "termos_relevantes": [palavra.__to_json__() for palavra in self.__termos_relevantes] if self.__termos_relevantes else None,
+            "termos_relevantes": [palavra.__to_json__() for palavra in
+                                  self.__termos_relevantes] if self.__termos_relevantes else None,
             "voz": str(self.__voz),
             "complementos_nominais": self.__complementos_nominais,
             "resposta": self.__resposta
@@ -120,11 +119,11 @@ class Frase:
         return \
             "Frase={{id={0}, palavras={1}, tipo={2}, locucao_verbal={3}, voz={4}}}" \
             "".format(
-                    str(self.id),
-                    str(self.palavras),
-                    str(self.__tipo),
-                    str(self.__locucao_verbal),
-                    str(self.__voz)
+                str(self.id),
+                str(self.palavras),
+                str(self.__tipo),
+                str(self.__locucao_verbal),
+                str(self.__voz)
             )
 
     def __repr__(self):

@@ -9,13 +9,13 @@ import os
 import sys
 
 # Seta no path do sistema a pasta que a pasta deste arquivo está contido
-from requests import HTTPError
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from main import main_utils
 from main import main_params
 import ensepro
+from ensepro.cbc import atualizar_frase
+from ensepro.cbc import consultar
 
 if len(sys.argv) < 2:
     print("Parametro '-frase' ou '-arquivo-frases' deve ser passado. '-h' ou '--help' para ver outras opcoes.")
@@ -24,6 +24,10 @@ if len(sys.argv) < 2:
 args = main_params.get_args()
 
 frases_texto = []
+frases_analisadas = []
+frases_reanalisadas = []
+respostas = []
+file = open("resultados.txt", mode="a", encoding="UTF-8") if args.save_txt else None
 
 if args.arquivo_frases:
     if not args.quiet:
@@ -38,59 +42,57 @@ if args.frase:
     frases_texto.append(args.frase)
 
 if not args.quiet:
-    print("Analisando frase(s)... ", end="", flush=True)
+    print("Analisando frase(s)... ")
 
-frases_analisadas = []
 
-try:
-    frases_analisadas = ensepro.analisar_frases(frases_texto)
-except Exception as ex:
-    print("\n\n{}".format(ex))
-    exit(1)
+def analisar(frase_texto):
+    frase_final = None
+    resposta = []
+    frase_original = ensepro.analisar_frase(frase_texto)
+    frases_analisadas.append(frase_original)
 
-for frase_analisada in frases_analisadas:
-    _ = frase_analisada.tipo
-    _ = frase_analisada.voz
+    if args.verbose or args.resposta or args.final:
+        frase_final = atualizar_frase(frase_original)
+        frases_reanalisadas.append(frase_final)
 
-    if args.termos_relevantes or args.verbose:
-        _ = frase_analisada.termos_relevantes
-        if args.sinonimos or args.verbose:
-            for palavra in frase_analisada.termos_relevantes:
-                _ = palavra.sinonimos
+    if args.verbose or args.resposta:
+        resposta = consultar(frase_final)
+        respostas.append(resposta)
 
-    if args.complementos_nominais or args.verbose:
-        _ = frase_analisada.complementos_nominais
+    if args.save_json and not args.save_txt:
+        return
 
-    if args.locucoes_verbais or args.verbose:
-        _ = frase_analisada.locucao_verbal
+    if args.original and args.final:
+        main_utils.comparar_frases(ensepro, frase_original, frase_final, args, file=file)
+        return
 
-    if args.arvore or args.verbose:
-        _ = frase_analisada.arvore
+    if args.original:
+        main_utils.print_frase(ensepro, frase_original, args, file=file)
 
-    if args.resposta or args.verbose:
-        _ = frase_analisada.resposta
+    if args.final:
+        main_utils.print_frase(ensepro, frase_final, args, file=file)
 
-if not args.quiet:
-    print("done")
+    if args.verbose or args.resposta:
+        main_utils.print_resposta(ensepro, resposta, file=file)
+
+
+for frase_texto in frases_texto:
+    try:
+        analisar(frase_texto)
+    except Exception as ex:
+        print("\n\n{}".format(ex))
 
 if args.save_json:
-    if not args.quiet:
-        print("Salvando arquivo json 'resultados.json'...", end="", flush=True)
+    resultado_json = []
+    for index in range(len(frases_analisadas)):
+        json = {
+            "frase_original": frases_analisadas[index]
+        }
+        if args.verbose or args.resposta or args.final:
+            json["frase_final"] = frases_reanalisadas[index]
+        if args.verbose or args.resposta:
+            json["resposta"] = respostas[index]
 
-    ensepro.save_as_json(frases_analisadas, "resultados.json")
+        resultado_json.append(json)
 
-    if not args.quiet:
-        print("done")
-
-if args.save_txt:
-    if not args.quiet:
-        print("Salvando arquivo txt 'resultados.txt'...", end="", flush=True)
-
-    file = open("resultados.txt", mode="w", encoding="UTF-8")
-    main_utils.print_frases(ensepro, frases_analisadas, args, file=file)
-
-    if not args.quiet:
-        print("done")
-
-if not args.save_txt and not args.save_json:
-    main_utils.print_frases(ensepro, frases_analisadas, args)
+    ensepro.save_as_json(frases_reanalisadas, "resultados.json")
