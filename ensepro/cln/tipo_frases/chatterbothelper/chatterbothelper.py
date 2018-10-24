@@ -197,6 +197,8 @@ def __get_termos_relevantes(frase):
                 ids = merge(ids, ids_temp)
 
         else:
+            if (ids):
+                break
             # Se achou partes de um tipo mas não foi um tipo completo, reseta valores..
             if (len(ids_temp) > 0):
                 index -= 1
