@@ -51,11 +51,13 @@ def analisar(frase_texto):
     frase_original = ensepro.analisar_frase(frase_texto)
     frases_analisadas.append(frase_original)
 
-    if args.verbose or args.resposta or args.final:
+    deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
+
+    if deve_responder or args.final:
         frase_final = atualizar_frase(frase_original)
         frases_reanalisadas.append(frase_final)
 
-    if args.verbose or args.resposta:
+    if deve_responder:
         resposta = consultar(frase_final)
         respostas.append(resposta)
 
@@ -72,7 +74,7 @@ def analisar(frase_texto):
     if args.final:
         main_utils.print_frase(ensepro, frase_final, args, file=file)
 
-    if args.verbose or args.resposta:
+    if deve_responder:
         main_utils.print_resposta(ensepro, resposta, file=file)
 
 
