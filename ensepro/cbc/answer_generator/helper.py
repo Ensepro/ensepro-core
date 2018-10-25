@@ -49,7 +49,7 @@ def save_helper():
     helper["map_var_to_resource"] = map_var_to_resource
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
-    helper["termos_relacionados"] = termos_relacionados
+    # helper["termos_relacionados"] = termos_relacionados
     helper["sinonimos"] = sinonimos
     helper["substantivos_proprios_frase"] = substantivos_proprios_frase
 
