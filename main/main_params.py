@@ -106,6 +106,12 @@ def get_args():
     parser.add_argument("-final",
                         dest="final",
                         help="Define que os resultados são referentes a frase final, depois de passar pelo modulo CBC e ser atualizada.",
+                        action="store_true",    
+                        default=False)
+
+    parser.add_argument("--sem-resposta",
+                        dest="sem_resposta",
+                        help="Não vai mostrar a resposta mesmo se o parâmetro '-resposta' for passado.",
                         action="store_true",
                         default=False)
 
