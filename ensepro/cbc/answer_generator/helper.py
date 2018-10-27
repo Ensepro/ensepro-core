@@ -7,7 +7,6 @@
 """
 from ensepro.configuracoes import get_config
 from ensepro import ConsultaConstantes
-import editdistance
 import json
 
 map_resource_to_var = {}
@@ -22,7 +21,7 @@ peso_m2 = get_config(ConsultaConstantes.PESO_M2)
 peso_m3 = get_config(ConsultaConstantes.PESO_M3)
 
 var_id = 1
-var_prefixes = {True: "z", False: "x"}
+var_prefixes = {True: -1, False: 1}
 
 
 def init_helper(values):
@@ -75,18 +74,17 @@ def _get_var_name(resource, is_tr=False):
         return map_resource_to_var[_resource]
 
     global var_id
-    var_name = var_prefixes[is_tr] + str(var_id)
+    var_name = var_prefixes[is_tr] * var_id
     var_id += 1
 
     map_resource_to_var[_resource] = var_name
-    map_var_to_resource[var_name] = _resource
+    map_var_to_resource[str(var_name)] = _resource
 
     return var_name
 
 
 def _get_var_value(var_name):
     return map_var_to_resource.get(var_name, None)
-
 
 def _termo_relevante_from_resource(resource):
     _resource = resource.lower()
