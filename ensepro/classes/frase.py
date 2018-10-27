@@ -68,7 +68,7 @@ class Frase:
 
     @property
     def complementos_nominais(self):
-        if self.__complementos_nominais is None:
+        if self.__complementos_nominais:
             return self.__complementos_nominais
 
         from ensepro.cln import complementos_nominais
