@@ -27,8 +27,8 @@ def print_resultado_value(params, step, steps, log=False):
     for value in values_to_print:
         for tripla in value["triples"]:
             for key in tripla:
-                value_temp = helper._get_var_value(tripla[key])
-                if tripla[key][0] == "z":
+                value_temp = helper._get_var_value(str(tripla[key]))
+                if tripla[key] < 0:
                     value_temp = "*" + value_temp
                 tripla[key] = value_temp
 

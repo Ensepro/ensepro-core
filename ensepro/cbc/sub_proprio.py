@@ -55,7 +55,6 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     if es_result:
                         return {
                             "nova_frase": frase_original.replace(entity["@surfaceForm"], entity_name),
-                            "resultado": es_result
                         }
                     logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 

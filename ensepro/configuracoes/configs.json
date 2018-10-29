@@ -37,7 +37,7 @@
     },
     "cbc": {
         "numero_respostas": 100,
-        "path_answer_generator": "C:\\_a\\ensepro\\ensepro-answer-generator\\target\\ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
+        "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
         "threads_answer_generator": 20,
         "pesos": {

@@ -74,8 +74,8 @@ def elastic_search_integrado_step(params, step, steps):
             Field.PARTIAL_MATCH_PREDICADO
         ],
         params["termos"]["VERB"][::2]
-
     )
+
     resultado = {}
     resultado["result"] = merge_consultas([busca_parte1, busca_parte2, busca_parte3])
 

@@ -7,12 +7,10 @@
 """
 from ensepro.configuracoes import get_config
 from ensepro import ConsultaConstantes
-import editdistance
 import json
 
 map_resource_to_var = {}
 map_var_to_resource = {}
-map_distancias_edicao = {}
 map_resource_to_tr = {}
 termos_relevantes = []
 termos_relacionados = {}
@@ -23,13 +21,12 @@ peso_m2 = get_config(ConsultaConstantes.PESO_M2)
 peso_m3 = get_config(ConsultaConstantes.PESO_M3)
 
 var_id = 1
-var_prefixes = {True: "z", False: "x"}
+var_prefixes = {True: -1, False: 1}
 
 
 def init_helper(values):
     global map_resource_to_var
     global map_var_to_resource
-    global map_distancias_edicao
     global map_resource_to_tr
     global termos_relevantes
     global termos_relacionados
@@ -38,7 +35,6 @@ def init_helper(values):
 
     map_resource_to_var = values.get("map_resource_to_var", map_resource_to_var)
     map_var_to_resource = values.get("map_var_to_resource", map_var_to_resource)
-    map_distancias_edicao = values.get("map_distancias_edicao", map_distancias_edicao)
     map_resource_to_tr = values.get("map_resource_to_tr", map_resource_to_tr)
     termos_relevantes = values.get("termos_relevantes", termos_relevantes)
     termos_relacionados = values.get("termos_relacionados", termos_relacionados)
@@ -50,10 +46,9 @@ def save_helper():
     helper = {}
     helper["map_resource_to_var"] = map_resource_to_var
     helper["map_var_to_resource"] = map_var_to_resource
-    helper["map_distancias_edicao"] = map_distancias_edicao
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
-    helper["termos_relacionados"] = termos_relacionados
+    # helper["termos_relacionados"] = termos_relacionados
     helper["sinonimos"] = sinonimos
     helper["substantivos_proprios_frase"] = substantivos_proprios_frase
 
@@ -79,29 +74,17 @@ def _get_var_name(resource, is_tr=False):
         return map_resource_to_var[_resource]
 
     global var_id
-    var_name = var_prefixes[is_tr] + str(var_id)
+    var_name = var_prefixes[is_tr] * var_id
     var_id += 1
 
     map_resource_to_var[_resource] = var_name
-    map_var_to_resource[var_name] = _resource
+    map_var_to_resource[str(var_name)] = _resource
 
     return var_name
 
 
 def _get_var_value(var_name):
     return map_var_to_resource.get(var_name, None)
-
-
-def _calcular_distancia_edicao(termo_relevante, var_name):
-    key = termo_relevante + "-" + var_name
-    ja_calculado = map_distancias_edicao.get(key, None)
-    if ja_calculado is not None:
-        return ja_calculado
-
-    de = editdistance.eval(termo_relevante, _get_var_value(var_name))
-    map_distancias_edicao[key] = de
-    return de
-
 
 def _termo_relevante_from_resource(resource):
     _resource = resource.lower()
@@ -116,7 +99,6 @@ def _termo_relevante_from_resource(resource):
         if tr in _resource:
             var_name = _get_var_name(_resource, True)
             map_resource_to_tr[_resource] = tr_peso
-            _calcular_distancia_edicao(tr, var_name)
             return var_name
 
     return None
