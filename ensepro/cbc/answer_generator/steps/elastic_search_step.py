@@ -82,6 +82,7 @@ def elastic_search_integrado_step(params, step, steps):
     if resultado.get("result", None):
         if steps.get(step, None):
             resultado["helper"] = helper.save_helper()
+            resultado["frase"] = params["frase"]
             save_as_json(resultado, "elastic_search_step.json")
             return steps[step][0](resultado, steps[step][1], steps)
         else:

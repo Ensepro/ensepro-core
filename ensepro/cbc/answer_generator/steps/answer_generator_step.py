@@ -7,12 +7,10 @@
 """
 
 import subprocess
-import os
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes, LoggerConstantes
 
 numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
-nivel = configuracoes.get_config(ConsultaConstantes.NIVEL_ANSWER_GENERATOR)
 threads = configuracoes.get_config(ConsultaConstantes.THREADS_ANSWER_GENERATOR)
 path_answer_generator = configuracoes.get_config(ConsultaConstantes.PATH_ANSWER_GENERATOR)
 
@@ -28,7 +26,7 @@ def answer_generator_step(params, step, steps):
         file_name,
         str(numero_respostas),
         str(threads),
-        str(nivel)
+        str(params["nivel_combination"])
     ])
 
     logger.debug("Gerando combinações e calculando valores via Java[%s]", comando)
