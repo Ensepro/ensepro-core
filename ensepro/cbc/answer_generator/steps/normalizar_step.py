@@ -10,8 +10,11 @@ from ensepro import save_as_json, LoggerConstantes
 import json
 from ensepro.cbc.answer_generator import helper
 from ensepro.utils.string_utils import remover_acentos
+from ensepro import ConsultaConstantes, LoggerConstantes
+import ensepro.configuracoes as configuracoes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_NORMALIZAR_STEP)
+nivel = configuracoes.get_config(ConsultaConstantes.NIVEL_ANSWER_GENERATOR)
 
 
 def normalizar_value_step(params, step, steps):
@@ -73,6 +76,7 @@ def normalizar_value_step(params, step, steps):
         values = {}
         values["values"] = result_normalized
         values["helper"] = helper_values
+        values["nivel_combination"] = get_nivel(params["frase"], nivel)
         save_as_json(values, "resultado_normalizado.json")
         return steps[step][0](values, steps[step][1], steps)
     else:
@@ -94,3 +98,22 @@ def alterar_para_variaveis(tripla):
             tripla[index] = tr
         else:
             tripla[index] = helper._get_var_name(tripla[index])
+
+
+def get_nivel(frase, nivel_default):
+    if not frase:
+        return nivel_default
+
+    if len(frase.termos_relevantes) > 2:
+        return nivel_default
+
+    tem_prop = False
+    for tr in frase.termos_relevantes:
+        tem_prop = tem_prop or tr.is_substantivo_proprio()
+
+        if "<KOMP>" in tr.tags:
+            return nivel_default
+        if "<NUM-ord>" in tr.tags:
+            return nivel_default
+
+    return 1 if tem_prop else nivel_default
