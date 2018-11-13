@@ -17,6 +17,9 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Log files**
+If you don't really know what is the problem, attach the log files with all levels at *debug*.
+
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
