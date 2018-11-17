@@ -131,26 +131,26 @@ def resposta_pretty_print(resposta, file=None):
 
     for index, tripla in enumerate(resposta):
         to_print = []
-        to_print.append("score:" + "{0:.3f}".format(tripla["score"]))
+        to_print.append("{0:.3f}".format(tripla["score"]))
         temp = []
         for value in tripla["triples"]:
             for key in value:
                 temp.append(value[key])
 
         to_print.append("[" + ' | '.join(temp) + "]")
-        to_print.append(" ")
+        to_print.append("-")
         if not resultado_resumido:
             temp = []
             for value in tripla["details"]["metrics"]["scoreMetrics"]:
                 temp.append("{0:.3f}".format(value))
-            to_print.append("metrics: [" + ' '.join(temp) + "]")
+            to_print.append("[" + ' '.join(temp) + "]")
 
             temp = []
             for value in tripla["details"]["metrics"]["metrics"]:
                 temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
-            to_print.append("metricsClass: [" + ','.join(temp) + "]")
+            #to_print.append("metricsClass: [" + ','.join(temp) + "]")
 
-        print(str(index), "-", ' '.join(to_print), file=file)
+        print(str(index), ' '.join(to_print), file=file)
 
 
 def save_as_json(value, filename, indent=4, sort_keys=False):
