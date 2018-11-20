@@ -7,10 +7,10 @@
 """
 
 from ensepro import save_as_json, LoggerConstantes
+from ensepro.cbc.answer_generator import helper
 from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import list_parcial_match_search
 from ensepro.utils.string_utils import remover_acentos
-from ensepro.cbc.answer_generator import helper
 
 fields_partial_match = [
     Field.PARTIAL_MATCH_SUJEITO,
@@ -50,31 +50,39 @@ def elastic_search_integrado_step(params, step, steps):
         logger.debug("Nenhum termo relevante indicado.")
         exit(1)
 
-    termos_relecionados(params["frase"])
+    if "nao_relacionar" not in params:
+        termos_relecionados(params["frase"])
 
-    busca_parte1 = list_parcial_match_search(
-        [
-            Field.PARTIAL_MATCH_SUJEITO,
-            Field.PARTIAL_MATCH_OBJETO
-        ],
-        params["termos"]["PROP"][::2]
-    )
+    busca_parte1 = []
+    busca_parte2 = []
+    busca_parte3 = []
 
-    busca_parte2 = list_parcial_match_search(
-        [
-            Field.PARTIAL_MATCH_SUJEITO,
-            Field.PARTIAL_MATCH_PREDICADO,
-            Field.PARTIAL_MATCH_OBJETO
-        ],
-        params["termos"]["SUB"][::2]
-    )
+    if "PROP" in params["termos"]:
+        busca_parte1 = list_parcial_match_search(
+            [
+                Field.PARTIAL_MATCH_SUJEITO,
+                Field.PARTIAL_MATCH_OBJETO
+            ],
+            params["termos"]["PROP"][::2]
+        )
 
-    busca_parte3 = list_parcial_match_search(
-        [
-            Field.PARTIAL_MATCH_PREDICADO
-        ],
-        params["termos"]["VERB"][::2]
-    )
+    if "SUB" in params["termos"]:
+        busca_parte2 = list_parcial_match_search(
+            [
+                Field.PARTIAL_MATCH_SUJEITO,
+                Field.PARTIAL_MATCH_PREDICADO,
+                Field.PARTIAL_MATCH_OBJETO
+            ],
+            params["termos"]["SUB"][::2]
+        )
+
+    if "VERB" in params["termos"]:
+        busca_parte3 = list_parcial_match_search(
+            [
+                Field.PARTIAL_MATCH_PREDICADO
+            ],
+            params["termos"]["VERB"][::2]
+        )
 
     resultado = {}
     resultado["result"] = merge_consultas([busca_parte1, busca_parte2, busca_parte3])
@@ -83,7 +91,7 @@ def elastic_search_integrado_step(params, step, steps):
         if steps.get(step, None):
             resultado["helper"] = helper.save_helper()
             resultado["frase"] = params["frase"]
-            save_as_json(resultado, "elastic_search_step.json")
+            # save_as_json(resultado, "elastic_search_step.json")
             return steps[step][0](resultado, steps[step][1], steps)
         else:
             return resultado
@@ -115,15 +123,16 @@ def merge_consultas(values):
     i = 0
     resultado = {}
     for value in values:
-        if value["keys"]:
-            result = value["result"]
-            for field, _value in result.items():
-                _field = field
-                while (_field in resultado):
-                    i += 1
-                    _field += str(i)
+        if value:
+            if value["keys"]:
+                result = value["result"]
+                for field, _value in result.items():
+                    _field = field
+                    while _field in resultado:
+                        i += 1
+                        _field += str(i)
 
-                resultado[_field] = _value
+                    resultado[_field] = _value
 
     return resultado
 
@@ -135,7 +144,7 @@ def integrado_obtem_termos_relevantes(params):
 
 def obtem_termos_relevantes(params, key):
     i = 0
-    while (i < len(params)):
+    while i < len(params):
         termo = remover_acentos(params[i]).lower()
         if i + 1 < len(params):
             peso = is_int(params[i + 1])
