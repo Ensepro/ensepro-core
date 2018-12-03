@@ -97,4 +97,4 @@ if args.save_json:
 
         resultado_json.append(json)
 
-    ensepro.save_as_json(frases_reanalisadas, "resultados.json")
+    ensepro.save_as_json(resultado_json, "resultados.json")
