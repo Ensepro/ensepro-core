@@ -48,7 +48,8 @@
                 "verbo": 3,
                 "verbo_sinonimo": 1,
                 "verbo_nomilizado": 3,
-                "verbo_nomilizado_sinonimo": 1
+                "verbo_nomilizado_sinonimo": 1,
+                "adjetivo": 1
             },
             "metricas": {
                 "m1": {

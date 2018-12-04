@@ -24,6 +24,8 @@ peso_verbo_sinonimo = get_config(ConsultaConstantes.PESO_VERBO_SINONIMO)
 peso_verbo_nomilizado = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO)
 peso_verbo_nomilizado_sinonimo = get_config(ConsultaConstantes.PESO_VERBO_NOMILIZADO_SINONIMO)
 
+peso_adjetivo = get_config(ConsultaConstantes.PESO_ADJETIVO)
+
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_CBC)
 
 
@@ -101,6 +103,22 @@ def __verbos_from_frase(frase: Frase):
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_verbos)
     return lista_verbos
+
+
+def __adjetivos_nao_tr(frase: Frase):
+    logger.debug("Obtendo adjetivos que não são TR")
+    lista_adjs = []
+
+    for palavra in frase.palavras:
+        if palavra in frase.termos_relevantes:
+            continue
+
+        if palavra.is_adjetivo():
+            lista_adjs.append(remover_acentos(palavra.palavra_canonica).lower())
+            lista_adjs.append(peso_adjetivo)
+
+    logger.debug("Verbos(+sinonimos) da frase: %s", lista_adjs)
+    return lista_adjs
 
 
 def check_sub_query(frase: Frase):
@@ -201,12 +219,14 @@ def consultar(frase: Frase):
     substantivos_proprios = __sub_proprio_from_frase(frase, substantivos_proprios_remover)
     substantivos_comuns = __sub_comum_from_frase(frase, substantivos_remover)
     verbos = __verbos_from_frase(frase)
+    adjetivos_nao_tr = __adjetivos_nao_tr(frase)
 
     params = {}
     params["termos"] = {}
     params["termos"]["PROP"] = substantivos_proprios + sub_proprio_from_subquery
     params["termos"]["SUB"] = substantivos_comuns
     params["termos"]["VERB"] = verbos
+    params["termos"]["ADJ"] = adjetivos_nao_tr
     params["frase"] = frase
 
     resultado_final = answer_generator.execute_integration(params)
