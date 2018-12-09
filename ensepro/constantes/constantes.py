@@ -226,6 +226,7 @@ class ConsultaConstantes:
     PESO_SUBSANTIVO_PROPRIO = PESOS_CLASSES + ".substantivo_proprio"
     PESO_SUBSANTIVO_COMUM_SINONIMO = PESOS_CLASSES + ".substantivo_comum_sinonimo"
     PESO_VERBO_NOMILIZADO_SINONIMO = PESOS_CLASSES + ".verbo_nomilizado_sinonimo"
+    PESO_ADJETIVO = PESOS_CLASSES + ".adjetivo"
 
     PESO_M1 = PESOS_METRICAS + ".m1"
     PESO_M2 = PESOS_METRICAS + ".m2"
