@@ -2,7 +2,7 @@
     "frases": {
         "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
         "regex": {
-            "termo_relevante": ":(v-|adj|n|prop)",
+            "termo_relevante": ":(v-|n|prop)",
             "palavra_adjetivo": ":adj$",
             "palavra_substantivo": ":n$",
             "palavra_preposicao": ":prp$",

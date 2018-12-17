@@ -54,7 +54,7 @@ def __sub_comum_from_frase(frase: Frase, ignore):
     lista_subsantivos_comuns = []
     substantivos_comuns = [
         palavra for palavra in frase.termos_relevantes
-        if palavra.is_substantivo() or palavra.is_adjetivo()
+        if palavra.is_substantivo()# or palavra.is_adjetivo()
     ]
 
     for substantivo in substantivos_comuns:
