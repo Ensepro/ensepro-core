@@ -16,18 +16,14 @@ remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTAD
 answer_doesnt_exist_respose = {}
 
 
-def analise_nivel_1_1(values):
+def answer_0_correct(values):
     # verifica se a resposta 0 possui todos os TRs PROPs
 
-    tr_prop_existe = [tr for tr in helper.termos_relevantes if tr[2] == "PROP"]
     answer_0 = values["answers"][0]
-    count_props = 0
+    count_tr_prop_existe = len([tr for tr in helper.termos_relevantes if tr[2] == "PROP"])
+    count_answer_0_prop = answer_0["details"]["nounsMatch"]
 
-    for keyword in answer_0["details"]["weightClasses"]["keyword"]:
-        if keyword["grammarClass"] == "PROP":
-            count_props += 1
-
-    if count_props != len(tr_prop_existe):
+    if count_answer_0_prop != count_tr_prop_existe:
         return {
             "answer_found": False,
             "continue": False
@@ -48,21 +44,32 @@ def get_triples_pattern(triples):
     for triple in triples:
         for value in triple.values():
             if value < 0:
-                triple_pattern += str(value)
+                triple_pattern += helper.map_resource_to_tr.get(helper.map_var_to_resource.get(str(value)))[0]
     return triple_pattern
 
 
-def analise_nivel_1_2(values):
+def get_answers_with_same_pattern(values):
     # obtem as demais triplas com o mesmo padrao
     # se existir somente 1 padrao igual, retorna que encontrou a resposta
 
     answer_0_pattern = values["answer_0_pattern"]
     answer_match_answer_0_pattern = []
 
+    answer_0 = values["answers"][0]
+
     for answer in values["answers"]:
         answer_pattern = get_triples_pattern(answer["triples"])
         if answer_pattern == answer_0_pattern:
             answer_match_answer_0_pattern.append(answer)
+            continue
+
+        if len(answer["triples"]) > 1:
+            answer_pattern = get_triples_pattern(answer["triples"][::-1])
+            if answer_pattern == answer_0_pattern:
+                continue
+
+        if answer_0["score"] != answer["score"]:
+            break
 
     answer_found = len(answer_match_answer_0_pattern) == 1
     should_continue = not answer_found
@@ -74,7 +81,7 @@ def analise_nivel_1_2(values):
     }
 
 
-def analise_nivel_2_1(values):
+def answers_have_same_predicate(values):
     # verifica se todas os PREDICATE são iguais, se sim, todas são respostas
     answers = values["answers"]
     for index, current_answer in enumerate(answers):
@@ -110,7 +117,7 @@ def analise_nivel_2_2(values):
     pass
 
 
-methods = [analise_nivel_1_1, analise_nivel_1_2, analise_nivel_2_1]
+methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_predicate]
 
 
 def print_resultado_value(params, step, steps, log=False):
@@ -124,6 +131,7 @@ def print_resultado_value(params, step, steps, log=False):
         return answers
 
     values = {"answers": answers}
+    all_answers = list(answers)
     answers = []
     for method in methods:
         values = method(values)
@@ -133,8 +141,12 @@ def print_resultado_value(params, step, steps, log=False):
             break
 
     format_answers(answers)
+    format_answers(all_answers)
 
-    return answers
+    return {
+        "correct_answer": answers,
+        "all_answers": all_answers
+    }
 
 
 def format_answers(best_answers):
@@ -142,9 +154,10 @@ def format_answers(best_answers):
         for tripla in value["triples"]:
             for key in tripla:
                 value_temp = helper._get_var_value(str(tripla[key]))
-                if tripla[key] < 0:
-                    value_temp = "*" + value_temp
-                tripla[key] = value_temp
+                if value_temp:
+                    if tripla[key] < 0:
+                        value_temp = "*" + value_temp
+                    tripla[key] = value_temp
 
 
 def print_resultado(params, step, steps, log=False):
