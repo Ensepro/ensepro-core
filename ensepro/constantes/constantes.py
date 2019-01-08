@@ -138,6 +138,7 @@ class LoggerConstantes:
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_ANSWER_GENERATOR_STEP = MODULO_ANSWER_GENERATOR + ".answer_generator_step"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
+    MODULO_WORD_EMBEDDING_NUMBER_BATCH = MODULO_SERVICOS + ".word_embedding_number_batch"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 
     MODULO_ELASTIC_SEARCH = "elasticsearch"
@@ -212,6 +213,14 @@ class KnowledgeGraphSearchConstantes:
         nome_servico="search"
     )
 
+
+class WordEmbeddingNumberBatchConstantes:
+    SERVIDOR_NOME = "word_embedding_number_batch"
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+    SERVICE = ConfiguracoesConstantes.SERVICO.format(
+        servidor=SERVIDOR_NOME,
+        nome_servico="word_embedding"
+    )
 
 class ConsultaConstantes:
     PESOS = ConfiguracoesConstantes.CBC + ".pesos"

@@ -112,12 +112,18 @@ def answers_have_same_predicate(values):
     }
 
 
-def analise_nivel_2_2(values):
-    #
-    pass
+def word_embedding(values):
+    from ensepro.servicos import word_embedding_number_batch as wb
+
+    print(values)
+
+    return {
+        "answer_found": False,
+        "continue": True
+    }
 
 
-methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_predicate]
+methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_predicate, word_embedding]
 
 
 def print_resultado_value(params, step, steps, log=False):

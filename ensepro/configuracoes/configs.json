@@ -102,6 +102,12 @@
             "servicos": {
                 "search": ":search"
             }
+        },
+        "word_embedding_number_batch": {
+            "endpoint": "http://api.conceptnet.io",
+            "servicos": {
+                "word_embedding": "/related/c/pt/{palavra1}?filter=/c/pt/{palavra2}"
+            }
         }
     },
     "logger": {
@@ -192,6 +198,9 @@
                 },
                 "knowledge_graph_search_service": {
                     "nivel": "INFO"
+                },
+                "word_embedding_number_batch": {
+                    "nivel": "DEBUG"
                 }
             },
             "sinonimos": {
