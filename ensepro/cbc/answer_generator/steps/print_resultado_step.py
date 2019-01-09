@@ -26,7 +26,7 @@ def answer_0_correct(values):
     if count_answer_0_prop != count_tr_prop_existe:
         return {
             "answer_found": False,
-            "continue": False
+            "continue": False,
         }
 
     answer_0_pattern = get_triples_pattern(answer_0["triples"])
@@ -102,7 +102,8 @@ def answers_have_same_predicate(values):
         if current_triple_predicates_pattern != next_triple_predicates_pattern:
             return {
                 "answer_found": False,
-                "continue": True
+                "continue": True,
+                "answers": values["answers"]
             }
 
     return {
@@ -113,7 +114,10 @@ def answers_have_same_predicate(values):
 
 
 def word_embedding(values):
+
     from ensepro.servicos import word_embedding_number_batch as wb
+
+    palavra1="abc"
 
     print(values)
 
@@ -128,6 +132,7 @@ methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_pr
 
 def print_resultado_value(params, step, steps, log=False):
     helper.init_helper(params["helper"])
+    frase = params["frase"]
 
     if log:
         print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
@@ -169,5 +174,5 @@ def format_answers(best_answers):
 def print_resultado(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
-
+    value["frase"] = params[1]
     return print_resultado_value(value, step, steps, log=log)

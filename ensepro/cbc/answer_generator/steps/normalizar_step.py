@@ -77,6 +77,7 @@ def normalizar_value_step(params, step, steps):
         values["values"] = result_normalized
         values["helper"] = helper_values
         values["nivel_combination"] = get_nivel(params["frase"], nivel)
+        values["frase"] = params["frase"]
         save_as_json(values, "resultado_normalizado.json")
         return steps[step][0](values, steps[step][1], steps)
     else:
