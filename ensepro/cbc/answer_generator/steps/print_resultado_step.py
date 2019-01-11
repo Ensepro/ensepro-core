@@ -10,6 +10,10 @@ import json
 from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes
+from ensepro.cbc.fields import Field
+from ensepro.elasticsearch import connection
+from ensepro.elasticsearch.searches import execute_search
+from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
 
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
 
@@ -113,11 +117,39 @@ def answers_have_same_predicate(values):
     }
 
 
+def get_resource(element):
+    return helper.map_var_to_resource.get(str(element))
+
+
+def search_in_elasticsearch(triple):
+    subject = get_resource(triple["subject"])
+    predicate = get_resource(triple["predicate"])
+    object = get_resource(triple["object"])
+
+    queryMultiTerm = QueryMultiTermSearch()
+    queryMultiTerm.add_term_search(Field.FULL_MATCH_SUJEITO, subject)
+    queryMultiTerm.add_term_search(Field.FULL_MATCH_PREDICADO, predicate)
+    queryMultiTerm.add_term_search(Field.FULL_MATCH_OBJETO, object)
+
+    query = Query.build_default(queryMultiTerm.build_query())
+
+    return execute_search(connection(), query)
+
+
 def word_embedding(values):
-
     from ensepro.servicos import word_embedding_number_batch as wb
+    from ensepro.cln import nominalizacao
+    answers = values["answers"]
 
-    palavra1="abc"
+    verbo = [tr[0] for tr in helper.termos_relevantes if tr[2] == "VERB"]
+    verbo_nominalizado = nominalizacao.get(verbo[0])
+
+    triple_number = 0
+
+    for answer in answers:
+        current_score = 0
+        for triple in answer["triples"]:
+            original_triple = search_in_elasticsearch(triple)
 
     print(values)
 
