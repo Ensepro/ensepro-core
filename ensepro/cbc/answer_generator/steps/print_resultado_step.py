@@ -7,6 +7,8 @@
 """
 
 import json
+import time
+import copy
 from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes
@@ -136,6 +138,10 @@ def search_in_elasticsearch(triple):
     return execute_search(connection(), query)
 
 
+def get_words_from_conceito(word):
+    return [word]
+
+
 def word_embedding(values):
     from ensepro.servicos import word_embedding_number_batch as wb
     from ensepro.cln import nominalizacao
@@ -145,17 +151,39 @@ def word_embedding(values):
     verbo_nominalizado = nominalizacao.get(verbo[0])
 
     triple_number = 0
-
+    best_answer = []
+    best_score = 0
     for answer in answers:
-        current_score = 0
         for triple in answer["triples"]:
             original_triple = search_in_elasticsearch(triple)
+            if original_triple["hits"]["total"] == 0:
+                continue
+            original_triple = original_triple["hits"]["hits"][0]["_source"]
+            sujeito = original_triple["sujeito"]
+            predicado = original_triple["predicado"]
+            objeto = original_triple["objeto"]
 
-    print(values)
+            words = get_words_from_conceito(predicado)
+            score = 0
+            for word in words:
+                word_embedding_result = wb.word_embedding(verbo_nominalizado[0], word["conceito"])
+                if word_embedding_result["related"]:
+                    if word_embedding_result["related"][0]["weight"] > score:
+                        score = word_embedding_result["related"][0]["weight"]
+
+            # print(sujeito["conceito"], predicado["conceito"], objeto["conceito"])
+            if score > best_score:
+                best_answer.clear()
+                best_score = score
+            if score == best_score:
+                best_answer.append(copy.deepcopy(answer))
+
+            # time.sleep(1)
 
     return {
-        "answer_found": False,
-        "continue": True
+        "answer_found": True,
+        "continue": False,
+        "answers": best_answer
     }
 
 
