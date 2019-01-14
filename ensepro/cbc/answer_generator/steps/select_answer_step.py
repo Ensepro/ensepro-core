@@ -7,7 +7,7 @@
 """
 
 import json
-import time
+import re
 import copy
 from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
@@ -139,7 +139,8 @@ def search_in_elasticsearch(triple):
 
 
 def get_words_from_conceito(word):
-    return [word]
+    matches = re.finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', word)
+    return [m.group(0) for m in matches]
 
 
 def word_embedding(values):
@@ -150,7 +151,7 @@ def word_embedding(values):
     verbo = [tr[0] for tr in helper.termos_relevantes if tr[2] == "VERB"]
     verbo_nominalizado = nominalizacao.get(verbo[0])
 
-    triple_number = 0
+    # triple_number = 0
     best_answer = []
     best_score = 0
     for answer in answers:
@@ -159,9 +160,9 @@ def word_embedding(values):
             if original_triple["hits"]["total"] == 0:
                 continue
             original_triple = original_triple["hits"]["hits"][0]["_source"]
-            sujeito = original_triple["sujeito"]
+            # sujeito = original_triple["sujeito"]
             predicado = original_triple["predicado"]
-            objeto = original_triple["objeto"]
+            # objeto = original_triple["objeto"]
 
             words = get_words_from_conceito(predicado)
             score = 0
@@ -190,7 +191,7 @@ def word_embedding(values):
 methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_predicate, word_embedding]
 
 
-def print_resultado_value(params, step, steps, log=False):
+def select_answer_value(params, step, steps, log=False):
     helper.init_helper(params["helper"])
     frase = params["frase"]
 
@@ -220,6 +221,13 @@ def print_resultado_value(params, step, steps, log=False):
     }
 
 
+def select_answer_step(params, step, steps, log=False):
+    with open(params[0], encoding="UTF-8", mode="r") as f:
+        value = json.load(f)
+    value["frase"] = params[1]
+    return select_answer_value(value, step, steps, log=log)
+
+
 def format_answers(best_answers):
     for value in best_answers:
         for tripla in value["triples"]:
@@ -229,10 +237,3 @@ def format_answers(best_answers):
                     if tripla[key] < 0:
                         value_temp = "*" + value_temp
                     tripla[key] = value_temp
-
-
-def print_resultado(params, step, steps, log=False):
-    with open(params[0], encoding="UTF-8", mode="r") as f:
-        value = json.load(f)
-    value["frase"] = params[1]
-    return print_resultado_value(value, step, steps, log=log)

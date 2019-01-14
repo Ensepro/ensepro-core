@@ -8,7 +8,7 @@
 from ensepro import LoggerConstantes
 from ensepro.cbc.answer_generator.steps.elastic_search_step import elastic_search_step, elastic_search_integrado_step
 from ensepro.cbc.answer_generator.steps.normalizar_step import normalizar_step, normalizar_value_step
-from ensepro.cbc.answer_generator.steps.print_resultado_step import print_resultado
+from ensepro.cbc.answer_generator.steps.select_answer_step import select_answer_step
 from ensepro.cbc.answer_generator.steps.answer_generator_step import answer_generator_step
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ANSWER_GENERATOR)
@@ -24,7 +24,7 @@ actions_next = {
     "-elasticsearch-integrado": (normalizar_value_step, "-normalizar-java"),
     "-elasticsearch-java": (normalizar_value_step, "-normalizar-java"),
     "-normalizar-java": (answer_generator_step, "-gerar-java"),
-    "-gerar-java": (print_resultado, None),
+    "-gerar-java": (select_answer_step, None),
 }
 
 start_at = "-elasticsearch-java"
