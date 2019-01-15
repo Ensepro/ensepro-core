@@ -24,10 +24,36 @@ def busca_no_elasticsearch(substantivo_proprio):
         return search_result
 
 
+def remove_small_words(substantivo_proprio):
+    count = 0
+    i = 0
+    final = ""
+    while i <= len(substantivo_proprio):
+        if i == len(substantivo_proprio):
+            if count > 2:
+                final += substantivo_proprio[:count + 1]
+            break
+        w = substantivo_proprio[i]
+        if (w == "_"):
+            if count > 2:
+                final += substantivo_proprio[:count + 1]
+
+            substantivo_proprio = substantivo_proprio[count + 1:]
+            i = 0
+            count = 0
+            continue
+
+        count += 1
+        i += 1
+
+    return final
+
+
 def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
     base_request = SpotlightRequest(frase_original)
     spotlight_requests = base_request.replicate_for_confidences(confiancas)
     responses = dbpedia_spotlight_service.spotlight_list(spotlight_requests, lang=lang)
+    new_frase = ""
 
     for response in responses:
         response_json = response.as_json
@@ -37,6 +63,12 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
             entities_found.sort(key=lambda entity: entity["@similarityScore"], reverse=False)
 
             for entity in entities_found:
+                substantivo_proprio = remove_small_words(substantivo_proprio)
+                if not substantivo_proprio:
+                    return {
+                        "nova_frase": frase_original
+                    }
+
                 uri = entity["@URI"]
                 entity_name = uri[uri.rfind("/") + 1:]
                 entity_name_lower = entity_name.lower()
@@ -49,14 +81,27 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                         "reanalisar": False
                     }
 
-                if (substantivo_proprio.replace("_", " ") in entity["@surfaceForm"].lower()):
+                surface = remove_small_words(entity["@surfaceForm"].lower().replace(" ", "_"))
+
+                if substantivo_proprio in surface:
                     logger.debug("Substantivo próprio do spotlight contém o substantivo próprio da frase")
-                    es_result = busca_no_elasticsearch(entity_name_lower)
-                    if es_result:
-                        return {
-                            "nova_frase": frase_original.replace(entity["@surfaceForm"], entity_name),
-                        }
-                    logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
+                    # es_result = busca_no_elasticsearch(entity_name_lower)
+                    # if es_result:
+                    substantivo_proprio = substantivo_proprio.replace(surface, "")
+                    frase_original = frase_original.replace(entity["@surfaceForm"],
+                                                            "<split> " + entity_name + " <split>")
+
+                    # logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
+                elif surface in substantivo_proprio:
+                    # es_result = busca_no_elasticsearch(entity_name_lower.replace("_", " "))
+                    # if es_result:
+                    substantivo_proprio = substantivo_proprio.replace(surface, "")
+                    frase_original = frase_original.replace(entity["@surfaceForm"],
+                                                            "<split> " + entity_name + " <split>")
+
+        return {
+            "nova_frase": frase_original
+        }
 
 
 def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_proprio, lang):
