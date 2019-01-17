@@ -190,6 +190,8 @@ def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
         palavra_original = palavra.palavra_original
         if not palavra.is_substantivo_proprio():
             palavra_original = palavra_original.replace("_", " ")
+        else:
+            palavra_original = "<split> " + palavra_original + " <split>"
 
         resultado += " " + palavra_original
 
