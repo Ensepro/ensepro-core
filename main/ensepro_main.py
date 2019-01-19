@@ -16,12 +16,15 @@ from main import main_params
 import ensepro
 from ensepro.cbc import atualizar_frase
 from ensepro.cbc import consultar
+from ensepro.constantes.constantes import LoggerConstantes
 
 if len(sys.argv) < 2:
     print("Parametro '-frase' ou '-arquivo-frases' deve ser passado. '-h' ou '--help' para ver outras opcoes.")
     exit(1)
 
 args = main_params.get_args()
+
+logger = LoggerConstantes.default_logger()
 
 frases_texto = []
 frases_analisadas = []
@@ -82,7 +85,9 @@ for frase_texto in frases_texto:
     try:
         analisar(frase_texto)
     except Exception as ex:
+        logger.exception(ex)
         print("\n\n{}".format(ex))
+        # raise ex
 
 if args.save_json:
     resultado_json = []

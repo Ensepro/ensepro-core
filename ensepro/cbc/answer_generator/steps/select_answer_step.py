@@ -8,6 +8,7 @@
 
 import json
 import re
+import time
 import copy
 from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
@@ -164,10 +165,10 @@ def word_embedding(values):
             predicado = original_triple["predicado"]
             # objeto = original_triple["objeto"]
 
-            words = get_words_from_conceito(predicado)
+            words = get_words_from_conceito(predicado["conceito"])
             score = 0
             for word in words:
-                word_embedding_result = wb.word_embedding(verbo_nominalizado[0], word["conceito"])
+                word_embedding_result = wb.word_embedding(verbo_nominalizado[0], word)
                 if word_embedding_result["related"]:
                     if word_embedding_result["related"][0]["weight"] > score:
                         score = word_embedding_result["related"][0]["weight"]
@@ -179,7 +180,7 @@ def word_embedding(values):
             if score == best_score:
                 best_answer.append(copy.deepcopy(answer))
 
-            # time.sleep(1)
+            time.sleep(1)
 
     return {
         "answer_found": True,
