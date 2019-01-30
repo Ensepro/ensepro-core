@@ -36,6 +36,9 @@
         ]
     },
     "cbc": {
+        "default_vec_file": "C:\\Users\\alenc\\Documents\\_projetos\\ensepro\\ensepro-corE\\arquivos\\fasttext-s50-m2-sg0.vec",
+        "default_vec_binary": false,
+        "default_vec_glove": false,
         "numero_respostas": 100,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
@@ -101,12 +104,6 @@
             "key_file": "/root/alencar/ensepro/ensepro/configuracoes/kg.key",
             "servicos": {
                 "search": ":search"
-            }
-        },
-        "word_embedding_number_batch": {
-            "endpoint": "http://api.conceptnet.io",
-            "servicos": {
-                "word_embedding": "/related/c/pt/{palavra1}?filter=/c/pt/{palavra2}"
             }
         }
     },
@@ -199,7 +196,7 @@
                 "knowledge_graph_search_service": {
                     "nivel": "INFO"
                 },
-                "word_embedding_number_batch": {
+                "word_embedding": {
                     "nivel": "DEBUG"
                 }
             },

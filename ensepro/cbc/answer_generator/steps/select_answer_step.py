@@ -145,7 +145,7 @@ def get_words_from_conceito(word):
 
 
 def word_embedding(values):
-    from ensepro.servicos import word_embedding_number_batch as wb
+    from ensepro.servicos import word_embedding as wb
     from ensepro.cln import nominalizacao
     answers = values["answers"]
 
@@ -168,10 +168,12 @@ def word_embedding(values):
             words = get_words_from_conceito(predicado["conceito"])
             score = 0
             for word in words:
-                word_embedding_result = wb.word_embedding(verbo_nominalizado[0], word)
-                if word_embedding_result["related"]:
-                    if word_embedding_result["related"][0]["weight"] > score:
-                        score = word_embedding_result["related"][0]["weight"]
+                temp_score = wb.word_embedding(verbo_nominalizado[0], word)
+                if temp_score > score:
+                    score = temp_score
+                # if word_embedding_result["related"]:
+                #     if word_embedding_result["related"][0]["weight"] > score:
+                #         score = word_embedding_result["related"][0]["weight"]
 
             # print(sujeito["conceito"], predicado["conceito"], objeto["conceito"])
             if score > best_score:
