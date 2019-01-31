@@ -80,8 +80,9 @@ def analisar(frase_texto):
     if deve_responder:
         main_utils.print_resposta(ensepro, resposta, file=file)
 
-from ensepro.servicos import word_embedding
-word_embedding.init(args.word_embedding_vector, args.vec_binary, args.vec_glove)
+if args.resposta or args.verbose:
+    from ensepro.servicos import word_embedding
+    word_embedding.init(args.word_embedding_vector, args.vec_binary, args.vec_glove)
 
 for frase_texto in frases_texto:
     try:
