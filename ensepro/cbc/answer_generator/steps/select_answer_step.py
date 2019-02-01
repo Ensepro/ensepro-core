@@ -150,9 +150,21 @@ def word_embedding(values):
     answers = values["answers"]
 
     verbo = [tr[0] for tr in helper.termos_relevantes if tr[2] == "VERB"]
+
+    if not verbo:
+        #logger.info("Frase não possui verbo.")
+        return {
+            "answer_found": False,
+            "continue": True,
+            "answers": []
+        }
+
+
     verbo_nominalizado = nominalizacao.get(verbo[0])
 
-    # triple_number = 0
+    if verbo_nominalizado:
+        verbo = verbo_nominalizado
+
     best_answer = []
     best_score = 0
     for answer in answers:
@@ -168,7 +180,7 @@ def word_embedding(values):
             words = get_words_from_conceito(predicado["conceito"])
             score = 0
             for word in words:
-                temp_score = wb.word_embedding(verbo_nominalizado[0], word)
+                temp_score = wb.word_embedding(verbo, word)
                 if temp_score > score:
                     score = temp_score
                 # if word_embedding_result["related"]:
