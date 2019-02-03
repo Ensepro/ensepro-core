@@ -1,0 +1,4 @@
+chatterbot
+elasticsearch
+nltk
+gensim

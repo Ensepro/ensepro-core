@@ -113,8 +113,7 @@ def frase_pretty_print(frase: Frase,
         for palavra in frase.palavras:
             print("----> Palavra[{:>3}] {:>20} - {:<20}==> {}".format(palavra.id, palavra.palavra_original,
                                                                       palavra.palavra_canonica,
-                                                                      str(palavra.tags)),
-                  file=file)
+                                                                      str(palavra.tags)), file=file)
 
     if arvore:
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
