@@ -138,6 +138,7 @@ class LoggerConstantes:
     MODULO_ELASTIC_SEARCH_STEP = MODULO_ANSWER_GENERATOR + ".elastic_search_step"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_ANSWER_GENERATOR_STEP = MODULO_ANSWER_GENERATOR + ".answer_generator_step"
+    MODULO_SELECTING_ANSWER_STEP = MODULO_ANSWER_GENERATOR + ".selecting_answer_step"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 

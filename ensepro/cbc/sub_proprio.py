@@ -53,9 +53,9 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
     base_request = SpotlightRequest(frase_original)
     spotlight_requests = base_request.replicate_for_confidences(confiancas)
     responses = dbpedia_spotlight_service.spotlight_list(spotlight_requests, lang=lang)
-    new_frase = ""
 
     for response in responses:
+        temp_substantivo_proprio = substantivo_proprio
         response_json = response.as_json
         logger.debug("Response with confidence: %s", response_json["@confidence"])
         if "Resources" in response_json:
@@ -63,17 +63,15 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
             entities_found.sort(key=lambda entity: entity["@similarityScore"], reverse=False)
 
             for entity in entities_found:
-                substantivo_proprio = remove_small_words(substantivo_proprio)
-                if not substantivo_proprio:
-                    return {
-                        "nova_frase": frase_original
-                    }
+                temp_substantivo_proprio = remove_small_words(temp_substantivo_proprio)
+                if not temp_substantivo_proprio:
+                    break
 
                 uri = entity["@URI"]
                 entity_name = uri[uri.rfind("/") + 1:]
                 entity_name_lower = entity_name.lower()
 
-                if (entity_name_lower == substantivo_proprio):
+                if entity_name_lower == temp_substantivo_proprio:
                     # es_result = busca_no_elasticsearch(entity_name)
                     logger.debug("Substantivo próprio encontrado no spotlight igual ao da frase.")
                     return {
@@ -83,21 +81,24 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
 
                 surface = remove_small_words(entity["@surfaceForm"].lower().replace(" ", "_"))
 
-                if substantivo_proprio in surface:
+                if temp_substantivo_proprio in surface:
                     logger.debug("Substantivo próprio do spotlight contém o substantivo próprio da frase")
-                    # es_result = busca_no_elasticsearch(entity_name_lower)
-                    # if es_result:
-                    substantivo_proprio = substantivo_proprio.replace(surface, "")
-                    frase_original = frase_original.replace(entity["@surfaceForm"],
-                                                            "<split> " + entity_name + " <split>")
+                    es_result = busca_no_elasticsearch(entity_name_lower)
+                    if es_result:
+                        temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
+                        frase_original = frase_original.replace(entity["@surfaceForm"],
+                                                                "<split> " + entity_name + " <split>")
+                    else:
+                        logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
-                    # logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
-                elif surface in substantivo_proprio:
-                    # es_result = busca_no_elasticsearch(entity_name_lower.replace("_", " "))
-                    # if es_result:
-                    substantivo_proprio = substantivo_proprio.replace(surface, "")
-                    frase_original = frase_original.replace(entity["@surfaceForm"],
-                                                            "<split> " + entity_name + " <split>")
+                elif surface in temp_substantivo_proprio:
+                    es_result = busca_no_elasticsearch(entity_name_lower.replace("_", " "))
+                    if es_result:
+                        temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
+                        frase_original = frase_original.replace(entity["@surfaceForm"],
+                                                                "<split> " + entity_name + " <split>")
+                    else:
+                        logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
         return {
             "nova_frase": frase_original
@@ -199,11 +200,27 @@ def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
     return resultado
 
 
+def remove_substantivos_proprios_existentes_no_es(substantivos_proprios):
+    lista_atualizada = []
+    logger.info("verificando existencia dos substantivos proprios no elasticsearch")
+    for substantivo_proprio in substantivos_proprios:
+        es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower())
+        if not es_result:
+            logger.info("mantendo substantivo [%s] pois não existe no elasticsearch")
+            lista_atualizada.append(substantivo_proprio)
+        else:
+            logger.info("ignorando substantivo [%s] pois existe no elasticsearch")
+
+    return lista_atualizada
+
+
 def atualizar_frase(frase: Frase):
     logger.info("Atualizando frase.")
     substantivos_proprios = __list_substantivos_proprios(frase)
     if not substantivos_proprios:
         return frase
+
+    substantivos_proprios = remove_substantivos_proprios_existentes_no_es(substantivos_proprios)
 
     frase_original = frase.frase_original
     atualizou = False

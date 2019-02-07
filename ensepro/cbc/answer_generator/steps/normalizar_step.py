@@ -69,7 +69,7 @@ def normalizar_value_step(params, step, steps):
                 alterar_para_variaveis(tripla)
                 result_normalized.append(tripla)
 
-    logger.debug("done -> size=%s", len(result_normalized))
+    logger.info("done -> size=%s", len(result_normalized))
     helper_values = helper.save_helper()
 
     if steps.get(step, None):

@@ -47,6 +47,7 @@ if args.frase:
 if not args.quiet:
     print("Analisando frase(s)... ")
 
+deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
 
 def analisar(frase_texto):
     frase_final = None
@@ -54,7 +55,7 @@ def analisar(frase_texto):
     frase_original = ensepro.analisar_frase(frase_texto)
     frases_analisadas.append(frase_original)
 
-    deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
+
 
     if deve_responder or args.final:
         frase_final = atualizar_frase(frase_original)
@@ -80,7 +81,7 @@ def analisar(frase_texto):
     if deve_responder:
         main_utils.print_resposta(ensepro, resposta, file=file)
 
-if args.resposta or args.verbose:
+if deve_responder:
     from ensepro.servicos import word_embedding
     word_embedding.init(args.word_embedding_vector, args.vec_binary, args.vec_glove)
 
@@ -100,7 +101,7 @@ if args.save_json:
         }
         if args.verbose or args.resposta or args.final:
             json["frase_final"] = frases_reanalisadas[index]
-        if args.verbose or args.resposta:
+        if deve_responder:
             json["resposta"] = respostas[index]
 
         resultado_json.append(json)

@@ -36,7 +36,7 @@
         ]
     },
     "cbc": {
-        "default_vec_file": "C:\\Users\\alenc\\Documents\\_projetos\\ensepro\\ensepro-corE\\arquivos\\fasttext-s50-m2-sg0.vec",
+        "default_vec_file": "/root/models/fastText/fasttext-s50-m2-sg0.vec",
         "default_vec_binary": false,
         "default_vec_glove": false,
         "numero_respostas": 100,
@@ -93,6 +93,9 @@
         "dbpedia_spotlight": {
             "endpoint": "http://172.17.0.1:2228",
             "confiancas": [
+                0.8,
+                0.7,
+                0.5,
                 0.3
             ],
             "servicos": {
@@ -127,6 +130,9 @@
                         "nivel": "DEBUG"
                     },
                     "normalizar_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "selecting_answer_step": {
                         "nivel": "DEBUG"
                     }
                 }

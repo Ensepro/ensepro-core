@@ -12,13 +12,15 @@ import time
 import copy
 from ensepro.cbc.answer_generator import helper
 import ensepro.configuracoes as configuracoes
-from ensepro import ConsultaConstantes
+from ensepro import ConsultaConstantes, LoggerConstantes
 from ensepro.cbc.fields import Field
 from ensepro.elasticsearch import connection
 from ensepro.elasticsearch.searches import execute_search
 from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
 
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
+
+logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_SELECTING_ANSWER_STEP)
 
 answer_doesnt_exist_respose = {}
 
@@ -31,6 +33,7 @@ def answer_0_correct(values):
     count_answer_0_prop = answer_0["details"]["nounsMatch"]
 
     if count_answer_0_prop != count_tr_prop_existe:
+        logger.info("Resposta 0 não possui todos os tr_prop")
         return {
             "answer_found": False,
             "continue": False,
@@ -52,6 +55,7 @@ def get_triples_pattern(triples):
         for value in triple.values():
             if value < 0:
                 triple_pattern += helper.map_resource_to_tr.get(helper.map_var_to_resource.get(str(value)))[0]
+    logger.debug("Obtendo o padrão para tripla [%s] -> %s", triples, triple_pattern)
     return triple_pattern
 
 
@@ -107,6 +111,7 @@ def answers_have_same_predicate(values):
             next_triple_predicates_pattern += str(triple["predicate"])
 
         if current_triple_predicates_pattern != next_triple_predicates_pattern:
+            logger.info("Quebrou o padrão das triple, ignorando demais triplas")
             return {
                 "answer_found": False,
                 "continue": True,
@@ -152,13 +157,12 @@ def word_embedding(values):
     verbo = [tr[0] for tr in helper.termos_relevantes if tr[2] == "VERB"]
 
     if not verbo:
-        #logger.info("Frase não possui verbo.")
+        logger.info("Frase não possui verbo. Ignorando execução do word_embedding")
         return {
             "answer_found": False,
             "continue": True,
             "answers": []
         }
-
 
     verbo_nominalizado = nominalizacao.get(verbo[0])
 
@@ -194,8 +198,6 @@ def word_embedding(values):
             if score == best_score:
                 best_answer.append(copy.deepcopy(answer))
 
-            time.sleep(1)
-
     return {
         "answer_found": True,
         "continue": False,
@@ -207,6 +209,7 @@ methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_pr
 
 
 def select_answer_value(params, step, steps, log=False):
+    logger.info("Iniciando selecting_answer_step")
     helper.init_helper(params["helper"])
     frase = params["frase"]
 
@@ -221,7 +224,10 @@ def select_answer_value(params, step, steps, log=False):
     all_answers = list(answers)
     answers = []
     for method in methods:
+        logger.debug("Executando metodo: %s", method.__name__)
         values = method(values)
+        logger.debug("resultado do metodo '%s': %s", method.__name__, values)
+
         if values["answer_found"]:
             answers = values["answers"]
         if not values["continue"]:
