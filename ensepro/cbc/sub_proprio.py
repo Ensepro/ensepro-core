@@ -112,7 +112,7 @@ def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_propri
     for item in result["itemListElement"]:
         if "name" in item["result"]:
             entity = item["result"]["name"].lower()
-            if (substantivo_proprio.replace("_", " ") in entity.lower()):
+            if substantivo_proprio.replace("_", " ") in entity.lower():
                 logger.debug("Substantivo próprio do GKG contém o substantivo próprio da frase")
                 es_result = busca_no_elasticsearch(entity)
                 if es_result:
@@ -204,7 +204,7 @@ def remove_substantivos_proprios_existentes_no_es(substantivos_proprios):
     lista_atualizada = []
     logger.info("verificando existencia dos substantivos proprios no elasticsearch")
     for substantivo_proprio in substantivos_proprios:
-        es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower())
+        es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower().replace("_", " "))
         if not es_result:
             logger.info("mantendo substantivo [%s] pois não existe no elasticsearch")
             lista_atualizada.append(substantivo_proprio)
