@@ -167,7 +167,7 @@ def word_embedding(values):
     verbo_nominalizado = nominalizacao.get(verbo[0])
 
     if verbo_nominalizado:
-        verbo = verbo_nominalizado
+        verbo = verbo_nominalizado[0]
 
     best_answer = []
     best_score = 0
