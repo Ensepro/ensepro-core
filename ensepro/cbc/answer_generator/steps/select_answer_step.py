@@ -6,17 +6,17 @@
 
 """
 
+import copy
 import json
 import re
-import time
-import copy
-from ensepro.cbc.answer_generator import helper
+
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes, LoggerConstantes
+from ensepro.cbc.answer_generator import helper
 from ensepro.cbc.fields import Field
 from ensepro.elasticsearch import connection
-from ensepro.elasticsearch.searches import execute_search
 from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
+from ensepro.elasticsearch.searches import execute_search
 
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
 
@@ -164,8 +164,8 @@ def word_embedding(values):
             "answers": []
         }
 
-    verbo_nominalizado = nominalizacao.get(verbo[0])
-
+    verbo = verbo[0]
+    verbo_nominalizado = nominalizacao.get(verbo)
     if verbo_nominalizado:
         verbo = verbo_nominalizado[0]
 
