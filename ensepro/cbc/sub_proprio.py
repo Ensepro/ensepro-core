@@ -7,11 +7,11 @@
 """
 
 from ensepro import LoggerConstantes, Frase, DBPediaSpotlightConstantes
+from ensepro import configuracoes
 from ensepro.cbc.fields import Field
 from ensepro.elasticsearch.searches import full_match_serach
 from ensepro.servicos import dbpedia_spotlight_service, knowledge_graph_search_service
 from ensepro.servicos.request import SpotlightRequest, KnowledgeGraphSearchRequest
-from ensepro import configuracoes
 
 fields = [Field.FULL_MATCH_SUJEITO, Field.FULL_MATCH_PREDICADO, Field.FULL_MATCH_OBJETO]
 confiancas = configuracoes.get_config(DBPediaSpotlightConstantes.CONFIANCAS)
@@ -174,6 +174,9 @@ def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
             continue
 
         if "<np-close>" not in atualPalavra.tags:
+            continue
+
+        if index > 0 and not (palavras[index - 1].is_adjetivo() or palavras[index - 1].is_substantivo()):
             continue
 
         proximaPalavra = palavras[index]
