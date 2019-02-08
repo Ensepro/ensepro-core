@@ -6,6 +6,7 @@
 
 """
 import re
+
 from ensepro import configuracoes
 from ensepro.constantes import ConfiguracoesConstantes, LoggerConstantes
 
@@ -23,7 +24,15 @@ def __is_termo_relevante_base(frase, palavra, *args):
 
     # 2. tagInicial da palavra deve bater com a regex de termos relevantes
     if not regex_termo_relevante.search(palavra.tag_inicial):
-        logger.debug("'__is_termo_relevante_base' -> '%s|%s' não está de acordo com a regex de termos relevantes", palavra.id,
+        logger.debug("'__is_termo_relevante_base' -> '%s|%s' não está de acordo com a regex de termos relevantes",
+                     palavra.id,
+                     palavra.palavra_canonica)
+        return False
+
+    # 3. não deve ser um número
+    if ":num" in palavra.tag_inicial:
+        logger.debug("'__is_termo_relevante_base' -> '%s|%s' é um número (':num') e por isso não é um termo relevante",
+                     palavra.id,
                      palavra.palavra_canonica)
         return False
 
@@ -37,12 +46,14 @@ def __is_termo_relevante_base(frase, palavra, *args):
 
     # 4. Não deve ser um verbo de ligação
     if palavra.palavra_canonica in verbos_ligacao:
-        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um verbo de ligação", palavra.id, palavra.palavra_canonica)
+        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um verbo de ligação", palavra.id,
+                     palavra.palavra_canonica)
         return False
 
     # 5. Não deve estar na lista de termos a serem ignorados
     if palavra.palavra_canonica in termos_ignorar:
-        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um termo que deve ser ignorado", palavra.id, palavra.palavra_canonica)
+        logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é um termo que deve ser ignorado", palavra.id,
+                     palavra.palavra_canonica)
         return False
 
     # 6. Quando houver locução verbal, o(s) verbo(s) auxiliar(es) deve ser desconsiderado.
@@ -50,8 +61,10 @@ def __is_termo_relevante_base(frase, palavra, *args):
     if frase.locucao_verbal:
         for locucao_verbal in frase.locucao_verbal:
             if palavra in locucao_verbal[:-1]:
-                logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' parte de uma locução verbal e não é relevante", palavra.id,
-                             palavra.palavra_canonica)
+                logger.debug(
+                    "'__is_termo_relevante_base' -> palavra '%s|%s' parte de uma locução verbal e não é relevante",
+                    palavra.id,
+                    palavra.palavra_canonica)
                 return False
 
     logger.debug("'__is_termo_relevante_base' -> palavra '%s|%s' é relevante", palavra.id, palavra.palavra_canonica)
@@ -65,7 +78,8 @@ def __is_termo_relevante_default(frase, palavra, *args):
 
     # 2. Deve estar após o tipo
     if frase.tipo.ids and palavra.id <= frase.tipo.ids[-1]:
-        logger.debug("__is_termo_relevante_default -> palavra '%s|%s' esta antes do tipo da frase", palavra.id, palavra.palavra_canonica)
+        logger.debug("__is_termo_relevante_default -> palavra '%s|%s' esta antes do tipo da frase", palavra.id,
+                     palavra.palavra_canonica)
         return False
 
     logger.debug("'__is_termo_relevante_default' -> palavra '%s|%s' é relevante ", palavra.id, palavra.palavra_canonica)
@@ -79,7 +93,8 @@ def __is_termo_relevante_eh_um(frase, palavra, *args):
 
     # 2. Não deve fazer parte do tipo
     if frase.tipo.ids and palavra.id in frase.tipo.ids:
-        logger.debug("'__is_termo_relevante_eh_um' -> palavra '%s|%s' faz parte do tipo da frase", palavra.id, palavra.palavra_canonica)
+        logger.debug("'__is_termo_relevante_eh_um' -> palavra '%s|%s' faz parte do tipo da frase", palavra.id,
+                     palavra.palavra_canonica)
         return False
 
     logger.debug("'__is_termo_relevante_eh_um' -> palavra '%s|%s' é relevante", palavra.id, palavra.palavra_canonica)
