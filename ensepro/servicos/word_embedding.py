@@ -1,9 +1,9 @@
-from ensepro.constantes import LoggerConstantes
+from gensim.scripts.glove2word2vec import glove2word2vec
+from gensim.test.utils import get_tmpfile
 
 from ensepro import configuracoes
-from ensepro.constantes import WordEmbedding, ConfiguracoesConstantes
-from gensim.test.utils import datapath, get_tmpfile
-from gensim.scripts.glove2word2vec import glove2word2vec
+from ensepro.constantes import LoggerConstantes
+from ensepro.constantes import WordEmbedding
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_WORD_EMBEDDING)
 
@@ -36,8 +36,7 @@ def word_embedding(palavra1, palavra2):
         return 0
     try:
         result = wv.similarity(palavra1, palavra2)
-        logger.debug("Verificando similaridade entra palavras: %s - %s = %s",
-                     palavra1, palavra2, result)
+        logger.debug("Verificando similaridade entra palavras: %s - %s = %s", palavra1, palavra2, result)
         return result
     except Exception as ex:
         logger.error("Erro ao verificar similaridade entre palavras [%s - %s]", palavra1, palavra2)

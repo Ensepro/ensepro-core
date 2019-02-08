@@ -120,9 +120,14 @@ def frase_pretty_print(frase: Frase,
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
 
 
-def resposta_pretty_print(resposta, file=None):
+def resposta_pretty_print(resposta, somente_resposta=False, file=None):
     if not resposta:
         print("Nenhuma resposta encontrada.\n", file=file)
+        return
+    if somente_resposta:
+        for _resposta in resposta["correct_answer"]:
+            for triple in _resposta["triples"]:
+                print(triple, end=" ")
         return
 
     import ensepro.configuracoes as configuracoes

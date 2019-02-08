@@ -53,5 +53,5 @@ def print_frases(ensepro, frases, args, file=None):
         print_frase(ensepro, frase, args, file=file)
 
 
-def print_resposta(ensepro, resposta, file=None):
-    ensepro.resposta_pretty_print(resposta, file=file)
+def print_resposta(ensepro, resposta, somente_resposta, file=None):
+    ensepro.resposta_pretty_print(resposta, somente_resposta, file=file)

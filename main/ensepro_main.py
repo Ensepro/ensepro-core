@@ -44,7 +44,7 @@ if args.arquivo_frases:
 if args.frase:
     frases_texto.append(args.frase)
 
-if not args.quiet:
+if not args.quiet and not args.somente_resposta:
     print("Analisando frase(s)... ")
 
 deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
@@ -79,7 +79,7 @@ def analisar(frase_texto):
         main_utils.print_frase(ensepro, frase_final, args, file=file)
 
     if deve_responder:
-        main_utils.print_resposta(ensepro, resposta, file=file)
+        main_utils.print_resposta(ensepro, resposta, args.somente_resposta, file=file)
 
 if deve_responder:
     from ensepro.servicos import word_embedding
