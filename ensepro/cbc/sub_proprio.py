@@ -100,9 +100,9 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     else:
                         logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
-        return {
-            "nova_frase": frase_original
-        }
+    return {
+        "nova_frase": frase_original
+    }
 
 
 def encontrar_entidade_google_knowledge_graph(frase_original, substantivo_proprio, lang):
