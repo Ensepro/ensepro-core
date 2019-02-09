@@ -120,37 +120,50 @@ def frase_pretty_print(frase: Frase,
         frase.arvore.to_nltk_tree().pretty_print(stream=file)
 
 
-def resposta_pretty_print(resposta, file=None):
+def resposta_pretty_print(resposta, somente_resposta=False, file=None):
     if not resposta:
         print("Nenhuma resposta encontrada.\n", file=file)
+        return
+    if somente_resposta:
+        for _resposta in resposta["correct_answer"]:
+            for triple in _resposta["triples"]:
+                print(triple, end=" ")
+        return
 
-    print("\nMelhores respostas:", file=file)
     import ensepro.configuracoes as configuracoes
     from ensepro import ConsultaConstantes
     resultado_resumido = configuracoes.get_config(ConsultaConstantes.RESULTADO_RESUMIDO)
 
-    for index, tripla in enumerate(resposta):
-        to_print = []
-        to_print.append("{0:.3f}".format(tripla["score"]))
-        temp = []
-        for value in tripla["triples"]:
-            for key in value:
-                temp.append(value[key])
+    respostas = [resposta["correct_answer"], resposta["all_answers"]]
 
-        to_print.append("[" + ' | '.join(temp) + "]")
-        to_print.append("-")
-        if not resultado_resumido:
+    for index, _resposta in enumerate(respostas):
+        if (index == 0):
+            print("\nMelhores respostas:", file=file)
+        else:
+            print("\nLista de triplas candidatas a resposta: ", file=file)
+
+        for index, tripla in enumerate(_resposta):
+            to_print = []
+            to_print.append("{0:.3f}".format(tripla["score"]))
             temp = []
-            for value in tripla["details"]["metrics"]["scoreMetrics"]:
-                temp.append("{0:.3f}".format(value))
-            to_print.append("[" + ' '.join(temp) + "]")
+            for value in tripla["triples"]:
+                for key in value:
+                    temp.append(str(value[key]))
 
-            temp = []
-            for value in tripla["details"]["metrics"]["metrics"]:
-                temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
-            #to_print.append("metricsClass: [" + ','.join(temp) + "]")
+            to_print.append("[" + ' | '.join(temp) + "]")
+            to_print.append("-")
+            if not resultado_resumido:
+                temp = []
+                for value in tripla["details"]["metrics"]["scoreMetrics"]:
+                    temp.append("{0:.3f}".format(value))
+                to_print.append("[" + ' '.join(temp) + "]")
 
-        print(str(index), ' '.join(to_print), file=file)
+                temp = []
+                for value in tripla["details"]["metrics"]["metrics"]:
+                    temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
+                # to_print.append("metricsClass: [" + ','.join(temp) + "]")
+
+            print(str(index), ' '.join(to_print), file=file)
 
 
 def save_as_json(value, filename, indent=4, sort_keys=False):

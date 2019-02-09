@@ -34,4 +34,4 @@ def answer_generator_step(params, step, steps):
     subprocess.check_output(comando, shell=True)
     if steps.get(step, None):
         logger.debug("Chamando próximo passo: %s", steps[step][1])
-        return steps[step][0](["queries_renqueadas.json"], steps[step][1], steps)
+        return steps[step][0](["queries_renqueadas.json", params["frase"]], steps[step][1], steps)

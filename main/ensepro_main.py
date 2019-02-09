@@ -16,12 +16,15 @@ from main import main_params
 import ensepro
 from ensepro.cbc import atualizar_frase
 from ensepro.cbc import consultar
+from ensepro.constantes.constantes import LoggerConstantes
 
 if len(sys.argv) < 2:
     print("Parametro '-frase' ou '-arquivo-frases' deve ser passado. '-h' ou '--help' para ver outras opcoes.")
     exit(1)
 
 args = main_params.get_args()
+
+logger = LoggerConstantes.default_logger()
 
 frases_texto = []
 frases_analisadas = []
@@ -41,9 +44,10 @@ if args.arquivo_frases:
 if args.frase:
     frases_texto.append(args.frase)
 
-if not args.quiet:
+if not args.quiet and not args.somente_resposta:
     print("Analisando frase(s)... ")
 
+deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
 
 def analisar(frase_texto):
     frase_final = None
@@ -51,7 +55,7 @@ def analisar(frase_texto):
     frase_original = ensepro.analisar_frase(frase_texto)
     frases_analisadas.append(frase_original)
 
-    deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
+
 
     if deve_responder or args.final:
         frase_final = atualizar_frase(frase_original)
@@ -75,14 +79,19 @@ def analisar(frase_texto):
         main_utils.print_frase(ensepro, frase_final, args, file=file)
 
     if deve_responder:
-        main_utils.print_resposta(ensepro, resposta, file=file)
+        main_utils.print_resposta(ensepro, resposta, args.somente_resposta, file=file)
 
+if deve_responder:
+    from ensepro.servicos import word_embedding
+    word_embedding.init(args.word_embedding_vector, args.vec_binary, args.vec_glove)
 
 for frase_texto in frases_texto:
     try:
         analisar(frase_texto)
     except Exception as ex:
+        logger.exception(ex)
         print("\n\n{}".format(ex))
+        # raise ex
 
 if args.save_json:
     resultado_json = []
@@ -92,7 +101,7 @@ if args.save_json:
         }
         if args.verbose or args.resposta or args.final:
             json["frase_final"] = frases_reanalisadas[index]
-        if args.verbose or args.resposta:
+        if deve_responder:
             json["resposta"] = respostas[index]
 
         resultado_json.append(json)

@@ -84,8 +84,7 @@ def elastic_search_integrado_step(params, step, steps):
             params["termos"]["VERB"][::2]
         )
 
-    resultado = {}
-    resultado["result"] = merge_consultas([busca_parte1, busca_parte2, busca_parte3])
+    resultado = {"result": merge_consultas([busca_parte1, busca_parte2, busca_parte3])}
 
     if resultado.get("result", None):
         if steps.get(step, None):

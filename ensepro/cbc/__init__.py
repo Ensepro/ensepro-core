@@ -54,7 +54,7 @@ def __sub_comum_from_frase(frase: Frase, ignore):
     lista_subsantivos_comuns = []
     substantivos_comuns = [
         palavra for palavra in frase.termos_relevantes
-        if palavra.is_substantivo() or palavra.is_adjetivo()
+        if palavra.is_substantivo()# or palavra.is_adjetivo()
     ]
 
     for substantivo in substantivos_comuns:
@@ -171,9 +171,12 @@ def sub_query_and_update(check_result):
     logger.debug("resultado subquery: %s", json.dumps(resultado))
     props = []
 
-    best_result_score = resultado[0]["score"]
+    if not resultado["all_answers"]:
+        return None
 
-    for result in resultado:
+    best_result_score = resultado["all_answers"][0]["score"]
+
+    for result in resultado["all_answers"]:
         if result["score"] == best_result_score:
             triple = result["triples"][0]
             if triple["predicate"][0] == "*":
