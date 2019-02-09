@@ -31,6 +31,24 @@ def get_args():
                         dest="arquivo_frases",
                         help="Arquivo contento frases a serem analisadas.")
 
+    parser.add_argument("-vec-file",
+                        default=None,
+                        type=lambda x: arquivo_existente(parser, x),
+                        dest="word_embedding_vector",
+                        help="Word Embedding vector file.")
+
+    parser.add_argument("-bin-vec",
+                        dest="vec_binary",
+                        help="Indica que o arquivo vec é um arquivo binário.",
+                        action="store_true",
+                        default=False)
+
+    parser.add_argument("-glove-vec",
+                        dest="vec_glove",
+                        help="Indica que o arquivo vec é um arquivo glove.",
+                        action="store_true",
+                        default=False)
+
     parser.add_argument("-save-json",
                         dest="save_json",
                         help="Salvará os resultdos em um arquivo json.",
@@ -106,12 +124,18 @@ def get_args():
     parser.add_argument("-final",
                         dest="final",
                         help="Define que os resultados são referentes a frase final, depois de passar pelo modulo CBC e ser atualizada.",
-                        action="store_true",    
+                        action="store_true",
                         default=False)
 
     parser.add_argument("--sem-resposta",
                         dest="sem_resposta",
                         help="Não vai mostrar a resposta mesmo se o parâmetro '-resposta' for passado.",
+                        action="store_true",
+                        default=False)
+
+    parser.add_argument("-somente-resposta",
+                        dest="somente_resposta",
+                        help="Indica que somente vai retornar a(s) resposta(s) corretas/finais.",
                         action="store_true",
                         default=False)
 

@@ -2,7 +2,7 @@
     "frases": {
         "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
         "regex": {
-            "termo_relevante": ":(v-|adj|n|prop)",
+            "termo_relevante": ":(v-|n|prop)",
             "palavra_adjetivo": ":adj$",
             "palavra_substantivo": ":n$",
             "palavra_preposicao": ":prp$",
@@ -36,6 +36,9 @@
         ]
     },
     "cbc": {
+        "default_vec_file": "/root/models/fastText/fasttext-s50-m2-sg0.vec",
+        "default_vec_binary": false,
+        "default_vec_glove": false,
         "numero_respostas": 100,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
@@ -90,6 +93,9 @@
         "dbpedia_spotlight": {
             "endpoint": "http://172.17.0.1:2228",
             "confiancas": [
+                0.8,
+                0.7,
+                0.5,
                 0.3
             ],
             "servicos": {
@@ -124,6 +130,9 @@
                         "nivel": "DEBUG"
                     },
                     "normalizar_step": {
+                        "nivel": "DEBUG"
+                    },
+                    "selecting_answer_step": {
                         "nivel": "DEBUG"
                     }
                 }
@@ -192,6 +201,9 @@
                 },
                 "knowledge_graph_search_service": {
                     "nivel": "INFO"
+                },
+                "word_embedding": {
+                    "nivel": "DEBUG"
                 }
             },
             "sinonimos": {

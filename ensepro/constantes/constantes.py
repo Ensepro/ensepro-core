@@ -129,6 +129,7 @@ class LoggerConstantes:
     MODULO_NOMINALIZACAO = MODULO_CLN + ".nominalizacao"
     MODULO_CONFIGURACOES = "configuracoes"
     MODULO_LOCUCAO_VERBAL = MODULO_CLN + ".locucao_verbal"
+    MODULO_WORD_EMBEDDING = MODULO_SERVICOS + ".word_embedding"
     MODULO_ANSWER_GENERATOR = MODULO_CBC + ".answer_generator"
     MODULO_NORMALIZAR_STEP = MODULO_ANSWER_GENERATOR + ".normalizar_step"
     MODULO_PALAVRAS_SERVICE = MODULO_SERVICOS + ".palavras_service"
@@ -137,6 +138,7 @@ class LoggerConstantes:
     MODULO_ELASTIC_SEARCH_STEP = MODULO_ANSWER_GENERATOR + ".elastic_search_step"
     MODULO_COMPLEMENTOS_NOMINAIS = MODULO_CLN + ".complementos_nominais"
     MODULO_ANSWER_GENERATOR_STEP = MODULO_ANSWER_GENERATOR + ".answer_generator_step"
+    MODULO_SELECTING_ANSWER_STEP = MODULO_ANSWER_GENERATOR + ".selecting_answer_step"
     MODULO_DBPEDIA_SPOTLIGHT_SERVICE = MODULO_SERVICOS + ".dbpedia_spotlight_service"
     MODULO_KNOWLEDGE_GRAPH_SEARCH_SERVICE = MODULO_SERVICOS + ".knowledge_graph_search_service"
 
@@ -200,6 +202,12 @@ class DBPediaSpotlightConstantes:
     )
 
     CONFIANCAS = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".confiancas"
+
+
+class WordEmbedding:
+    DEFAULT_VEC_FILE = "cbc.default_vec_file"
+    DEFAULT_VEC_BINARY = "cbc.default_vec_binary"
+    DEFAULT_VEC_GLOVE = "cbc.default_vec_glove"
 
 
 class KnowledgeGraphSearchConstantes:

@@ -12,3 +12,4 @@ temp*
 **/elastic_search_step.json
 **/queries_renqueadas.json
 **/resultado_normalizado.json
+fasttext*
