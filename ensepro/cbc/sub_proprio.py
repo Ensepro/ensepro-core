@@ -176,7 +176,7 @@ def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
         if "<np-close>" not in atualPalavra.tags:
             continue
 
-        if index > 0 and not (palavras[index - 1].is_adjetivo() or palavras[index - 1].is_substantivo()):
+        if index > 0 and not (palavras[index].is_adjetivo() or palavras[index].is_substantivo()):
             continue
 
         proximaPalavra = palavras[index]

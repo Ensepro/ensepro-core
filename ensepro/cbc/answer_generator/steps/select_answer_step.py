@@ -255,6 +255,9 @@ def format_answers(best_answers):
             for key in tripla:
                 value_temp = helper._get_var_value(str(tripla[key]))
                 if value_temp:
-                    if tripla[key] < 0:
-                        value_temp = "*" + value_temp
-                    tripla[key] = value_temp
+                    try:
+                        if tripla[key] < 0:
+                            value_temp = "*" + value_temp
+                        tripla[key] = value_temp
+                    except:
+                        pass
