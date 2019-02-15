@@ -136,8 +136,9 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
         ))
 
         for triple in list_all_triples:
-            print(triple, end="")
+            print(str(triple).replace("*", ""), end="")
 
+        print()
         return
 
     import ensepro.configuracoes as configuracoes
