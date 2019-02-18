@@ -116,6 +116,8 @@ def __adjetivos_nao_tr(frase: Frase):
         if palavra.is_adjetivo():
             lista_adjs.append(remover_acentos(palavra.palavra_canonica).lower())
             lista_adjs.append(peso_adjetivo)
+            lista_adjs.append(remover_acentos(palavra.palavra_original).lower())
+            lista_adjs.append(peso_adjetivo)
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_adjs)
     return lista_adjs
@@ -220,9 +222,10 @@ def consultar(frase: Frase):
     substantivos_remover = ""
     if check_sub_query_result:
         sub_query_result = sub_query_and_update(check_sub_query_result)
-        sub_proprio_from_subquery = sub_query_result["resultado"]
-        substantivos_proprios_remover = sub_query_result["substantivos_proprios_remover"]
-        substantivos_remover = sub_query_result["substantivos_remover"]
+        if sub_query_result["resultado"]:
+            sub_proprio_from_subquery = sub_query_result["resultado"]
+            substantivos_proprios_remover = sub_query_result["substantivos_proprios_remover"]
+            substantivos_remover = sub_query_result["substantivos_remover"]
 
     logger.debug("subquery resultado final: %s", str(sub_query_result))
 
