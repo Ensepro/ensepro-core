@@ -50,9 +50,6 @@ def elastic_search_integrado_step(params, step, steps):
         logger.debug("Nenhum termo relevante indicado.")
         exit(1)
 
-    if "nao_relacionar" not in params:
-        termos_relecionados(params["frase"])
-
     busca_parte1 = []
     busca_parte2 = []
     busca_parte3 = []
@@ -94,28 +91,6 @@ def elastic_search_integrado_step(params, step, steps):
             return steps[step][0](resultado, steps[step][1], steps)
         else:
             return resultado
-
-
-def termos_relecionados(frase):
-    for tr in frase.termos_relevantes:
-        termo_principal = remover_acentos(tr.palavra_canonica).lower()
-
-        if tr.is_substantivo_proprio():
-            helper.substantivos_proprios_frase.append(termo_principal)
-
-        helper.termos_relacionados[termo_principal] = []
-        helper.sinonimos[termo_principal] = termo_principal
-        for key, sinonimos in tr.sinonimos.items():
-            for sinonimo in sinonimos:
-                sinonimo = remover_acentos(sinonimo.sinonimo).lower()
-                helper.termos_relacionados[termo_principal].append(sinonimo)
-                helper.sinonimos[sinonimo] = termo_principal
-
-        for sin in helper.termos_relacionados[termo_principal]:
-            sinonimos_temp = helper.termos_relacionados[termo_principal].copy()
-            sinonimos_temp.remove(sin)
-            sinonimos_temp.append(termo_principal)
-            helper.termos_relacionados[sin] = sinonimos_temp
 
 
 def merge_consultas(values):

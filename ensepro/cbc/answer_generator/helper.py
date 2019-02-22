@@ -13,7 +13,6 @@ map_resource_to_var = {}
 map_var_to_resource = {}
 map_resource_to_tr = {}
 termos_relevantes = []
-termos_relacionados = {}
 sinonimos = {}
 substantivos_proprios_frase = []
 peso_m1 = get_config(ConsultaConstantes.PESO_M1)
@@ -29,7 +28,6 @@ def init_helper(values):
     global map_var_to_resource
     global map_resource_to_tr
     global termos_relevantes
-    global termos_relacionados
     global sinonimos
     global substantivos_proprios_frase
 
@@ -37,7 +35,6 @@ def init_helper(values):
     map_var_to_resource = values.get("map_var_to_resource", map_var_to_resource)
     map_resource_to_tr = values.get("map_resource_to_tr", map_resource_to_tr)
     termos_relevantes = values.get("termos_relevantes", termos_relevantes)
-    termos_relacionados = values.get("termos_relacionados", termos_relacionados)
     sinonimos = values.get("sinonimos", sinonimos)
     substantivos_proprios_frase = values.get("substantivos_proprios_frase", substantivos_proprios_frase)
 
@@ -48,7 +45,6 @@ def save_helper():
     helper["map_var_to_resource"] = map_var_to_resource
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
-    # helper["termos_relacionados"] = termos_relacionados
     helper["sinonimos"] = sinonimos
     helper["substantivos_proprios_frase"] = substantivos_proprios_frase
 
@@ -86,6 +82,7 @@ def _get_var_name(resource, is_tr=False):
 def _get_var_value(var_name):
     return map_var_to_resource.get(var_name, None)
 
+
 def _termo_relevante_from_resource(resource):
     _resource = resource.lower()
 
@@ -93,6 +90,13 @@ def _termo_relevante_from_resource(resource):
 
     if tr:
         return _get_var_name(_resource)
+
+    for tr_peso in termos_relevantes:
+        tr = tr_peso[0]
+        if tr == _resource:
+            var_name = _get_var_name(_resource, True)
+            map_resource_to_tr[_resource] = tr_peso
+            return var_name
 
     for tr_peso in termos_relevantes:
         tr = tr_peso[0]

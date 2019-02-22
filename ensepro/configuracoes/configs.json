@@ -57,7 +57,7 @@
             "metricas": {
                 "m1": {
                     "peso": 1,
-                    "policy": "WORST_MATCH"
+                    "policy": "BEST_MATCH"
                 },
                 "m2": {
                     "peso": 1,
