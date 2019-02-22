@@ -216,7 +216,7 @@ def select_answer_value(params, step, steps, log=False):
     if log:
         print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
     answers = params["answers"]
-
+    logger.info("Resultado java: size=%s", len(answers))
     if not remover_variaveis:
         return answers
 

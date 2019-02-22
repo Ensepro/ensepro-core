@@ -124,10 +124,21 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
     if not resposta:
         print("Nenhuma resposta encontrada.\n", file=file)
         return
+
     if somente_resposta:
-        for _resposta in resposta["correct_answer"]:
-            for triple in _resposta["triples"]:
-                print(triple, end=" ")
+        list_all_triples = []
+        for answer in resposta["correct_answer"]:
+            for triple in answer["triples"]:
+                list_all_triples.append(triple)
+
+        list_all_triples = sorted(list_all_triples, key=lambda x: (
+            x["subject"], x["predicate"], x["object"]
+        ))
+
+        for triple in list_all_triples:
+            print(str(triple).replace("*", ""), end="")
+
+        print()
         return
 
     import ensepro.configuracoes as configuracoes
@@ -143,8 +154,7 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
             print("\nLista de triplas candidatas a resposta: ", file=file)
 
         for index, tripla in enumerate(_resposta):
-            to_print = []
-            to_print.append("{0:.3f}".format(tripla["score"]))
+            to_print = ["{0:.3f}".format(tripla["score"])]
             temp = []
             for value in tripla["triples"]:
                 for key in value:

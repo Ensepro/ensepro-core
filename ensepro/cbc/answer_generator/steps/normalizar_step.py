@@ -32,35 +32,6 @@ def normalizar_value_step(params, step, steps):
             objeto = remover_acentos(result_tripla["_source"]["objeto"]["conceito"])
 
             tripla = [sujeito, predicado, objeto]
-            sujeito_lower = sujeito.lower()
-            predicado_lower = predicado.lower()
-            objeto_lower = objeto.lower()
-
-            tripla_invalida = False
-
-            for termos_relacionados in helper.termos_relacionados.get(sujeito_lower, []):
-                if termos_relacionados in predicado_lower or termos_relacionados in objeto_lower:
-                    tripla_invalida = True
-                    break
-
-            if tripla_invalida:
-                continue
-
-            for termos_relacionados in helper.termos_relacionados.get(predicado_lower, []):
-                if termos_relacionados in sujeito_lower or termos_relacionados in objeto_lower:
-                    tripla_invalida = True
-                    break
-
-            if tripla_invalida:
-                continue
-
-            for termos_relacionados in helper.termos_relacionados.get(objeto_lower, []):
-                if termos_relacionados in predicado_lower or termos_relacionados in sujeito_lower:
-                    tripla_invalida = True
-                    break
-
-            if tripla_invalida:
-                continue
 
             tripla_ja_existe = triplas.get(tripla[0] + "-" + tripla[1] + "-" + tripla[2], None)
 

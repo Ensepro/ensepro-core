@@ -54,7 +54,7 @@ def __sub_comum_from_frase(frase: Frase, ignore):
     lista_subsantivos_comuns = []
     substantivos_comuns = [
         palavra for palavra in frase.termos_relevantes
-        if palavra.is_substantivo()# or palavra.is_adjetivo()
+        if palavra.is_substantivo()  # or palavra.is_adjetivo()
     ]
 
     for substantivo in substantivos_comuns:
@@ -116,6 +116,8 @@ def __adjetivos_nao_tr(frase: Frase):
         if palavra.is_adjetivo():
             lista_adjs.append(remover_acentos(palavra.palavra_canonica).lower())
             lista_adjs.append(peso_adjetivo)
+            lista_adjs.append(remover_acentos(palavra.palavra_original).lower())
+            lista_adjs.append(peso_adjetivo)
 
     logger.debug("Verbos(+sinonimos) da frase: %s", lista_adjs)
     return lista_adjs
@@ -124,42 +126,49 @@ def __adjetivos_nao_tr(frase: Frase):
 def check_sub_query(frase: Frase):
     logger.info("Verificando necessidade de subquery.")
     cns = frase.complementos_nominais
-    size = len(cns)
-    if size < 2:
-        logger.info("Subquery não necessária.")
+    trs = frase.termos_relevantes
+    size_cn = len(cns)
+    size_tr = len(trs)
+    if size_tr < 3:
+        logger.info("Subquery não necessária. [menos de 3 TRs]")
         return None
 
-    i = 0
-    while i < size and i + 1 < size:
-        cn1 = cns[i]
-        cn2 = cns[i + 1]
+    if (size_cn * 2) >= size_tr:
+        logger.info("Subquery não necessária. [(size_cn * 2) >= size_tr]")
 
-        if cn1.complemento == cn2.nome:
-            if cn2.complemento.is_substantivo_proprio():
-                logger.info("Subquery necessária.")
-                sub_query_values = {
-                    "cn1": cn1,
-                    "cn2": cn2
-                }
-                logger.debug("Subquery - valores encontrados - %s - %s", str(cn1), str(cn2))
-                return sub_query_values
+    for cn in cns:
+        if cn.nome.is_substantivo_proprio():
+            logger.info("Subquery necessária.")
+            sub_query_values = {
+                "prop": cn.nome,
+                "verb": cn.complemento
+            }
+            logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
+            return sub_query_values
 
-        i += 1
+        if cn.complemento.is_substantivo_proprio():
+            logger.info("Subquery necessária.")
+            sub_query_values = {
+                "prop": cn.complemento,
+                "verb": cn.nome
+            }
+            logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
+            return sub_query_values
 
     logger.info("Subquery não necessária.")
     return None
 
 
 def sub_query_and_update(check_result):
-    cn1 = remover_acentos(check_result["cn1"].complemento.palavra_canonica).lower()
-    cn2 = remover_acentos(check_result["cn2"].complemento.palavra_canonica).lower()
+    verb = remover_acentos(check_result["verb"].palavra_canonica).lower()
+    prop = remover_acentos(check_result["prop"].palavra_canonica).lower()
 
-    frase = Frase(palavras=[check_result["cn1"].nome, check_result["cn2"].complemento])
+    frase = Frase(palavras=[check_result["verb"], check_result["prop"]])
 
     params = {}
     params["termos"] = {}
-    params["termos"]["PROP"] = [cn2, peso_substantivo_proprio]
-    params["termos"]["VERB"] = [cn1, peso_substantivo_comum]
+    params["termos"]["PROP"] = [prop, peso_substantivo_proprio]
+    params["termos"]["VERB"] = [verb, peso_substantivo_comum]
     params["frase"] = frase
     params["nao_relacionar"] = True
 
@@ -195,8 +204,8 @@ def sub_query_and_update(check_result):
 
     return {
         "resultado": props,
-        "substantivos_remover": cn1,
-        "substantivos_proprios_remover": cn2
+        "substantivos_remover": verb,
+        "substantivos_proprios_remover": prop
     }
 
 
@@ -213,9 +222,10 @@ def consultar(frase: Frase):
     substantivos_remover = ""
     if check_sub_query_result:
         sub_query_result = sub_query_and_update(check_sub_query_result)
-        sub_proprio_from_subquery = sub_query_result["resultado"]
-        substantivos_proprios_remover = sub_query_result["substantivos_proprios_remover"]
-        substantivos_remover = sub_query_result["substantivos_remover"]
+        if sub_query_result["resultado"]:
+            sub_proprio_from_subquery = sub_query_result["resultado"]
+            substantivos_proprios_remover = sub_query_result["substantivos_proprios_remover"]
+            substantivos_remover = sub_query_result["substantivos_remover"]
 
     logger.debug("subquery resultado final: %s", str(sub_query_result))
 
