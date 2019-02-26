@@ -50,6 +50,8 @@ def elastic_search_integrado_step(params, step, steps):
         logger.debug("Nenhum termo relevante indicado.")
         exit(1)
 
+    vincular_sinonimos_com_tr(params["frase"])
+
     busca_parte1 = []
     busca_parte2 = []
     busca_parte3 = []
@@ -91,6 +93,20 @@ def elastic_search_integrado_step(params, step, steps):
             return steps[step][0](resultado, steps[step][1], steps)
         else:
             return resultado
+
+
+def vincular_sinonimos_com_tr(frase):
+    for tr in frase.termos_relevantes:
+        termo_principal = remover_acentos(tr.palavra_canonica).lower()
+
+        if tr.is_substantivo_proprio():
+            helper.substantivos_proprios_frase.append(termo_principal)
+
+        helper.sinonimos[termo_principal] = termo_principal
+        for key, sinonimos in tr.sinonimos.items():
+            for sinonimo in sinonimos:
+                sinonimo = remover_acentos(sinonimo.sinonimo).lower()
+                helper.sinonimos[sinonimo] = termo_principal
 
 
 def merge_consultas(values):
