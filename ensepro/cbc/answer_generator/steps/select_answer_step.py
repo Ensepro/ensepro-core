@@ -54,7 +54,16 @@ def get_triples_pattern(triples):
     for triple in triples:
         for value in triple.values():
             if value < 0:
-                triple_pattern += helper.map_resource_to_tr.get(helper.map_var_to_resource.get(str(value)))[0]
+                resource = helper.map_var_to_resource.get(str(value))
+                tr = helper.map_resource_to_tr.get(resource)[0]
+
+                if resource == tr:
+                    tr = "f" + tr
+                else:
+                    tr = "p" + tr
+
+                triple_pattern += tr
+
     logger.debug("Obtendo o padrão para tripla [%s] -> %s", triples, triple_pattern)
     return triple_pattern
 
