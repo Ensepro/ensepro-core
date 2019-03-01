@@ -180,6 +180,9 @@ def sub_query_and_update(check_result):
     logger.debug("resultado subquery: %s", json.dumps(resultado))
     props = []
 
+    if not resultado:
+        return None
+
     if not resultado["all_answers"]:
         return None
 
@@ -222,7 +225,7 @@ def consultar(frase: Frase):
     substantivos_remover = ""
     if check_sub_query_result:
         sub_query_result = sub_query_and_update(check_sub_query_result)
-        if sub_query_result["resultado"]:
+        if sub_query_result and sub_query_result["resultado"]:
             sub_proprio_from_subquery = sub_query_result["resultado"]
             substantivos_proprios_remover = sub_query_result["substantivos_proprios_remover"]
             substantivos_remover = sub_query_result["substantivos_remover"]

@@ -28,6 +28,12 @@ answer_doesnt_exist_respose = {}
 def answer_0_correct(values):
     # verifica se a resposta 0 possui todos os TRs PROPs
 
+    if not values["answers"]:
+        return {
+            "answer_found": False,
+            "continue": False,
+        }
+
     answer_0 = values["answers"][0]
     count_tr_prop_existe = len([tr for tr in helper.termos_relevantes if tr[2] == "PROP"])
     count_answer_0_prop = answer_0["details"]["nounsMatch"]
