@@ -209,10 +209,10 @@ def remove_substantivos_proprios_existentes_no_es(substantivos_proprios):
     for substantivo_proprio in substantivos_proprios:
         es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower().replace("_", " "))
         if not es_result:
-            logger.info("mantendo substantivo [%s] pois não existe no elasticsearch")
+            logger.info("mantendo substantivo [%s] pois não existe no elasticsearch", substantivo_proprio)
             lista_atualizada.append(substantivo_proprio)
         else:
-            logger.info("ignorando substantivo [%s] pois existe no elasticsearch")
+            logger.info("ignorando substantivo [%s] pois existe no elasticsearch", substantivo_proprio)
 
     return lista_atualizada
 
