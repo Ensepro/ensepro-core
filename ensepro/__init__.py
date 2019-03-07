@@ -156,22 +156,19 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
         for index, tripla in enumerate(_resposta):
             to_print = ["{0:.3f}".format(tripla["score"])]
             temp = []
-            for value in tripla["triples"]:
-                for key in value:
-                    temp.append(str(value[key]))
+            for triple in tripla["triples"]:
+                for value in triple:
+                    temp.append(value)
 
             to_print.append("[" + ' | '.join(temp) + "]")
             to_print.append("-")
             if not resultado_resumido:
                 temp = []
-                for value in tripla["details"]["metrics"]["scoreMetrics"]:
-                    temp.append("{0:.3f}".format(value))
+                score_detail = tripla["detail"]["score_detail"]
+                temp.append("{0:.3f}".format(score_detail["m1"]))
+                temp.append("{0:.3f}".format(score_detail["m2"]))
+                temp.append("{0:.3f}".format(score_detail["m3"]))
                 to_print.append("[" + ' '.join(temp) + "]")
-
-                temp = []
-                for value in tripla["details"]["metrics"]["metrics"]:
-                    temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
-                # to_print.append("metricsClass: [" + ','.join(temp) + "]")
 
             print(str(index), ' '.join(to_print), file=file)
 

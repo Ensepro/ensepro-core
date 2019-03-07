@@ -92,14 +92,14 @@ def _termo_relevante_from_resource(resource):
         return _get_var_name(_resource)
 
     for tr_peso in termos_relevantes:
-        tr = tr_peso[0]
+        tr = tr_peso["termo"]
         if tr == _resource:
             var_name = _get_var_name(_resource, True)
             map_resource_to_tr[_resource] = tr_peso
             return var_name
 
     for tr_peso in termos_relevantes:
-        tr = tr_peso[0]
+        tr = tr_peso["termo"]
         if tr in _resource:
             var_name = _get_var_name(_resource, True)
             map_resource_to_tr[_resource] = tr_peso

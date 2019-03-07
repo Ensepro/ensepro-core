@@ -35,8 +35,8 @@ def answer_0_correct(values):
         }
 
     answer_0 = values["answers"][0]
-    count_tr_prop_existe = len([tr for tr in helper.termos_relevantes if tr[2] == "PROP"])
-    count_answer_0_prop = answer_0["details"]["nounsMatch"]
+    count_tr_prop_existe = answer_0["detail"]["proper_nouns_count"]
+    count_answer_0_prop = answer_0["detail"]["proper_nouns_matched_count"]
 
     if count_answer_0_prop != count_tr_prop_existe:
         logger.info("Resposta 0 não possui todos os tr_prop")
@@ -58,10 +58,10 @@ def answer_0_correct(values):
 def get_triples_pattern(triples):
     triple_pattern = ""
     for triple in triples:
-        for value in triple.values():
+        for value in triple:
             if value < 0:
                 resource = helper.map_var_to_resource.get(str(value))
-                tr = helper.map_resource_to_tr.get(resource)[0]
+                tr = helper.map_resource_to_tr.get(resource)["termo"]
 
                 if resource == tr:
                     tr = "f" + tr
@@ -120,10 +120,10 @@ def answers_have_same_predicate(values):
         next_triple_predicates_pattern = ""
 
         for triple in current_answer["triples"]:
-            current_triple_predicates_pattern += str(triple["predicate"])
+            current_triple_predicates_pattern += str(triple[1])
 
         for triple in next_answer["triples"]:
-            next_triple_predicates_pattern += str(triple["predicate"])
+            next_triple_predicates_pattern += str(triple[1])
 
         if current_triple_predicates_pattern != next_triple_predicates_pattern:
             logger.info("Quebrou o padrão das triple, ignorando demais triplas")
@@ -145,9 +145,9 @@ def get_resource(element):
 
 
 def search_in_elasticsearch(triple):
-    subject = get_resource(triple["subject"])
-    predicate = get_resource(triple["predicate"])
-    object = get_resource(triple["object"])
+    subject = get_resource(triple[0])
+    predicate = get_resource(triple[1])
+    object = get_resource(triple[2])
 
     queryMultiTerm = QueryMultiTermSearch()
     queryMultiTerm.add_term_search(Field.FULL_MATCH_SUJEITO, subject)
@@ -169,7 +169,7 @@ def word_embedding(values):
     from ensepro.cln import nominalizacao
     answers = values["answers"]
 
-    verbo = [tr[0] for tr in helper.termos_relevantes if tr[2] == "VERB"]
+    verbo = [tr["termo"] for tr in helper.termos_relevantes if tr["classe"] == "VERB"]
 
     if not verbo:
         logger.info("Frase não possui verbo. Ignorando execução do word_embedding")
@@ -267,12 +267,13 @@ def select_answer_step(params, step, steps, log=False):
 def format_answers(best_answers):
     for value in best_answers:
         for tripla in value["triples"]:
-            for key in tripla:
-                value_temp = helper._get_var_value(str(tripla[key]))
+            for index in range(0, len(tripla)):
+                var = str(tripla[index])
+                value_temp = helper._get_var_value(var)
                 if value_temp:
                     try:
-                        if tripla[key] < 0:
+                        if tripla[index] < 0:
                             value_temp = "*" + value_temp
-                        tripla[key] = value_temp
+                        tripla[index] = value_temp
                     except:
                         pass
