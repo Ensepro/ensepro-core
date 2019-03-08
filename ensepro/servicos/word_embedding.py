@@ -1,48 +1,46 @@
-from gensim.scripts.glove2word2vec import glove2word2vec
-from gensim.test.utils import get_tmpfile
+# -*- coding: utf-8 -*-
+"""
+@project ensepro
+@since 08/03/2019
+@author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
-from ensepro import configuracoes
-from ensepro.constantes import LoggerConstantes
-from ensepro.constantes import WordEmbedding
+"""
+
+import requests
+from requests import HTTPError
+
+import ensepro.configuracoes as configuracoes
+from ensepro.constantes import LoggerConstantes, WordEmbeddingServidorConstantes as wb_consts
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_WORD_EMBEDDING)
 
-from gensim.models import KeyedVectors
-
-wv = None
-
-
-def init(vec: str, binary: bool, glove: bool):
-    global wv
-    if not vec:
-        vec = configuracoes.get_config(WordEmbedding.DEFAULT_VEC_FILE)
-        binary = configuracoes.get_config(WordEmbedding.DEFAULT_VEC_BINARY)
-        glove = configuracoes.get_config(WordEmbedding.DEFAULT_VEC_GLOVE)
-
-    logger.info("Carregando vetor de treinamento: %s - binary=%s, glove=%s", vec, binary, glove)
-    if not glove:
-        wv = KeyedVectors.load_word2vec_format(vec, binary=binary)
-        return
-
-    if glove:
-        tmp_file = get_tmpfile("glove2w2v_")
-        glove2word2vec(vec, tmp_file)
-        wv = KeyedVectors.load_word2vec_format(tmp_file)
-        return
+endpoint = configuracoes.get_config(wb_consts.ENDPOINT)
+porta = configuracoes.get_config(wb_consts.PORTA)
+servico_word_embedding = configuracoes.get_config(wb_consts.SERVICO_WORD_EMBEDDING)
 
 
 def word_embedding(palavra1, palavra2):
-    if not wv:
-        return 0
-    try:
-        result = wv.similarity(palavra1, palavra2)
-        logger.debug("Verificando similaridade entra palavras: %s - %s = %s", palavra1, palavra2, result)
-        return result
-    except Exception as ex:
-        logger.error("Erro ao verificar similaridade entre palavras [%s - %s]", palavra1, palavra2)
-        # logger.exception(ex)
-        return 0
+    logger.debug("Verificando similaridade entra palavras: %s - %s", palavra1, palavra2)
 
+    url = __build_url([endpoint, ":", porta, servico_word_embedding])
+    params = {"word1": palavra1, "word2": palavra2}
+    logger.debug("Executando request [url=%s, params=%s]", url, params)
+
+    response = requests.get(url, params=params)
+    logger.info("similaridade: [response=%s]", response)
+
+    if (response.ok):
+        logger.debug("Response as json: [response=%s]", response.json())
+        return response.json()["score"]
+
+    # Se respose não OK, throw exception
+    exception = HTTPError("Erro ao chamar o serviço WordEmbedding: [status_code={0}, reason={1}]" \
+                          "".format(response.status_code, response.reason), response=response)
+    raise exception
+
+
+def __build_url(values):
+    return ''.join(values)
 
 if __name__ == '__main__':
     import sys

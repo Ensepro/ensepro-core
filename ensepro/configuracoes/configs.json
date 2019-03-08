@@ -36,9 +36,6 @@
         ]
     },
     "cbc": {
-        "default_vec_file": "/root/models/fastText/fasttext-s50-m2-sg0.vec",
-        "default_vec_binary": false,
-        "default_vec_glove": false,
         "numero_respostas": 100,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
@@ -78,6 +75,13 @@
             "porta": "8099",
             "servicos": {
                 "analisar_frase": "/palavras/analisar/"
+            }
+        },
+        "word_embedding": {
+            "endpoint": "http://127.0.0.1",
+            "porta": "8098",
+            "servicos": {
+                "word_embedding": "/word-embedding/similarity"
             }
         },
         "elastic_search": {
