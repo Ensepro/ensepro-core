@@ -46,7 +46,7 @@ def save_helper():
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
     helper["sinonimos"] = sinonimos
-    helper["substantivos_proprios_frase"] = substantivos_proprios_frase
+    helper["substantivos_proprios_frase"] = list(set(substantivos_proprios_frase))
 
     helper["metricas"] = {}
     helper["metricas"]["m1"] = peso_m1

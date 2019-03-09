@@ -137,20 +137,11 @@ def check_sub_query(frase: Frase):
         logger.info("Subquery não necessária. [(size_cn * 2) >= size_tr]")
 
     for cn in cns:
-        if cn.nome.is_substantivo_proprio():
+        if cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio():
             logger.info("Subquery necessária.")
             sub_query_values = {
                 "prop": cn.nome,
                 "verb": cn.complemento
-            }
-            logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
-            return sub_query_values
-
-        if cn.complemento.is_substantivo_proprio():
-            logger.info("Subquery necessária.")
-            sub_query_values = {
-                "prop": cn.complemento,
-                "verb": cn.nome
             }
             logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
             return sub_query_values

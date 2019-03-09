@@ -132,7 +132,7 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
                 list_all_triples.append(triple)
 
         list_all_triples = sorted(list_all_triples, key=lambda x: (
-            x["subject"], x["predicate"], x["object"]
+            x[0], x[1], x[2]
         ))
 
         for triple in list_all_triples:
