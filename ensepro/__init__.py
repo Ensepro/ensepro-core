@@ -158,7 +158,7 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
             temp = []
             for triple in tripla["triples"]:
                 for value in triple:
-                    temp.append(value)
+                    temp.append(str(value))
 
             to_print.append("[" + ' | '.join(temp) + "]")
             to_print.append("-")
