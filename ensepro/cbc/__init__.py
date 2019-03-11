@@ -140,8 +140,8 @@ def check_sub_query(frase: Frase):
         if cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio():
             logger.info("Subquery necessária.")
             sub_query_values = {
-                "prop": cn.nome,
-                "verb": cn.complemento
+                "prop": cn.complemento,
+                "verb": cn.nome
             }
             logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
             return sub_query_values
