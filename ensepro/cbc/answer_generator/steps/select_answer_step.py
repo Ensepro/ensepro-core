@@ -38,7 +38,7 @@ def answer_0_correct(values):
     count_tr_prop_existe = answer_0["detail"]["proper_nouns_count"]
     count_answer_0_prop = answer_0["detail"]["proper_nouns_matched_count"]
 
-    if count_answer_0_prop != count_tr_prop_existe:
+    if count_answer_0_prop < count_tr_prop_existe:
         logger.info("Resposta 0 não possui todos os tr_prop")
         return {
             "answer_found": False,
@@ -192,21 +192,19 @@ def word_embedding(values):
             if original_triple["hits"]["total"] == 0:
                 continue
             original_triple = original_triple["hits"]["hits"][0]["_source"]
-            # sujeito = original_triple["sujeito"]
+
             predicado = original_triple["predicado"]
-            # objeto = original_triple["objeto"]
 
             words = get_words_from_conceito(predicado["conceito"])
             score = 0
             for word in words:
                 temp_score = wb.word_embedding(verbo, word)
+                if temp_score < 0.7:
+                    score = -1
+                    continue
                 if temp_score > score:
                     score = temp_score
-                # if word_embedding_result["related"]:
-                #     if word_embedding_result["related"][0]["weight"] > score:
-                #         score = word_embedding_result["related"][0]["weight"]
 
-            # print(sujeito["conceito"], predicado["conceito"], objeto["conceito"])
             if score > best_score:
                 best_answer.clear()
                 best_score = score
@@ -243,6 +241,8 @@ def select_answer_value(params, step, steps, log=False):
         values = method(values)
         logger.debug("resultado do metodo '%s': %s", method.__name__, values)
 
+        if not values:
+            continue
         if values["answer_found"]:
             answers = values["answers"]
         if not values["continue"]:

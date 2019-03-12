@@ -125,6 +125,10 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
         print("Nenhuma resposta encontrada.\n", file=file)
         return
 
+    if (not resposta["all_answers"] and not somente_resposta):
+        print("Nenhuma resposta encontrada.")
+        return
+
     if somente_resposta:
         list_all_triples = []
         for answer in resposta["correct_answer"]:
