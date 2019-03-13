@@ -91,6 +91,18 @@ class PalavrasServidorConstantes:
     )
 
 
+class WordEmbeddingServidorConstantes:
+    SERVIDOR_NOME = "word_embedding"
+
+    ENDPOINT = ConfiguracoesConstantes.ENDPOINT.format(servidor=SERVIDOR_NOME)
+    PORTA = ConfiguracoesConstantes.PORTA.format(servidor=SERVIDOR_NOME)
+
+    SERVICO_WORD_EMBEDDING = ConfiguracoesConstantes.SERVICO.format(
+        servidor=SERVIDOR_NOME,
+        nome_servico="word_embedding"
+    )
+
+
 class ElasticSearchConstantes:
     SERVIDOR_NOME = "elastic_search"
 
@@ -202,12 +214,6 @@ class DBPediaSpotlightConstantes:
     )
 
     CONFIANCAS = ConfiguracoesConstantes.SERVIDOR.format(servidor=SERVIDOR_NOME) + ".confiancas"
-
-
-class WordEmbedding:
-    DEFAULT_VEC_FILE = "cbc.default_vec_file"
-    DEFAULT_VEC_BINARY = "cbc.default_vec_binary"
-    DEFAULT_VEC_GLOVE = "cbc.default_vec_glove"
 
 
 class KnowledgeGraphSearchConstantes:

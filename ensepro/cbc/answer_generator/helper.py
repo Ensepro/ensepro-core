@@ -46,7 +46,7 @@ def save_helper():
     helper["map_resource_to_tr"] = map_resource_to_tr
     helper["termos_relevantes"] = termos_relevantes
     helper["sinonimos"] = sinonimos
-    helper["substantivos_proprios_frase"] = substantivos_proprios_frase
+    helper["substantivos_proprios_frase"] = list(set(substantivos_proprios_frase))
 
     helper["metricas"] = {}
     helper["metricas"]["m1"] = peso_m1
@@ -92,14 +92,14 @@ def _termo_relevante_from_resource(resource):
         return _get_var_name(_resource)
 
     for tr_peso in termos_relevantes:
-        tr = tr_peso[0]
+        tr = tr_peso["termo"]
         if tr == _resource:
             var_name = _get_var_name(_resource, True)
             map_resource_to_tr[_resource] = tr_peso
             return var_name
 
     for tr_peso in termos_relevantes:
-        tr = tr_peso[0]
+        tr = tr_peso["termo"]
         if tr in _resource:
             var_name = _get_var_name(_resource, True)
             map_resource_to_tr[_resource] = tr_peso

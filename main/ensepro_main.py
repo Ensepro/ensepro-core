@@ -49,13 +49,12 @@ if not args.quiet and not args.somente_resposta:
 
 deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
 
+
 def analisar(frase_texto):
     frase_final = None
     resposta = []
     frase_original = ensepro.analisar_frase(frase_texto)
     frases_analisadas.append(frase_original)
-
-
 
     if deve_responder or args.final:
         frase_final = atualizar_frase(frase_original)
@@ -81,9 +80,6 @@ def analisar(frase_texto):
     if deve_responder:
         main_utils.print_resposta(ensepro, resposta, args.somente_resposta, file=file)
 
-if deve_responder:
-    from ensepro.servicos import word_embedding
-    word_embedding.init(args.word_embedding_vector, args.vec_binary, args.vec_glove)
 
 for frase_texto in frases_texto:
     try:

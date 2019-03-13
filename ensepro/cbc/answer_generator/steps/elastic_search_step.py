@@ -147,7 +147,7 @@ def obtem_termos_relevantes(params, key):
         else:
             i += 2
 
-        helper.termos_relevantes.append((termo, peso, key))
+        helper.termos_relevantes.append({"termo": termo, "peso": peso, "classe": key})
 
 
 def is_int(s):

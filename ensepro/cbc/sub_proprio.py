@@ -25,6 +25,7 @@ def busca_no_elasticsearch(substantivo_proprio):
 
 
 def remove_small_words(substantivo_proprio):
+    # TODO mover para utilizar `stop words` do nltk
     count = 0
     i = 0
     final = ""
@@ -53,7 +54,7 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
     base_request = SpotlightRequest(frase_original)
     spotlight_requests = base_request.replicate_for_confidences(confiancas)
     responses = dbpedia_spotlight_service.spotlight_list(spotlight_requests, lang=lang)
-
+    frase_temp = frase_original
     for response in responses:
         temp_substantivo_proprio = substantivo_proprio
         response_json = response.as_json
@@ -86,17 +87,27 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     es_result = busca_no_elasticsearch(entity_name_lower)
                     if es_result:
                         temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
-                        frase_original = frase_original.replace(entity["@surfaceForm"],
+                        frase_temp = frase_temp.replace(entity["@surfaceForm"],
                                                                 "<split> " + entity_name + " <split>")
+
+                        if not temp_substantivo_proprio:
+                            return {
+                                "nova_frase": frase_temp
+                            }
                     else:
                         logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
-                elif surface in temp_substantivo_proprio:
+                elif temp_substantivo_proprio != substantivo_proprio and surface in temp_substantivo_proprio:
                     es_result = busca_no_elasticsearch(entity_name_lower.replace("_", " "))
                     if es_result:
                         temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
-                        frase_original = frase_original.replace(entity["@surfaceForm"],
+                        frase_temp = frase_temp.replace(entity["@surfaceForm"],
                                                                 "<split> " + entity_name + " <split>")
+
+                        if not temp_substantivo_proprio:
+                            return {
+                                "nova_frase": frase_temp
+                            }
                     else:
                         logger.debug("Substantivo próprio ingorado. (Não existe no elasticsearch) ")
 
@@ -203,18 +214,18 @@ def remover_adjuntos_adnominais_justapostos(ensepro_result: Frase):
     return resultado
 
 
-def remove_substantivos_proprios_existentes_no_es(substantivos_proprios):
-    lista_atualizada = []
-    logger.info("verificando existencia dos substantivos proprios no elasticsearch")
-    for substantivo_proprio in substantivos_proprios:
-        es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower().replace("_", " "))
-        if not es_result:
-            logger.info("mantendo substantivo [%s] pois não existe no elasticsearch")
-            lista_atualizada.append(substantivo_proprio)
-        else:
-            logger.info("ignorando substantivo [%s] pois existe no elasticsearch")
-
-    return lista_atualizada
+# def remove_substantivos_proprios_existentes_no_es(substantivos_proprios):
+#     lista_atualizada = []
+#     logger.info("verificando existencia dos substantivos proprios no elasticsearch")
+#     for substantivo_proprio in substantivos_proprios:
+#         es_result = busca_no_elasticsearch(substantivo_proprio.palavra_canonica.lower().replace("_", " "))
+#         if not es_result:
+#             logger.info("mantendo substantivo [%s] pois não existe no elasticsearch", substantivo_proprio)
+#             lista_atualizada.append(substantivo_proprio)
+#         else:
+#             logger.info("ignorando substantivo [%s] pois existe no elasticsearch", substantivo_proprio)
+#
+#     return lista_atualizada
 
 
 def atualizar_frase(frase: Frase):
@@ -223,7 +234,7 @@ def atualizar_frase(frase: Frase):
     if not substantivos_proprios:
         return frase
 
-    substantivos_proprios = remove_substantivos_proprios_existentes_no_es(substantivos_proprios)
+    # substantivos_proprios = remove_substantivos_proprios_existentes_no_es(substantivos_proprios)
 
     frase_original = frase.frase_original
     atualizou = False
