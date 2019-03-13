@@ -137,16 +137,7 @@ def check_sub_query(frase: Frase):
         logger.info("Subquery não necessária. [(size_cn * 2) >= size_tr]")
 
     for cn in cns:
-        if cn.nome.is_substantivo_proprio():
-            logger.info("Subquery necessária.")
-            sub_query_values = {
-                "prop": cn.nome,
-                "verb": cn.complemento
-            }
-            logger.debug("Subquery - valores encontrados - %s - %s", str(cn.nome), str(cn.complemento))
-            return sub_query_values
-
-        if cn.complemento.is_substantivo_proprio():
+        if cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio():
             logger.info("Subquery necessária.")
             sub_query_values = {
                 "prop": cn.complemento,
@@ -191,16 +182,16 @@ def sub_query_and_update(check_result):
     for result in resultado["all_answers"]:
         if result["score"] == best_result_score:
             triple = result["triples"][0]
-            if triple["predicate"][0] == "*":
-                if triple["subject"][0] == "*":
-                    props.append(triple["object"])
+            if triple[1][0] == "*":
+                if triple[0][0] == "*":
+                    props.append(triple[2])
                     props.append(peso_substantivo_proprio)
-                    logger.info("Subquery result: %s", triple["object"])
+                    logger.info("Subquery result: %s", triple[2])
                     continue
-                if triple["object"][0] == "*":
-                    props.append(triple["subject"])
+                if triple[2][0] == "*":
+                    props.append(triple[0])
                     props.append(peso_substantivo_proprio)
-                    logger.info("Subquery result: %s", triple["subject"])
+                    logger.info("Subquery result: %s", triple[0])
                     continue
         logger.info("Subquery não obteve resultados")
         break

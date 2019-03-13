@@ -6,12 +6,13 @@
 
 """
 
-from ensepro import save_as_json, LoggerConstantes
 import json
+
+import ensepro.configuracoes as configuracoes
+from ensepro import ConsultaConstantes, LoggerConstantes
+from ensepro import save_as_json
 from ensepro.cbc.answer_generator import helper
 from ensepro.utils.string_utils import remover_acentos
-from ensepro import ConsultaConstantes, LoggerConstantes
-import ensepro.configuracoes as configuracoes
 
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_NORMALIZAR_STEP)
 nivel = configuracoes.get_config(ConsultaConstantes.NIVEL_ANSWER_GENERATOR)
@@ -44,11 +45,17 @@ def normalizar_value_step(params, step, steps):
     helper_values = helper.save_helper()
 
     if steps.get(step, None):
+        if (not helper.substantivos_proprios_frase):
+            return {
+                "correct_answer": [],
+                "all_answers": []
+            }
+
         values = {}
         values["values"] = result_normalized
         values["helper"] = helper_values
         values["nivel_combination"] = get_nivel(params["frase"], nivel)
-        values["frase"] = params["frase"]
+        values["frase"] = params["frase"].frase_original
         save_as_json(values, "resultado_normalizado.json")
         return steps[step][0](values, steps[step][1], steps)
     else:

@@ -125,6 +125,10 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
         print("Nenhuma resposta encontrada.\n", file=file)
         return
 
+    if (not resposta["all_answers"] and not somente_resposta):
+        print("Nenhuma resposta encontrada.")
+        return
+
     if somente_resposta:
         list_all_triples = []
         for answer in resposta["correct_answer"]:
@@ -132,7 +136,7 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
                 list_all_triples.append(triple)
 
         list_all_triples = sorted(list_all_triples, key=lambda x: (
-            x["subject"], x["predicate"], x["object"]
+            x[0], x[1], x[2]
         ))
 
         for triple in list_all_triples:
@@ -156,22 +160,19 @@ def resposta_pretty_print(resposta, somente_resposta=False, file=None):
         for index, tripla in enumerate(_resposta):
             to_print = ["{0:.3f}".format(tripla["score"])]
             temp = []
-            for value in tripla["triples"]:
-                for key in value:
-                    temp.append(str(value[key]))
+            for triple in tripla["triples"]:
+                for value in triple:
+                    temp.append(str(value))
 
             to_print.append("[" + ' | '.join(temp) + "]")
             to_print.append("-")
             if not resultado_resumido:
                 temp = []
-                for value in tripla["details"]["metrics"]["scoreMetrics"]:
-                    temp.append("{0:.3f}".format(value))
+                score_detail = tripla["detail"]["score_detail"]
+                temp.append("{0:.3f}".format(score_detail["m1"]))
+                temp.append("{0:.3f}".format(score_detail["m2"]))
+                temp.append("{0:.3f}".format(score_detail["m3"]))
                 to_print.append("[" + ' '.join(temp) + "]")
-
-                temp = []
-                for value in tripla["details"]["metrics"]["metrics"]:
-                    temp.append("{0:.2f}".format(value["weight"]) + "(" + value["policy"] + ")")
-                # to_print.append("metricsClass: [" + ','.join(temp) + "]")
 
             print(str(index), ' '.join(to_print), file=file)
 
