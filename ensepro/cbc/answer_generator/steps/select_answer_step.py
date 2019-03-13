@@ -45,7 +45,7 @@ def answer_0_correct(values):
             "continue": False,
         }
 
-    answer_0_pattern = get_triples_pattern(answer_0["triples"])
+    answer_0_pattern = get_triples_pattern(answer_0)
 
     return {
         "answer_found": False,
@@ -55,22 +55,28 @@ def answer_0_correct(values):
     }
 
 
-def get_triples_pattern(triples):
+def get_triples_pattern(answer, reversed=False):
     triple_pattern = ""
+    triples = answer["triples"] if not reversed else answer["triples"][::-1]
     for triple in triples:
         for value in triple:
-            if value < 0:
-                resource = helper.map_var_to_resource.get(str(value))
-                tr = helper.map_resource_to_tr.get(resource)["termo"]
+            resource = helper.map_var_to_resource.get(str(value))
+            tr = helper.map_resource_to_tr.get(resource)
+            if not tr:
+                continue
 
-                if resource == tr:
-                    tr = "f" + tr
-                else:
-                    tr = "p" + tr
+            tr = tr["termo"]
+            if tr not in answer["detail"]["keywords"]:
+                continue
 
-                triple_pattern += tr
+            if resource == tr:
+                tr = "f" + tr
+            else:
+                tr = "p" + tr
 
-    logger.debug("Obtendo o padrão para tripla [%s] -> %s", triples, triple_pattern)
+            triple_pattern += tr
+
+    logger.debug("Obtendo o padrão para tripla [%s] -> %s", answer["triples"], triple_pattern)
     return triple_pattern
 
 
@@ -84,13 +90,13 @@ def get_answers_with_same_pattern(values):
     answer_0 = values["answers"][0]
 
     for answer in values["answers"]:
-        answer_pattern = get_triples_pattern(answer["triples"])
+        answer_pattern = get_triples_pattern(answer)
         if answer_pattern == answer_0_pattern:
             answer_match_answer_0_pattern.append(answer)
             continue
 
         if len(answer["triples"]) > 1:
-            answer_pattern = get_triples_pattern(answer["triples"][::-1])
+            answer_pattern = get_triples_pattern(answer, reversed=True)
             if answer_pattern == answer_0_pattern:
                 continue
 
