@@ -88,7 +88,7 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     if es_result:
                         temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
                         frase_temp = frase_temp.replace(entity["@surfaceForm"],
-                                                                "<split> " + entity_name + " <split>")
+                                                                "<split> " + entity_name.capitalize() + " <split>")
 
                         if not temp_substantivo_proprio:
                             return {
@@ -102,7 +102,7 @@ def encontrar_entidade_spotlight(frase_original, substantivo_proprio, lang):
                     if es_result:
                         temp_substantivo_proprio = temp_substantivo_proprio.replace(surface, "")
                         frase_temp = frase_temp.replace(entity["@surfaceForm"],
-                                                                "<split> " + entity_name + " <split>")
+                                                                "<split> " + entity_name.capitalize() + " <split>")
 
                         if not temp_substantivo_proprio:
                             return {
