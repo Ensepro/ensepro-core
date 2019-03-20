@@ -133,8 +133,8 @@ def check_sub_query(frase: Frase):
         logger.info("Subquery não necessária. [menos de 3 TRs]")
         return None
 
-    if (size_cn * 2) >= size_tr:
-        logger.info("Subquery não necessária. [(size_cn * 2) >= size_tr]")
+    if size_cn == 1 and size_tr == 2:
+        logger.info("Subquery não necessária. [size_cn == 1 and size_tr == 2]")
         return None
 
     for cn in cns:
