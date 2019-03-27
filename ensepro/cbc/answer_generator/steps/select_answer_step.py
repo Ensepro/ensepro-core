@@ -17,137 +17,15 @@ from ensepro.cbc.fields import Field
 from ensepro.elasticsearch import connection
 from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
 from ensepro.elasticsearch.searches import execute_search
+from ensepro.servicos import word_embedding as wb
 
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
-
+treshold_predicate = configuracoes.get_config(ConsultaConstantes.TRESHOLD_PREDICATE)
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_SELECTING_ANSWER_STEP)
 
-answer_doesnt_exist_respose = {}
 
-
-def answer_0_correct(values):
-    # verifica se a resposta 0 possui todos os TRs PROPs
-
-    if not values["answers"]:
-        return {
-            "answer_found": False,
-            "continue": False,
-        }
-
-    answer_0 = values["answers"][0]
-    count_tr_prop_existe = answer_0["detail"]["proper_nouns_count"]
-    count_answer_0_prop = answer_0["detail"]["proper_nouns_matched_count"]
-
-    if count_answer_0_prop < count_tr_prop_existe:
-        logger.info("Resposta 0 não possui todos os tr_prop")
-        return {
-            "answer_found": False,
-            "continue": False,
-        }
-
-    answer_0_pattern = get_triples_pattern(answer_0)
-
-    return {
-        "answer_found": False,
-        "continue": True,
-        "answers": values["answers"],
-        "answer_0_pattern": answer_0_pattern
-    }
-
-
-def get_triples_pattern(answer, reversed=False):
-    triple_pattern = ""
-    triples = answer["triples"] if not reversed else answer["triples"][::-1]
-    for triple in triples:
-        for value in triple:
-            resource = helper.map_var_to_resource.get(str(value))
-            tr = helper.map_resource_to_tr.get(resource)
-            if not tr:
-                continue
-
-            tr = tr["termo"]
-            if tr not in answer["detail"]["keywords"]:
-                continue
-
-            if resource == tr:
-                tr = "f" + tr
-            else:
-                tr = "p" + tr
-
-            triple_pattern += tr
-
-    logger.debug("Obtendo o padrão para tripla [%s] -> %s", answer["triples"], triple_pattern)
-    return triple_pattern
-
-
-def get_answers_with_same_pattern(values):
-    # obtem as demais triplas com o mesmo padrao
-    # se existir somente 1 padrao igual, retorna que encontrou a resposta
-
-    answer_0_pattern = values["answer_0_pattern"]
-    answer_match_answer_0_pattern = []
-
-    answer_0 = values["answers"][0]
-
-    for answer in values["answers"]:
-        answer_pattern = get_triples_pattern(answer)
-        if answer_pattern == answer_0_pattern:
-            answer_match_answer_0_pattern.append(answer)
-            continue
-
-        if len(answer["triples"]) > 1:
-            answer_pattern = get_triples_pattern(answer, reversed=True)
-            if answer_pattern == answer_0_pattern:
-                continue
-
-        if answer_0["score"] != answer["score"]:
-            break
-
-    answer_found = len(answer_match_answer_0_pattern) == 1
-    should_continue = not answer_found
-
-    return {
-        "answer_found": answer_found,
-        "continue": should_continue,
-        "answers": answer_match_answer_0_pattern
-    }
-
-
-def answers_have_same_predicate(values):
-    # verifica se todas os PREDICATE são iguais, se sim, todas são respostas
-    answers = values["answers"]
-    for index, current_answer in enumerate(answers):
-        if index == len(answers) - 1:
-            # the last time cannot be done because its doing index+1
-            break
-        next_answer = answers[index + 1]
-
-        current_triple_predicates_pattern = ""
-        next_triple_predicates_pattern = ""
-
-        for triple in current_answer["triples"]:
-            current_triple_predicates_pattern += str(triple[1])
-
-        for triple in next_answer["triples"]:
-            next_triple_predicates_pattern += str(triple[1])
-
-        if current_triple_predicates_pattern != next_triple_predicates_pattern:
-            logger.info("Quebrou o padrão das triple, ignorando demais triplas")
-            return {
-                "answer_found": False,
-                "continue": True,
-                "answers": values["answers"]
-            }
-
-    return {
-        "answer_found": True,
-        "continue": False,
-        "answers": values["answers"]
-    }
-
-
-def get_resource(element):
-    return helper.map_var_to_resource.get(str(element))
+def get_resource(resource_id):
+    return helper.map_var_to_resource.get(str(resource_id))
 
 
 def search_in_elasticsearch(triple):
@@ -224,35 +102,214 @@ def word_embedding(values):
     }
 
 
-methods = [answer_0_correct, get_answers_with_same_pattern, answers_have_same_predicate, word_embedding]
+def answer_pattern_for(answer, reversed_=False):
+    """
+    TODO
+    for each fullmatch, add 1.1
+    for each partialmatch add 0.5
+    """
+
+    triple_pattern = ""
+    score = 0.0
+    triples = answer["triples"] if not reversed_ else answer["triples"][::-1]
+    for triple in triples:
+        for value in triple:
+            resource = get_resource(value)
+            tr = helper.map_resource_to_tr.get(resource)
+            if not tr:
+                continue
+
+            tr = tr["termo"]
+            if tr not in answer["detail"]["keywords"]:
+                continue
+
+            if resource == tr:
+                tr = "f" + tr
+                score += 1.1
+            else:
+                tr = "p" + tr
+                score += 0.5
+
+            triple_pattern += tr
+
+    logger.debug("Obtendo o padrão para tripla [%s] -> %s (%s)", answer["triples"], triple_pattern, str(score))
+    return {
+        "pattern": triple_pattern,
+        "score": score
+    }
+
+
+def create_id_for_each_answer(previous_result):
+    for index in range(len(previous_result["answers"])):
+        previous_result["answers"][index]["id"] = index
+
+    return previous_result
+
+
+def find_best_pattern(previous_result):
+    answers = previous_result["answers"]
+    best_score = previous_result["answers"][0]["score"]
+
+    best_answers_patterns = [answer_pattern_for(answer) for answer in answers if answer["score"] == best_score]
+
+    best_answers_patterns.sort(key=lambda x: x["score"])
+
+    previous_result["best_pattern"] = best_answers_patterns[0]
+
+    return previous_result
+
+
+def keep_only_best_pattern(previous_result):
+    answers = previous_result["answers"]
+
+    answer_same_pattern = []
+
+    for answer in answers:
+        answer_pattern = answer_pattern_for(answer)
+
+        if answer_pattern["pattern"] == previous_result["best_pattern"]["pattern"]:
+            answer_same_pattern.append(answer)
+            continue
+
+        if len(answer["triples"]) > 1:
+            answer_pattern = answer_pattern_for(answer, reversed_=True)
+            if answer_pattern["pattern"] == previous_result["best_pattern"]:
+                continue
+
+        if answers[0]["score"] != answer["score"]:
+            break
+
+    previous_result["answers"] = answer_same_pattern
+
+    return previous_result
+
+
+def bind_existend_values(answer):
+    position = ["all_subject_binded", "all_predicate_binded", "all_object_binded"]
+    bind_control = {
+        position[0]: True,
+        position[1]: True,
+        position[2]: True,
+        "binds": {}
+    }
+
+    for triple in answer["triples"]:
+        for index in range(len(triple)):
+            resource_id = str(triple[index])
+            resource = get_resource(resource_id)
+            tr = helper.map_resource_to_tr.get(resource)
+
+            if not tr:
+                bind_control[position[index]] = False
+                continue
+
+            bind_control["binds"][resource_id] = tr["termo"]
+
+    return bind_control
+
+
+def create_binding_control(previous_result):
+    for index in range(len(previous_result["answers"])):
+        bind_control = bind_existend_values(previous_result["answers"][index])
+        previous_result["answers"][index]["bind_control"] = bind_control
+
+    return previous_result
+
+
+def inject_tr_from_phrase_type(previous_result):
+    # TODO needs to be done
+
+    return previous_result
+
+
+def bind_pred_to_tr(previous_result):
+    trs = [tr.palavra_original for tr in helper.frase.termos_relevantes]
+    for index in range(len(previous_result["answers"])):
+        answer = previous_result["answers"][index]
+        best_bind = {
+            "score": 0,
+            "resource_id": None
+        }
+        for triple in answer["triples"]:
+            if str(triple[1]) in answer["bind_control"]["binds"]:
+                continue
+
+            original_triple = search_in_elasticsearch(triple)
+            if original_triple["hits"]["total"] == 0:
+                continue
+            original_triple = original_triple["hits"]["hits"][0]["_source"]
+            predicado = original_triple["predicado"]
+
+            words = get_words_from_conceito(predicado["conceito"])
+
+            for tr in trs:
+                for word in words:
+                    score = wb.word_embedding(tr, word)
+                    if score > best_bind["score"]:
+                        best_bind = {
+                            "score": score,
+                            "resource_id": triple[1],
+                            "tr": tr
+                        }
+
+        if best_bind["score"] > treshold_predicate:
+            previous_result["answers"][index]["bind_control"]["binds"][str(best_bind["resource_id"])] = best_bind["tr"]
+
+    return previous_result
+
+
+def validate_binded_tr(previous_result):
+    # TODO needs to be done
+
+    return previous_result
+
+
+def validate_binded_pred(previous_result):
+    # TODO needs to be done
+    return previous_result
+
+
+def validate_binded_sub_obj(previous_result):
+    # TODO needs to be done
+    return previous_result
+
+
+methods = [
+    create_id_for_each_answer,
+    find_best_pattern,
+    keep_only_best_pattern,
+    create_binding_control,
+    inject_tr_from_phrase_type,
+    bind_pred_to_tr,
+    validate_binded_pred,
+    validate_binded_sub_obj
+]
 
 
 def select_answer_value(params, step, steps, log=False):
     logger.info("Iniciando selecting_answer_step")
     helper.init_helper(params["helper"])
-    frase = params["frase"]
+    helper.frase = params["frase"]
 
-    if log:
-        print("\n\nExibindo os 20 melhores resultados para:", helper.termos_relevantes)
-    answers = params["answers"]
-    logger.info("Resultado java: size=%s", len(answers))
+    logger.info("Resultado java: size=%s", len(params["answers"]))
     if not remover_variaveis:
-        return answers
+        return params["answers"]
 
-    values = {"answers": answers}
-    all_answers = list(answers)
+    values = {"answers": params["answers"]}
+    all_answers = list(params["answers"])
     answers = []
     for method in methods:
         logger.debug("Executando metodo: %s", method.__name__)
         values = method(values)
         logger.debug("resultado do metodo '%s': %s", method.__name__, values)
-
-        if not values:
-            continue
-        if values["answer_found"]:
-            answers = values["answers"]
-        if not values["continue"]:
-            break
+        print(method.__name__)
+        print(values)
+        # if not values:
+        #     continue
+        # if values["answer_found"]:
+        #     answers = values["answers"]
+        # if not values["continue"]:
+        #     break
 
     format_answers(answers)
     format_answers(all_answers)
@@ -266,7 +323,7 @@ def select_answer_value(params, step, steps, log=False):
 def select_answer_step(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
-    value["frase"] = params[1]
+    value["frase"] = params[2]
     return select_answer_value(value, step, steps, log=log)
 
 

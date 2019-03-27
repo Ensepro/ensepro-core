@@ -246,9 +246,12 @@ class ConsultaConstantes:
     PESO_M2 = PESOS_METRICAS + ".m2"
     PESO_M3 = PESOS_METRICAS + ".m3"
 
+    LCA_SIZE = ConfiguracoesConstantes.CBC + ".lca_size"
     NUMERO_RESPOSTAS = ConfiguracoesConstantes.CBC + ".numero_respostas"
     RESULTADO_RESUMIDO = ConfiguracoesConstantes.CBC + ".resultado_resumido"
+    TERMOS_TIPO_FRASE = ConfiguracoesConstantes.CBC + ".termos_tipos_frases"
     REMOVER_RESULTADOS = ConfiguracoesConstantes.CBC + ".remover_variaveis"
+    TRESHOLD_PREDICATE = ConfiguracoesConstantes.CBC + ".treshold_predicate"
     NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".nivel_answer_generator"
     THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".threads_answer_generator"
     PATH_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".path_answer_generator"

@@ -36,10 +36,12 @@
         ]
     },
     "cbc": {
-        "numero_respostas": 100,
+        "lca_size": 100,
+        "numero_respostas": 50,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
         "threads_answer_generator": 20,
+        "treshold_predicate": 0.7,
         "pesos": {
             "classes": {
                 "substantivo_proprio": 10,
@@ -65,6 +67,19 @@
                     "policy": "BEST_MATCH"
                 }
             }
+        },
+        "termos_tipos_frases": {
+            "alguem": [],
+            "algum": [],
+            "eh_um": [],
+            "em_que": [],
+            "quanto": [],
+            "quando": [],
+            "o_que": [],
+            "qual": [],
+            "quem": [],
+            "onde": [],
+            "consulta": []
         },
         "resultado_resumido": false,
         "remover_variaveis": true
