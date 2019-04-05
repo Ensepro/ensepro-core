@@ -39,8 +39,27 @@ def word_embedding(palavra1, palavra2):
     raise exception
 
 
+def n_word_embedding(palavras1, palavras2):
+    logger.debug("Verificando similaridade entra palavras: %s - %s", palavras1, palavras2)
+
+    url = __build_url([endpoint, ":", porta, '/word-embedding/n-similarity/'])
+    params = {"word1": palavras1, "word2": palavras2}
+    logger.debug("Executando request [url=%s, params=%s]", url, params)
+
+    response = requests.get(url, params=params)
+    if (response.ok):
+        logger.debug("Response as json: [response=%s]", response.json())
+        return response.json()["score"]
+
+    # Se respose não OK, throw exception
+    exception = HTTPError("Erro ao chamar o serviço WordEmbedding: [status_code={0}, reason={1}]" \
+                          "".format(response.status_code, response.reason), response=response)
+    raise exception
+
+
 def __build_url(values):
     return ''.join(values)
+
 
 if __name__ == '__main__':
     import sys

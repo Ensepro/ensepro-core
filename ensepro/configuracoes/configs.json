@@ -41,15 +41,16 @@
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
         "threads_answer_generator": 20,
-        "treshold_predicate": 0.7,
+        "threshold_predicate": 0.7,
+        "threshold_answer": 0.7,
         "pesos": {
             "classes": {
                 "substantivo_proprio": 10,
                 "substantivo_comum": 2,
-                "substantivo_comum_sinonimo": 2,
+                "substantivo_comum_sinonimo": 1.8,
                 "verbo": 3,
                 "verbo_sinonimo": 1,
-                "verbo_nomilizado": 3,
+                "verbo_nomilizado": 2.8,
                 "verbo_nomilizado_sinonimo": 1,
                 "adjetivo": 1
             },

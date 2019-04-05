@@ -13,9 +13,11 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_ES_CONSULTA)
 
 def execute_search(client: Elasticsearch, query: Query):
     logger.debug("Executando consulta simples: %s", query)
-    return client.search(
+    result =  client.search(
             index=query.index_name,
             doc_type=query.index_type,
             body=query.query,
             request_timeout=30
     )
+    logger.info("Elasticsearch query result size=%s", result["hits"]["total"])
+    return result
