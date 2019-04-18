@@ -252,7 +252,7 @@ class ConsultaConstantes:
     RESULTADO_RESUMIDO = ConfiguracoesConstantes.CBC + ".resultado_resumido"
     THERMOS_TIPO_FRASE = ConfiguracoesConstantes.CBC + ".termos_tipos_frases"
     REMOVER_RESULTADOS = ConfiguracoesConstantes.CBC + ".remover_variaveis"
-    TRESHOLD_PREDICATE = ConfiguracoesConstantes.CBC + ".threshold_predicate"
+    THRESHOLD_PREDICATE = ConfiguracoesConstantes.CBC + ".threshold_predicate"
     NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".nivel_answer_generator"
     THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".threads_answer_generator"
     PATH_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".path_answer_generator"

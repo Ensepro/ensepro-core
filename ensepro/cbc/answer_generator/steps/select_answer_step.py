@@ -21,6 +21,9 @@ from ensepro.servicos import word_embedding as wb
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
 threshold_predicate = configuracoes.get_config(ConsultaConstantes.THRESHOLD_PREDICATE)
 threshold_answer = configuracoes.get_config(ConsultaConstantes.THRESHOLD_ANSWER)
+
+numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
+
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_SELECTING_ANSWER_STEP)
 
 
@@ -136,11 +139,7 @@ def keep_only_best_pattern(previous_result):
 
 
 def bind_existend_values(answer):
-    position = ["all_subject_binded", "all_predicate_binded", "all_object_binded"]
     bind_control = {
-        position[0]: True,
-        position[1]: True,
-        position[2]: True,
         "binds": {}
     }
 
@@ -151,7 +150,6 @@ def bind_existend_values(answer):
             tr = helper.map_resource_to_tr.get(resource)
 
             if not tr:
-                bind_control[position[index]] = False
                 continue
 
             bind_control["binds"][tr["termo"]] = resource_id
@@ -244,7 +242,7 @@ def validate_binded_values(previous_result):
             for word in words_obj:
                 resources += format_concept(word.lower())
 
-        score = wb.n_word_embedding(palavras1=trs, palavras2=resources)
+        score = wb.n_word_embedding(palavras1=list(set(trs)), palavras2=list(set(resources)))
 
         logger.info("n_similarity = [%s] + [%s] = %s", str(trs), str(resources), str(score))
         if score >= threshold_answer:
@@ -287,7 +285,7 @@ def select_answer_value(params, step, steps, log=False):
 
     return {
         "correct_answer": values["answers"],
-        "all_answers": all_answers
+        "all_answers": all_answers[:numero_respostas]
     }
 
 

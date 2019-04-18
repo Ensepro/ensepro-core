@@ -36,11 +36,11 @@
         ]
     },
     "cbc": {
-        "lca_size": 100,
-        "numero_respostas": 50,
+        "lca_size": -1,
+        "numero_respostas": 10,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
-        "threads_answer_generator": 20,
+        "threads_answer_generator": 8,
         "threshold_predicate": 0.7,
         "threshold_answer": 0.7,
         "pesos": {
@@ -140,20 +140,20 @@
                 "nivel": "ERROR"
             },
             "cbc": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "answer_generator": {
-                    "nivel": "DEBUG",
+                    "nivel": "INFO",
                     "elastic_search_step": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     },
                     "answer_generator_step": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     },
                     "normalizar_step": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     },
                     "selecting_answer_step": {
-                        "nivel": "DEBUG"
+                        "nivel": "INFO"
                     }
                 }
             },
@@ -161,13 +161,13 @@
                 "nivel": "ERROR"
             },
             "consulta": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "localizar_referencia_substantivo_proprio": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "elasticsearch": {
-                "nivel": "DEBUG",
+                "nivel": "INFO",
                 "connection": {
                     "nivel": "INFO"
                 },
@@ -181,10 +181,10 @@
                     }
                 },
                 "queries": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 },
                 "searches": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "cln": {
@@ -223,7 +223,7 @@
                     "nivel": "INFO"
                 },
                 "word_embedding": {
-                    "nivel": "DEBUG"
+                    "nivel": "INFO"
                 }
             },
             "sinonimos": {
