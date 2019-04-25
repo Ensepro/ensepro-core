@@ -19,5 +19,5 @@ def execute_search(client: Elasticsearch, query: Query):
             body=query.query,
             request_timeout=30
     )
-    logger.info("Elasticsearch query result size=%s", result["hits"]["total"])
+    logger.debug("Elasticsearch query result size=%s", result["hits"]["total"])
     return result

@@ -36,7 +36,7 @@
         ]
     },
     "cbc": {
-        "lca_size": -1,
+        "lca_size": 10000,
         "numero_respostas": 10,
         "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
         "nivel_answer_generator": 2,
