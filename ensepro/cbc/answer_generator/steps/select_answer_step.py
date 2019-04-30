@@ -13,6 +13,8 @@ import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes, LoggerConstantes
 from ensepro.cbc.answer_generator import helper
 from ensepro.cbc.fields import Field
+from ensepro.classes.classe_gramatical import ClasseGramatical
+from ensepro.cln import nominalizacao
 from ensepro.elasticsearch import connection
 from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
 from ensepro.elasticsearch.searches import execute_search
@@ -152,6 +154,9 @@ def bind_existend_values(answer):
             if not tr:
                 continue
 
+            if tr["termo"] in bind_control["binds"]:
+                continue
+
             bind_control["binds"][tr["termo"]] = resource_id
 
     return bind_control
@@ -172,6 +177,13 @@ def inject_tr_from_phrase_type(previous_result):
 
 
 def bind_tr_to_resources(previous_result):
+    verbs = [tr.palavra_original for tr in helper.frase.termos_relevantes if
+             tr.classe_gramatical == ClasseGramatical.VERBO]
+
+    map_nominalizacoes = {}
+    for verb in verbs:
+        map_nominalizacoes[verb] = nominalizacao.get(verb)
+
     trs = [tr.palavra_original for tr in helper.frase.termos_relevantes]
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
@@ -192,17 +204,30 @@ def bind_tr_to_resources(previous_result):
             words = get_words_from_conceito(predicado["conceito"])
 
             for tr in trs:
-                for word in words:
-                    score = wb.word_embedding(tr, word)
-                    if score > best_bind["score"]:
-                        best_bind = {
-                            "score": score,
-                            "resource_id": triple[1],
-                            "tr": tr
-                        }
+                test_with = [tr]
+                nominalizacoes = map_nominalizacoes.get(tr, [])
+                if nominalizacoes:
+                    test_with += nominalizacoes
+
+                for val in test_with:
+                    for word in words:
+                        score = wb.word_embedding(val, word)
+                        if score > best_bind["score"]:
+                            best_bind = {
+                                "score": score,
+                                "resource_id": triple[1],
+                                "tr": tr
+                            }
 
         if best_bind["score"] > threshold_predicate:
-            previous_result["answers"][index]["bind_control"]["binds"][str(best_bind["resource_id"])] = best_bind["tr"]
+            previous_result["answers"][index]["bind_control"]["binds"][str(best_bind["tr"])] = best_bind
+
+    previous_result["answers"].sort(key=lambda x: len(x["bind_control"]["binds"]), reverse=True)
+
+    most_matches = len(previous_result["answers"][0]["bind_control"]["binds"])
+
+    previous_result["answers"] = [answer for answer in previous_result["answers"]
+                                  if len(answer["bind_control"]["binds"]) == most_matches]
 
     return previous_result
 
@@ -229,9 +254,9 @@ def validate_binded_values(previous_result):
             predicado = original_triple["predicado"]
             object = original_triple["objeto"]
 
-            words_sub = get_words_from_conceito(subject["conceito"])
-            words_pred = get_words_from_conceito(predicado["conceito"])
-            words_obj = get_words_from_conceito(object["conceito"])
+            words_sub = get_words_from_conceito(subject["conceito"].replace("\\n", ""))
+            words_pred = get_words_from_conceito(predicado["conceito"].replace("\\n", ""))
+            words_obj = get_words_from_conceito(object["conceito"].replace("\\n", ""))
 
             for word in words_sub:
                 resources += format_concept(word.lower())

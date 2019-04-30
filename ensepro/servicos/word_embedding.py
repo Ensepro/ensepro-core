@@ -17,12 +17,17 @@ logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_WORD_EMBEDDING)
 endpoint = configuracoes.get_config(wb_consts.ENDPOINT)
 porta = configuracoes.get_config(wb_consts.PORTA)
 servico_word_embedding = configuracoes.get_config(wb_consts.SERVICO_WORD_EMBEDDING)
+simple_cache = {}
 
 
 def word_embedding(palavra1, palavra2):
     if not palavra1 or not palavra2:
         return 0
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavra1, palavra2)
+
+    if string_key(palavra1, palavra2) in simple_cache:
+        logger.debug("[CHACHE] word_embedding em cache")
+        return simple_cache.get(string_key(palavra1, palavra2))
 
     url = __build_url([endpoint, ":", porta, servico_word_embedding])
     params = {"word1": palavra1, "word2": palavra2}
@@ -33,7 +38,9 @@ def word_embedding(palavra1, palavra2):
 
     if response.ok:
         logger.debug("Response as json: [response=%s]", response.json())
-        return response.json()["score"]
+        out = response.json()["score"]
+        simple_cache[string_key(palavra1, palavra2)] = out
+        return out
 
     # Se respose não OK, throw exception
     exception = HTTPError("Erro ao chamar o serviço WordEmbedding: [status_code={0}, reason={1}]" \
@@ -47,6 +54,10 @@ def n_word_embedding(palavras1, palavras2):
 
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavras1, palavras2)
 
+    if list_key(palavras2, palavras2) in simple_cache:
+        logger.debug("[CHACHE] n_word_embedding em cache")
+        return simple_cache.get(list_key(palavras1, palavras2))
+
     url = __build_url([endpoint, ":", porta, '/word-embedding/n-similarity/'])
     params = {"word1": palavras1, "word2": palavras2}
     logger.debug("Executando request [url=%s, params=%s]", url, params)
@@ -54,7 +65,9 @@ def n_word_embedding(palavras1, palavras2):
     response = requests.get(url, params=params)
     if response.ok:
         logger.debug("Response as json: [response=%s]", response.json())
-        return response.json()["score"]
+        out = response.json()["score"]
+        simple_cache[list_key(palavras1, palavras2)] = out
+        return out
 
     # Se respose não OK, throw exception
     exception = HTTPError(
@@ -67,7 +80,22 @@ def n_word_embedding(palavras1, palavras2):
         response=response)
 
     logger.exception(exception)
+    simple_cache[list_key(palavras1, palavras2)] = 0
     return 0
+
+
+def string_key(palavra1, palavra2):
+    return "{}+{}".format(palavra1, palavra2)
+
+
+def list_key(palavras1: list, palavras2: list):
+    palavras1.sort()
+    palavras2.sort()
+
+    key1 = '-'.join(palavras1)
+    key2 = '-'.join(palavras2)
+
+    return '+'.join([key1, key2])
 
 
 def __build_url(values):
