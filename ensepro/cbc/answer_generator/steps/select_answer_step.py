@@ -142,7 +142,8 @@ def keep_only_best_pattern(previous_result):
 
 def bind_existend_values(answer):
     bind_control = {
-        "binds": {}
+        "binds": {},
+        "best_bind": {"score": 0}
     }
 
     for triple in answer["triples"]:
@@ -184,16 +185,16 @@ def bind_tr_to_resources(previous_result):
     for verb in verbs:
         map_nominalizacoes[verb] = nominalizacao.get(verb)
 
-    trs = [tr.palavra_original for tr in helper.frase.termos_relevantes]
+    trs = [tr for tr in helper.frase.termos_relevantes]
+
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
-        best_bind = {
-            "score": 0,
-            "resource_id": None
-        }
+        predicates_looked = []
         for triple in answer["triples"]:
-            if str(triple[1]) in answer["bind_control"]["binds"]:
+            if str(triple[1]) in predicates_looked:
                 continue
+
+            predicates_looked.append(str(triple[1]))
 
             original_triple = search_in_elasticsearch(triple)
             if original_triple["hits"]["total"] == 0:
@@ -204,30 +205,34 @@ def bind_tr_to_resources(previous_result):
             words = get_words_from_conceito(predicado["conceito"])
 
             for tr in trs:
-                test_with = [tr]
-                nominalizacoes = map_nominalizacoes.get(tr, [])
+                test_with = [tr.palavra_original]
+                nominalizacoes = map_nominalizacoes.get(tr.palavra_canonica, [])
                 if nominalizacoes:
                     test_with += nominalizacoes
 
                 for val in test_with:
                     for word in words:
                         score = wb.word_embedding(val, word)
-                        if score > best_bind["score"]:
-                            best_bind = {
+                        if score > answer["bind_control"]["best_bind"]["score"]:
+                            answer["bind_control"]["best_bind"] = {
                                 "score": score,
                                 "resource_id": triple[1],
                                 "tr": tr
                             }
 
-        if best_bind["score"] > threshold_predicate:
-            previous_result["answers"][index]["bind_control"]["binds"][str(best_bind["tr"])] = best_bind
+        best_bind = answer["bind_control"]["best_bind"]
+        if best_bind["score"] >= threshold_predicate:
+            previous_result["answers"][index]["bind_control"]["binds"][str(best_bind["tr"])] = best_bind["resource_id"]
 
-    previous_result["answers"].sort(key=lambda x: len(x["bind_control"]["binds"]), reverse=True)
+    previous_result["answers"].sort(key=lambda x: x["bind_control"]["best_bind"]["score"], reverse=True)
 
-    most_matches = len(previous_result["answers"][0]["bind_control"]["binds"])
+    matches_count = len(previous_result["answers"][0]["bind_control"]["binds"])
+    score = previous_result["answers"][0]["bind_control"]["best_bind"]["score"]
 
     previous_result["answers"] = [answer for answer in previous_result["answers"]
-                                  if len(answer["bind_control"]["binds"]) == most_matches]
+                                  if len(answer["bind_control"]["binds"]) == matches_count
+                                  and answer["bind_control"]["best_bind"]["score"] == score
+                                  and answer["bind_control"]["best_bind"]["score"] >= threshold_predicate]
 
     return previous_result
 
