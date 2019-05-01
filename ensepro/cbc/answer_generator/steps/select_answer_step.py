@@ -193,6 +193,8 @@ def bind_tr_to_resources(previous_result):
         for triple in answer["triples"]:
             if str(triple[1]) in predicates_looked:
                 continue
+            if get_resource(triple[1]) in answer["bind_control"]["binds"]:
+                continue
 
             predicates_looked.append(str(triple[1]))
 

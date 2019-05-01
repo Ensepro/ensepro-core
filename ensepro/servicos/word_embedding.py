@@ -29,11 +29,11 @@ def word_embedding(palavra1, palavra2):
         logger.debug("[CHACHE] word_embedding em cache")
         return simple_cache.get(string_key(palavra1, palavra2))
 
-    url = __build_url([endpoint, ":", porta, servico_word_embedding])
-    params = {"word1": palavra1, "word2": palavra2}
-    logger.debug("Executando request [url=%s, params=%s]", url, params)
+    url = __build_url([endpoint, ":", porta, servico_word_embedding, "/"])
+    data = {"word1": palavra1, "word2": palavra2}
+    logger.debug("Executando request [url=%s, data=%s]", url, data)
 
-    response = requests.get(url, params=params)
+    response = requests.post(url, json=data)
     # logger.info("similaridade: [response=%s]", response)
 
     if response.ok:
@@ -59,10 +59,10 @@ def n_word_embedding(palavras1, palavras2):
         return simple_cache.get(list_key(palavras1, palavras2))
 
     url = __build_url([endpoint, ":", porta, '/word-embedding/n-similarity/'])
-    params = {"word1": palavras1, "word2": palavras2}
-    logger.debug("Executando request [url=%s, params=%s]", url, params)
+    data = {"words1": palavras1, "words2": palavras2}
+    logger.debug("Executando request [url=%s, data=%s]", url, data)
 
-    response = requests.get(url, params=params)
+    response = requests.post(url, json=data)
     if response.ok:
         logger.debug("Response as json: [response=%s]", response.json())
         out = response.json()["score"]
