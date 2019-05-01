@@ -178,6 +178,21 @@ def inject_tr_from_phrase_type(previous_result):
 
 
 def bind_tr_to_resources(previous_result):
+    answers = previous_result["answers"]
+    if not answers:
+        return previous_result
+
+    predicate = answers[0]["triples"][0][1]  # predicate of the first triple of the first answer
+    all_same_predicate = True
+    for answer in answers:
+        for triple in answer["triples"]:
+            all_same_predicate = triple[1] == predicate and all_same_predicate
+            if not all_same_predicate:
+                break
+
+    if all_same_predicate:
+        return previous_result
+
     verbs = [tr.palavra_original for tr in helper.frase.termos_relevantes if
              tr.classe_gramatical == ClasseGramatical.VERBO]
 
@@ -185,15 +200,13 @@ def bind_tr_to_resources(previous_result):
     for verb in verbs:
         map_nominalizacoes[verb] = nominalizacao.get(verb)
 
-    trs = [tr for tr in helper.frase.termos_relevantes]
+    trs = [tr["termo"] for tr in helper.termos_relevantes]
 
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
         predicates_looked = []
         for triple in answer["triples"]:
             if str(triple[1]) in predicates_looked:
-                continue
-            if get_resource(triple[1]) in answer["bind_control"]["binds"]:
                 continue
 
             predicates_looked.append(str(triple[1]))
@@ -207,12 +220,14 @@ def bind_tr_to_resources(previous_result):
             words = get_words_from_conceito(predicado["conceito"])
 
             for tr in trs:
-                test_with = [tr.palavra_original]
-                nominalizacoes = map_nominalizacoes.get(tr.palavra_canonica, [])
+                if tr in answer["bind_control"]["binds"]:
+                    continue
+                trs_with_nominalization = [tr]
+                nominalizacoes = map_nominalizacoes.get(tr, [])
                 if nominalizacoes:
-                    test_with += nominalizacoes
+                    trs_with_nominalization += nominalizacoes
 
-                for val in test_with:
+                for val in trs_with_nominalization:
                     for word in words:
                         score = wb.word_embedding(val, word)
                         if score > answer["bind_control"]["best_bind"]["score"]:

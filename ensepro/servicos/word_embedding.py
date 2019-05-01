@@ -23,6 +23,8 @@ simple_cache = {}
 def word_embedding(palavra1, palavra2):
     if not palavra1 or not palavra2:
         return 0
+    palavra1 = palavra1.lower()
+    palavra2 = palavra2.lower()
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavra1, palavra2)
 
     if string_key(palavra1, palavra2) in simple_cache:
@@ -51,7 +53,8 @@ def word_embedding(palavra1, palavra2):
 def n_word_embedding(palavras1, palavras2):
     if not palavras1 or not palavras2:
         return 0
-
+    palavras1 = [palavra.lower() for palavra in palavras1]
+    palavras2 = [palavra.lower() for palavra in palavras2]
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavras1, palavras2)
 
     if list_key(palavras2, palavras2) in simple_cache:
