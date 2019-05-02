@@ -28,8 +28,9 @@ def word_embedding(palavra1, palavra2):
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavra1, palavra2)
 
     if string_key(palavra1, palavra2) in simple_cache:
-        logger.debug("[CHACHE] word_embedding em cache")
-        return simple_cache.get(string_key(palavra1, palavra2))
+        out = simple_cache.get(string_key(palavra1, palavra2))
+        logger.debug("[CACHE] word_embedding em cache. [%s]", out)
+        return out
 
     url = __build_url([endpoint, ":", porta, servico_word_embedding, "/"])
     data = {"word1": palavra1, "word2": palavra2}
@@ -58,8 +59,9 @@ def n_word_embedding(palavras1, palavras2):
     logger.debug("Verificando similaridade entra palavras: %s - %s", palavras1, palavras2)
 
     if list_key(palavras2, palavras2) in simple_cache:
-        logger.debug("[CHACHE] n_word_embedding em cache")
-        return simple_cache.get(list_key(palavras1, palavras2))
+        out = simple_cache.get(list_key(palavras1, palavras2))
+        logger.debug("[CACHE] n_word_embedding em cache. [%s]", out)
+        return out
 
     url = __build_url([endpoint, ":", porta, '/word-embedding/n-similarity/'])
     data = {"words1": palavras1, "words2": palavras2}
