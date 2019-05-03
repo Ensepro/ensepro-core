@@ -193,14 +193,14 @@ def bind_tr_to_resources(previous_result):
     if all_same_predicate:
         return previous_result
 
-    verbs = [tr.palavra_original for tr in helper.frase.termos_relevantes if
+    verbs = [tr.palavra_canonica for tr in helper.frase.termos_relevantes if
              tr.classe_gramatical == ClasseGramatical.VERBO]
 
     map_nominalizacoes = {}
     for verb in verbs:
         map_nominalizacoes[verb] = nominalizacao.get(verb)
 
-    trs = [tr["termo"] for tr in helper.termos_relevantes]
+    trs = [tr.palavra_canonica.lower() for tr in helper.frase.termos_relevantes]
 
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
@@ -222,20 +222,25 @@ def bind_tr_to_resources(previous_result):
             for tr in trs:
                 if tr in answer["bind_control"]["binds"]:
                     continue
-                trs_with_nominalization = [tr]
+                tr_with_nominalization = [tr]
                 nominalizacoes = map_nominalizacoes.get(tr, [])
                 if nominalizacoes:
-                    trs_with_nominalization += nominalizacoes
+                    tr_with_nominalization += nominalizacoes
 
-                for val in trs_with_nominalization:
+                for val in tr_with_nominalization:
+                    score = 0
                     for word in words:
-                        score = wb.word_embedding(val, word)
-                        if score > answer["bind_control"]["best_bind"]["score"]:
-                            answer["bind_control"]["best_bind"] = {
-                                "score": score,
-                                "resource_id": triple[1],
-                                "tr": tr
-                            }
+                        score += wb.word_embedding(val, word)
+
+                    avg_score = score / len(words)
+                    logger.debug("Similaridade média: [%s + %s] = %s", val, predicado["conceito"], avg_score)
+
+                    if avg_score > answer["bind_control"]["best_bind"]["score"]:
+                        answer["bind_control"]["best_bind"] = {
+                            "score": avg_score,
+                            "resource_id": triple[1],
+                            "tr": tr
+                        }
 
         best_bind = answer["bind_control"]["best_bind"]
         if best_bind["score"] >= threshold_predicate:
