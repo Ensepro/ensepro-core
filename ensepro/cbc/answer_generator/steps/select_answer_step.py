@@ -19,6 +19,7 @@ from ensepro.elasticsearch import connection
 from ensepro.elasticsearch.queries import Query, QueryMultiTermSearch
 from ensepro.elasticsearch.searches import execute_search
 from ensepro.servicos import word_embedding as wb
+from ensepro.utils.string_utils import remover_acentos
 
 remover_variaveis = configuracoes.get_config(ConsultaConstantes.REMOVER_RESULTADOS)
 threshold_predicate = configuracoes.get_config(ConsultaConstantes.THRESHOLD_PREDICATE)
@@ -38,12 +39,12 @@ def search_in_elasticsearch(triple):
     predicate = get_resource(triple[1])
     object = get_resource(triple[2])
 
-    queryMultiTerm = QueryMultiTermSearch()
-    queryMultiTerm.add_term_search(Field.FULL_MATCH_SUJEITO, subject)
-    queryMultiTerm.add_term_search(Field.FULL_MATCH_PREDICADO, predicate)
-    queryMultiTerm.add_term_search(Field.FULL_MATCH_OBJETO, object)
+    query_multi_term = QueryMultiTermSearch()
+    query_multi_term.add_term_search(Field.FULL_MATCH_SUJEITO, subject)
+    query_multi_term.add_term_search(Field.FULL_MATCH_PREDICADO, predicate)
+    query_multi_term.add_term_search(Field.FULL_MATCH_OBJETO, object)
 
-    query = Query.build_default(queryMultiTerm.build_query())
+    query = Query.build_default(query_multi_term.build_query())
 
     return execute_search(connection(), query)
 
@@ -97,9 +98,20 @@ def create_id_for_each_answer(previous_result):
     return previous_result
 
 
+def validate_answer_0(previous_result):
+    answer_0 = previous_result["answers"][0]
+
+    if answer_0["detail"]["proper_nouns_count"] > answer_0["detail"]["proper_nouns_matched_count"]:
+        previous_result["answers"] = []
+        previous_result["continue"] = False
+
+    return previous_result
+
+
 def find_best_pattern(previous_result):
     answers = previous_result["answers"]
     if not answers:
+        previous_result["continue"] = False
         return previous_result
 
     best_score = previous_result["answers"][0]["score"]
@@ -116,6 +128,7 @@ def find_best_pattern(previous_result):
 def keep_only_best_pattern(previous_result):
     answers = previous_result["answers"]
     if not answers:
+        previous_result["continue"] = False
         return previous_result
 
     answer_same_pattern = []
@@ -180,6 +193,10 @@ def inject_tr_from_phrase_type(previous_result):
 def bind_tr_to_resources(previous_result):
     answers = previous_result["answers"]
     if not answers:
+        previous_result["continue"] = False
+        return previous_result
+
+    if len(answers) == 1:
         return previous_result
 
     predicate = answers[0]["triples"][0][1]  # predicate of the first triple of the first answer
@@ -200,7 +217,7 @@ def bind_tr_to_resources(previous_result):
     for verb in verbs:
         map_nominalizacoes[verb] = nominalizacao.get(verb)
 
-    trs = [tr.palavra_canonica.lower() for tr in helper.frase.termos_relevantes]
+    trs = [remover_acentos(tr.palavra_canonica.lower()) for tr in helper.frase.termos_relevantes]
 
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
@@ -306,6 +323,7 @@ def validate_binded_values(previous_result):
 
 methods = [
     create_id_for_each_answer,
+    validate_answer_0,
     find_best_pattern,
     keep_only_best_pattern,
     create_binding_control,
@@ -324,13 +342,15 @@ def select_answer_value(params, step, steps, log=False):
     if not remover_variaveis:
         return params["answers"]
 
-    values = {"answers": params["answers"]}
+    values = {"answers": params["answers"], "continue": True}
     all_answers = list(params["answers"])
 
     for method in methods:
         logger.debug("Executando metodo: %s", method.__name__)
         values = method(values)
         logger.debug("resultado do metodo '%s': %s", method.__name__, values)
+        if not values["continue"]:
+            break
 
     format_answers(values["answers"])
     format_answers(all_answers)
