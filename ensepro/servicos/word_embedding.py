@@ -70,7 +70,7 @@ def n_word_embedding(palavras1, palavras2):
     response = requests.post(url, json=data)
     if response.ok:
         logger.debug("Response as json: [response=%s]", response.json())
-        out = response.json()["score"]
+        out = response.json()
         simple_cache[list_key(palavras1, palavras2)] = out
         return out
 
@@ -86,7 +86,11 @@ def n_word_embedding(palavras1, palavras2):
 
     logger.exception(exception)
     simple_cache[list_key(palavras1, palavras2)] = 0
-    return 0
+    return {
+        "score": 0,
+        "words1": palavras1,
+        "words2": palavras2
+    }
 
 
 def string_key(palavra1, palavra2):

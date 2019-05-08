@@ -193,10 +193,12 @@ def inject_tr_from_phrase_type(previous_result):
 def bind_tr_to_resources(previous_result):
     answers = previous_result["answers"]
     if not answers:
+        logger.debug("Sem respostas, retornando.")
         previous_result["continue"] = False
         return previous_result
 
     if len(answers) == 1:
+        logger.debug("Somente 1 resposta, ignorando esta etapa")
         return previous_result
 
     predicate = answers[0]["triples"][0][1]  # predicate of the first triple of the first answer
@@ -298,9 +300,9 @@ def validate_binded_values(previous_result):
             predicado = original_triple["predicado"]
             object = original_triple["objeto"]
 
-            words_sub = get_words_from_conceito(subject["conceito"].replace("\\n", ""))
-            words_pred = get_words_from_conceito(predicado["conceito"].replace("\\n", ""))
-            words_obj = get_words_from_conceito(object["conceito"].replace("\\n", ""))
+            words_sub = get_words_from_conceito(subject["conceito"])
+            words_pred = get_words_from_conceito(predicado["conceito"])
+            words_obj = get_words_from_conceito(object["conceito"])
 
             for word in words_sub:
                 resources += format_concept(word.lower())
@@ -311,9 +313,10 @@ def validate_binded_values(previous_result):
             for word in words_obj:
                 resources += format_concept(word.lower())
 
-        score = wb.n_word_embedding(palavras1=list(set(trs)), palavras2=list(set(resources)))
+        result = wb.n_word_embedding(palavras1=list(set(trs)), palavras2=list(set(resources)))
+        score = result["score"]
 
-        logger.info("n_similarity = [%s] + [%s] = %s", str(trs), str(resources), str(score))
+        logger.info("n_similarity = [%s] + [%s] = %s", result["words1"], result["words2"], str(score))
         if score >= threshold_answer:
             final_aswers.append(answer)
 
@@ -348,7 +351,7 @@ def select_answer_value(params, step, steps, log=False):
     for method in methods:
         logger.debug("Executando metodo: %s", method.__name__)
         values = method(values)
-        logger.debug("resultado do metodo '%s': %s", method.__name__, values)
+        # logger.debug("resultado do metodo '%s': %s", method.__name__, values)
         if not values["continue"]:
             break
 
