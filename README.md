@@ -7,12 +7,20 @@ O Ensepro é um sistema semântico de perguntas e respostas baseado em ontologia
 
 ### Dependências
 
-* Python >= 3.6
-* Modulo NLTK [`pip install nltk`]
-    * Importe e execute o comando `nltk.download()`
-    * Faça o download da collection `all-nltk`
-* Chatterbot [`pip install chatterbot`]
-* ElasticSearch [`pip install elasticsearch`]
-* Palavras Service
+```
+windows = python 3.6
+linux = python 3.6 / 3.7
+```
 
+```bash
+pip install --upgrade flask
+pip install --upgrade chatterbot
+pip install --upgrade chatterbot_corpus 
+pip install --upgrade nltk
+pip install --upgrade tensorflow
+pip install --upgrade elasticsearch
+pip install --upgrade bert-serving-server
+pip install --upgrade bert-serving-client
+pip install --upgarde gensim
+```
 
