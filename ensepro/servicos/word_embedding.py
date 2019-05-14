@@ -63,7 +63,7 @@ def n_word_embedding(palavras1, palavras2):
         logger.debug("[CACHE] n_word_embedding em cache. [%s]", out)
         return out
 
-    url = __build_url([endpoint, ":", porta, '/word-embedding/n-similarity/'])
+    url = __build_url([endpoint, ":", porta, '/n-similarity/'])
     data = {"words1": palavras1, "words2": palavras2}
     logger.debug("Executando request [url=%s, data=%s]", url, data)
 

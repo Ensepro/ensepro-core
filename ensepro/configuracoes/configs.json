@@ -97,7 +97,7 @@
             "endpoint": "http://127.0.0.1",
             "porta": "8098",
             "servicos": {
-                "word_embedding": "/word-embedding/similarity"
+                "word_embedding": "/similarity"
             }
         },
         "elastic_search": {
