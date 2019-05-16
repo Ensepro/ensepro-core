@@ -73,9 +73,15 @@
       "alguem": [],
       "algum": [],
       "eh_um": [],
-      "em_que": [],
+      "em_que": [
+        "tipo",
+        "type"
+      ],
       "quanto": [],
-      "quando": [],
+      "quando": [
+        "data",
+        "date"
+      ],
       "o_que": [],
       "qual": [],
       "quem": [],

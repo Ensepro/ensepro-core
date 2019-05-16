@@ -27,6 +27,8 @@ threshold_answer = configuracoes.get_config(ConsultaConstantes.THRESHOLD_ANSWER)
 
 numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
 
+termos_tipos_frases = configuracoes.get_config(ConsultaConstantes.TERMOS_TIPOS_FRASES)
+
 logger = LoggerConstantes.get_logger(LoggerConstantes.MODULO_SELECTING_ANSWER_STEP)
 
 
@@ -184,9 +186,15 @@ def create_binding_control(previous_result):
     return previous_result
 
 
-def inject_tr_from_phrase_type(previous_result):
-    # TODO needs to be done
+def select_tr_to_bind(previous_result):
+    trs = [remover_acentos(tr.palavra_canonica.lower()) for tr in helper.frase.termos_relevantes]
 
+    if len(helper.frase.termos_relevantes) == 1:
+        trs_to_inject = termos_tipos_frases[helper.frase.tipo.tipo]
+        logger.info("Frase com somente 1 TR: Injetando TRs: %s", str(trs_to_inject))
+        trs += trs_to_inject
+
+    previous_result["trs"] = trs
     return previous_result
 
 
@@ -219,8 +227,7 @@ def bind_tr_to_resources(previous_result):
     for verb in verbs:
         map_nominalizacoes[verb] = nominalizacao.get(verb)
 
-    trs = [remover_acentos(tr.palavra_canonica.lower()) for tr in helper.frase.termos_relevantes]
-
+    trs = previous_result["trs"]
     for index in range(len(previous_result["answers"])):
         answer = previous_result["answers"][index]
         predicates_looked = []
@@ -330,7 +337,7 @@ methods = [
     find_best_pattern,
     keep_only_best_pattern,
     create_binding_control,
-    inject_tr_from_phrase_type,
+    select_tr_to_bind,
     bind_tr_to_resources,
     validate_binded_values
 ]

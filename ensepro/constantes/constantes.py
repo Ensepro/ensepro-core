@@ -256,3 +256,6 @@ class ConsultaConstantes:
     NIVEL_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".nivel_answer_generator"
     THREADS_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".threads_answer_generator"
     PATH_ANSWER_GENERATOR = ConfiguracoesConstantes.CBC + ".path_answer_generator"
+
+    TERMOS_TIPOS_FRASES = ConfiguracoesConstantes.CBC + ".termos_tipos_frases"
+
