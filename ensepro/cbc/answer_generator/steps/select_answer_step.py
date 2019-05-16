@@ -268,11 +268,11 @@ def bind_tr_to_resources(previous_result):
     previous_result["answers"].sort(key=lambda x: x["bind_control"]["best_bind"]["score"], reverse=True)
 
     matches_count = len(previous_result["answers"][0]["bind_control"]["binds"])
-    score = previous_result["answers"][0]["bind_control"]["best_bind"]["score"]
+    # score = previous_result["answers"][0]["bind_control"]["best_bind"]["score"]
 
     previous_result["answers"] = [answer for answer in previous_result["answers"]
                                   if len(answer["bind_control"]["binds"]) == matches_count
-                                  and answer["bind_control"]["best_bind"]["score"] == score
+                                  # and answer["bind_control"]["best_bind"]["score"] == score
                                   and answer["bind_control"]["best_bind"]["score"] >= threshold_predicate]
 
     return previous_result
