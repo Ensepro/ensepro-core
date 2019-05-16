@@ -1,337 +1,337 @@
 {
-    "frases": {
-        "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
-        "regex": {
-            "termo_relevante": ":(v-|n|prop)",
-            "palavra_adjetivo": ":adj$",
-            "palavra_substantivo": ":n$",
-            "palavra_preposicao": ":prp$",
-            "palavra_substantivo_proprio": ":prop$",
-            "palavra_verbo": "v-",
-            "voz_passiva": "^fApass:pp$"
+  "frases": {
+    "nominalizacao": "/ensepro/configuracoes/nominalizacao.json",
+    "regex": {
+      "termo_relevante": ":(v-|n|prop)",
+      "palavra_adjetivo": ":adj$",
+      "palavra_substantivo": ":n$",
+      "palavra_preposicao": ":prp$",
+      "palavra_substantivo_proprio": ":prop$",
+      "palavra_verbo": "v-",
+      "voz_passiva": "^fApass:pp$"
+    },
+    "verbos_de_ligacao": [
+      "ser",
+      "estar",
+      "permanecer",
+      "continuar",
+      "parecer",
+      "tornar",
+      "ficar",
+      "possuir",
+      "ter",
+      "precisar"
+    ],
+    "termos_relevantes": {
+      "ignorar": [
+        "existir",
+        "vir"
+      ]
+    }
+  },
+  "sinonimos": {
+    "linguagens": [
+      "por",
+      "eng"
+    ]
+  },
+  "cbc": {
+    "lca_size": 10000,
+    "numero_respostas": 10,
+    "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
+    "nivel_answer_generator": 2,
+    "threads_answer_generator": 8,
+    "threshold_predicate": 0.7,
+    "threshold_answer": 0.7,
+    "pesos": {
+      "classes": {
+        "substantivo_proprio": 10,
+        "substantivo_comum": 2,
+        "substantivo_comum_sinonimo": 1.8,
+        "verbo": 3,
+        "verbo_sinonimo": 1,
+        "verbo_nomilizado": 2.8,
+        "verbo_nomilizado_sinonimo": 1,
+        "adjetivo": 1
+      },
+      "metricas": {
+        "m1": {
+          "peso": 1,
+          "policy": "BEST_MATCH"
         },
-        "verbos_de_ligacao": [
-            "ser",
-            "estar",
-            "permanecer",
-            "continuar",
-            "parecer",
-            "tornar",
-            "ficar",
-            "possuir",
-            "ter",
-            "precisar"
-        ],
-        "termos_relevantes": {
-            "ignorar": [
-                "existir",
-                "vir"
-            ]
+        "m2": {
+          "peso": 1,
+          "policy": "BEST_MATCH"
+        },
+        "m3": {
+          "peso": 1,
+          "policy": "BEST_MATCH"
         }
+      }
     },
-    "sinonimos": {
-        "linguagens": [
-            "por",
-            "eng"
-        ]
+    "termos_tipos_frases": {
+      "alguem": [],
+      "algum": [],
+      "eh_um": [],
+      "em_que": [],
+      "quanto": [],
+      "quando": [],
+      "o_que": [],
+      "qual": [],
+      "quem": [],
+      "onde": [],
+      "consulta": []
     },
-    "cbc": {
-        "lca_size": 10000,
-        "numero_respostas": 10,
-        "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
-        "nivel_answer_generator": 2,
-        "threads_answer_generator": 8,
-        "threshold_predicate": 0.7,
-        "threshold_answer": 0.7,
-        "pesos": {
-            "classes": {
-                "substantivo_proprio": 10,
-                "substantivo_comum": 2,
-                "substantivo_comum_sinonimo": 1.8,
-                "verbo": 3,
-                "verbo_sinonimo": 1,
-                "verbo_nomilizado": 2.8,
-                "verbo_nomilizado_sinonimo": 1,
-                "adjetivo": 1
-            },
-            "metricas": {
-                "m1": {
-                    "peso": 1,
-                    "policy": "BEST_MATCH"
-                },
-                "m2": {
-                    "peso": 1,
-                    "policy": "BEST_MATCH"
-                },
-                "m3": {
-                    "peso": 1,
-                    "policy": "BEST_MATCH"
-                }
-            }
+    "resultado_resumido": false,
+    "remover_variaveis": true
+  },
+  "servidores": {
+    "palavras": {
+      "endpoint": "http://127.0.0.1",
+      "porta": "8099",
+      "servicos": {
+        "analisar_frase": "/palavras/analisar/"
+      }
+    },
+    "word_embedding": {
+      "endpoint": "http://127.0.0.1",
+      "porta": "8098",
+      "servicos": {
+        "word_embedding": "/similarity"
+      }
+    },
+    "elastic_search": {
+      "endpoint": "172.17.0.2",
+      "porta": "9200",
+      "settings": {
+        "index_name": "ensepro_triplas",
+        "index_type": "ensepro_tripla",
+        "username": "",
+        "password": ""
+      }
+    },
+    "dbpedia_spotlight": {
+      "endpoint": "http://172.17.0.1:2228",
+      "confiancas": [
+        0.8,
+        0.7,
+        0.5,
+        0.3
+      ],
+      "servicos": {
+        "spotlight": "/rest/annotate/"
+      }
+    },
+    "knowledge_graph_search": {
+      "endpoint": "https://kgsearch.googleapis.com/v1/entities",
+      "key_file": "/root/alencar/ensepro/ensepro/configuracoes/kg.key",
+      "servicos": {
+        "search": ":search"
+      }
+    }
+  },
+  "logger": {
+    "nome_arquivo": "/ensepro.log",
+    "modo_arquivo": "w",
+    "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "default_logger_nivel": "DEBUG",
+    "modulos": {
+      "arvore": {
+        "nivel": "ERROR"
+      },
+      "cbc": {
+        "nivel": "INFO",
+        "answer_generator": {
+          "nivel": "INFO",
+          "elastic_search_step": {
+            "nivel": "INFO"
+          },
+          "answer_generator_step": {
+            "nivel": "INFO"
+          },
+          "normalizar_step": {
+            "nivel": "INFO"
+          },
+          "selecting_answer_step": {
+            "nivel": "INFO"
+          }
+        }
+      },
+      "configuracoes": {
+        "nivel": "ERROR"
+      },
+      "consulta": {
+        "nivel": "INFO",
+        "localizar_referencia_substantivo_proprio": {
+          "nivel": "INFO"
+        }
+      },
+      "elasticsearch": {
+        "nivel": "INFO",
+        "connection": {
+          "nivel": "INFO"
         },
-        "termos_tipos_frases": {
-            "alguem": [],
-            "algum": [],
-            "eh_um": [],
-            "em_que": [],
-            "quanto": [],
-            "quando": [],
-            "o_que": [],
-            "qual": [],
-            "quem": [],
-            "onde": [],
-            "consulta": []
+        "helpers": {
+          "nivel": "INFO"
         },
-        "resultado_resumido": false,
-        "remover_variaveis": true
-    },
-    "servidores": {
-        "palavras": {
-            "endpoint": "http://127.0.0.1",
-            "porta": "8099",
-            "servicos": {
-                "analisar_frase": "/palavras/analisar/"
-            }
+        "loaders": {
+          "nivel": "INFO",
+          "dataset": {
+            "nivel": "INFO"
+          }
+        },
+        "queries": {
+          "nivel": "INFO"
+        },
+        "searches": {
+          "nivel": "INFO"
+        }
+      },
+      "cln": {
+        "nivel": "ERROR",
+        "complementos_nominais": {
+          "nivel": "INFO"
+        },
+        "locucao_verbal": {
+          "nivel": "INFO"
+        },
+        "nominalizacao": {
+          "nivel": "INFO"
+        },
+        "termos_relevantes": {
+          "nivel": "INFO"
+        },
+        "tipo_frases": {
+          "nivel": "ERROR",
+          "chatterbot_helper": {
+            "nivel": "ERROR"
+          }
+        },
+        "voz": {
+          "nivel": "ERROR"
+        }
+      },
+      "servicos": {
+        "nivel": "ERROR",
+        "palavras_service": {
+          "nivel": "INFO"
+        },
+        "dbpedia_spotlight_service": {
+          "nivel": "INFO"
+        },
+        "knowledge_graph_search_service": {
+          "nivel": "INFO"
         },
         "word_embedding": {
-            "endpoint": "http://127.0.0.1",
-            "porta": "8098",
-            "servicos": {
-                "word_embedding": "/similarity"
-            }
-        },
-        "elastic_search": {
-            "endpoint": "172.17.0.2",
-            "porta": "9200",
-            "settings": {
-                "index_name": "ensepro_triplas",
-                "index_type": "ensepro_tripla",
-                "username": "",
-                "password": ""
-            }
-        },
-        "dbpedia_spotlight": {
-            "endpoint": "http://172.17.0.1:2228",
-            "confiancas": [
-                0.8,
-                0.7,
-                0.5,
-                0.3
-            ],
-            "servicos": {
-                "spotlight": "/rest/annotate/"
-            }
-        },
-        "knowledge_graph_search": {
-            "endpoint": "https://kgsearch.googleapis.com/v1/entities",
-            "key_file": "/root/alencar/ensepro/ensepro/configuracoes/kg.key",
-            "servicos": {
-                "search": ":search"
-            }
+          "nivel": "INFO"
         }
-    },
-    "logger": {
-        "nome_arquivo": "/ensepro.log",
-        "modo_arquivo": "w",
-        "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        "default_logger_nivel": "DEBUG",
-        "modulos": {
-            "arvore": {
-                "nivel": "ERROR"
-            },
-            "cbc": {
-                "nivel": "INFO",
-                "answer_generator": {
-                    "nivel": "INFO",
-                    "elastic_search_step": {
-                        "nivel": "INFO"
-                    },
-                    "answer_generator_step": {
-                        "nivel": "INFO"
-                    },
-                    "normalizar_step": {
-                        "nivel": "INFO"
-                    },
-                    "selecting_answer_step": {
-                        "nivel": "INFO"
-                    }
-                }
-            },
-            "configuracoes": {
-                "nivel": "ERROR"
-            },
-            "consulta": {
-                "nivel": "INFO",
-                "localizar_referencia_substantivo_proprio": {
-                    "nivel": "INFO"
-                }
-            },
-            "elasticsearch": {
-                "nivel": "INFO",
-                "connection": {
-                    "nivel": "INFO"
-                },
-                "helpers": {
-                    "nivel": "INFO"
-                },
-                "loaders": {
-                    "nivel": "INFO",
-                    "dataset": {
-                        "nivel": "INFO"
-                    }
-                },
-                "queries": {
-                    "nivel": "INFO"
-                },
-                "searches": {
-                    "nivel": "INFO"
-                }
-            },
-            "cln": {
-                "nivel": "ERROR",
-                "complementos_nominais": {
-                    "nivel": "INFO"
-                },
-                "locucao_verbal": {
-                    "nivel": "INFO"
-                },
-                "nominalizacao": {
-                    "nivel": "INFO"
-                },
-                "termos_relevantes": {
-                    "nivel": "INFO"
-                },
-                "tipo_frases": {
-                    "nivel": "ERROR",
-                    "chatterbot_helper": {
-                        "nivel": "ERROR"
-                    }
-                },
-                "voz": {
-                    "nivel": "ERROR"
-                }
-            },
-            "servicos": {
-                "nivel": "ERROR",
-                "palavras_service": {
-                    "nivel": "INFO"
-                },
-                "dbpedia_spotlight_service": {
-                    "nivel": "INFO"
-                },
-                "knowledge_graph_search_service": {
-                    "nivel": "INFO"
-                },
-                "word_embedding": {
-                    "nivel": "INFO"
-                }
-            },
-            "sinonimos": {
-                "nivel": "INFO"
-            }
-        }
-    },
-    "chatterbot": {
-        "configuracoes": {
-            "name": "TipoFrases",
-            "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
-            "trainer": "chatterbot.trainers.ListTrainer",
-            "show_training_progress": false,
-            "read_only": true,
-            "logic_adapters": [
-                {
-                    "import_path": "chatterbot.logic.BestMatch",
-                    "statement_comparison_function": "chatterbot.comparisons.levenshtein_distance",
-                    "response_selection_method": "chatterbot.response_selection.get_first_response"
-                },
-                {
-                    "import_path": "chatterbot.logic.LowConfidenceAdapter",
-                    "threshold": 0.20,
-                    "default_response": "desconhecido"
-                }
-            ]
-        },
-        "treinamento": {
-            "dicionario": {
-                "alguem": "#alguém M S",
-                "algum": "#algum <quant> DET",
-                "quanto": "#quanto <clb> <interr> <quant> DET F P",
-                "quando": "#quando <clb> <interr>",
-                "o_que": "#o_que <clb> <interr> M S",
-                "qual": "#qual <clb> <interr> DET M/F",
-                "que": "#que <clb> <interr> DET",
-                "quem": "#quem <clb> <interr> M/F S",
-                "onde": "#onde <clb> <interr>",
-                "aonde": "#aonde <clb> <interr>",
-                "listar": "#listar <vH> <mv>",
-                "buscar": "#buscar <vH> <mv>",
-                "achar": "#achar <vH> <mv>",
-                "encontrar": "#encontrar <vH> <mv>",
-                "descobrir": "#descobrir <vH> <mv>",
-                "mostrar": "#mostrar <vH> <mv>",
-                "localizar": "#localizar <vH> <mv>",
-                "obter": "#obter <vH> <mv>",
-                "recuperar": "#recuperar <vH> <mv>",
-                "conseguir": "#conseguir <vH> <mv>",
-                "nomear": "#nomear <vH> <mv>",
-                "dar": "#dar <mv> PR 3S SUBJ VFIN",
-                "em": "#em <clb> <*>",
-                "cidade": "#cidade <Lciv> F S",
-                "dia": "#dia <temp> <dur> <per> <unit> M S",
-                "vez": "#vez <temp> F P",
-                "ser": "#ser <vK> <mv> PR 3S IND VFIN",
-                "um": "#um <arti> M S"
-            },
-            "mapeamento": {
-                "alguem": [
-                    "$alguem"
-                ],
-                "algum": [
-                    "$algum"
-                ],
-                "eh_um": [
-                    "$ser $um"
-                ],
-                "em_que": [
-                    "$em $que"
-                ],
-                "quanto": [
-                    "$quanto",
-                    "$quanto $vez"
-                ],
-                "quando": [
-                    "$quando",
-                    "$em $que $dia"
-                ],
-                "o_que": [
-                    "$o_que"
-                ],
-                "qual": [
-                    "$qual",
-                    "$que"
-                ],
-                "quem": [
-                    "$quem"
-                ],
-                "onde": [
-                    "$onde",
-                    "$aonde"
-                ],
-                "consulta": [
-                    "$listar",
-                    "$buscar",
-                    "$achar",
-                    "$encontrar",
-                    "$descobrir",
-                    "$mostrar",
-                    "$localizar",
-                    "$obter",
-                    "$recuperar",
-                    "$conseguir",
-                    "$nomear",
-                    "$dar"
-                ]
-            }
-        }
+      },
+      "sinonimos": {
+        "nivel": "INFO"
+      }
     }
+  },
+  "chatterbot": {
+    "configuracoes": {
+      "name": "TipoFrases",
+      "storage_adapter": "chatterbot.storage.SQLStorageAdapter",
+      "trainer": "chatterbot.trainers.ListTrainer",
+      "show_training_progress": false,
+      "read_only": true,
+      "logic_adapters": [
+        {
+          "import_path": "chatterbot.logic.BestMatch",
+          "statement_comparison_function": "chatterbot.comparisons.levenshtein_distance",
+          "response_selection_method": "chatterbot.response_selection.get_first_response"
+        },
+        {
+          "import_path": "chatterbot.logic.LowConfidenceAdapter",
+          "threshold": 0.20,
+          "default_response": "desconhecido"
+        }
+      ]
+    },
+    "treinamento": {
+      "dicionario": {
+        "alguem": "#alguém M S",
+        "algum": "#algum <quant> DET",
+        "quanto": "#quanto <clb> <interr> <quant> DET F P",
+        "quando": "#quando <clb> <interr>",
+        "o_que": "#o_que <clb> <interr> M S",
+        "qual": "#qual <clb> <interr> DET M/F",
+        "que": "#que <clb> <interr> DET",
+        "quem": "#quem <clb> <interr> M/F S",
+        "onde": "#onde <clb> <interr>",
+        "aonde": "#aonde <clb> <interr>",
+        "listar": "#listar <vH> <mv>",
+        "buscar": "#buscar <vH> <mv>",
+        "achar": "#achar <vH> <mv>",
+        "encontrar": "#encontrar <vH> <mv>",
+        "descobrir": "#descobrir <vH> <mv>",
+        "mostrar": "#mostrar <vH> <mv>",
+        "localizar": "#localizar <vH> <mv>",
+        "obter": "#obter <vH> <mv>",
+        "recuperar": "#recuperar <vH> <mv>",
+        "conseguir": "#conseguir <vH> <mv>",
+        "nomear": "#nomear <vH> <mv>",
+        "dar": "#dar <mv> PR 3S SUBJ VFIN",
+        "em": "#em <clb> <*>",
+        "cidade": "#cidade <Lciv> F S",
+        "dia": "#dia <temp> <dur> <per> <unit> M S",
+        "vez": "#vez <temp> F P",
+        "ser": "#ser <vK> <mv> PR 3S IND VFIN",
+        "um": "#um <arti> M S"
+      },
+      "mapeamento": {
+        "alguem": [
+          "$alguem"
+        ],
+        "algum": [
+          "$algum"
+        ],
+        "eh_um": [
+          "$ser $um"
+        ],
+        "em_que": [
+          "$em $que"
+        ],
+        "quanto": [
+          "$quanto",
+          "$quanto $vez"
+        ],
+        "quando": [
+          "$quando",
+          "$em $que $dia"
+        ],
+        "o_que": [
+          "$o_que"
+        ],
+        "qual": [
+          "$qual",
+          "$que"
+        ],
+        "quem": [
+          "$quem"
+        ],
+        "onde": [
+          "$onde",
+          "$aonde"
+        ],
+        "consulta": [
+          "$listar",
+          "$buscar",
+          "$achar",
+          "$encontrar",
+          "$descobrir",
+          "$mostrar",
+          "$localizar",
+          "$obter",
+          "$recuperar",
+          "$conseguir",
+          "$nomear",
+          "$dar"
+        ]
+      }
+    }
+  }
 }
