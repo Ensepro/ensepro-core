@@ -217,9 +217,9 @@ def bind_tr_to_resources(previous_result):
     all_same_object = True
     for answer in answers:
         for triple in answer["triples"]:
-            all_same_subject = triple[0] == subject and all_same_predicate
+            all_same_subject = triple[0] == subject and all_same_subject
             all_same_predicate = triple[1] == predicate and all_same_predicate
-            all_same_object = triple[2] == _object and all_same_predicate
+            all_same_object = triple[2] == _object and all_same_object
             if not all_same_predicate:
                 break
 
