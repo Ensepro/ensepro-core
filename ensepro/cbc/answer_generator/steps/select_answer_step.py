@@ -190,7 +190,7 @@ def select_tr_to_bind(previous_result):
     trs = [remover_acentos(tr.palavra_canonica.lower()) for tr in helper.frase.termos_relevantes]
 
     if len(helper.frase.termos_relevantes) == 1:
-        trs_to_inject = termos_tipos_frases[helper.frase.tipo.tipo]
+        trs_to_inject = termos_tipos_frases.get(helper.frase.tipo.tipo, [])
         logger.info("Frase com somente 1 TR: Injetando TRs: %s", str(trs_to_inject))
         trs += trs_to_inject
 
@@ -209,15 +209,22 @@ def bind_tr_to_resources(previous_result):
         logger.debug("Somente 1 resposta, ignorando esta etapa")
         return previous_result
 
+    subject = answers[0]["triples"][0][0]  # subject of the first triple of the first answer
     predicate = answers[0]["triples"][0][1]  # predicate of the first triple of the first answer
+    _object = answers[0]["triples"][0][2]  # object of the first triple of the first answer
+    all_same_subject = True
     all_same_predicate = True
+    all_same_object = True
     for answer in answers:
         for triple in answer["triples"]:
+            all_same_subject = triple[0] == subject and all_same_predicate
             all_same_predicate = triple[1] == predicate and all_same_predicate
+            all_same_object = triple[2] == _object and all_same_predicate
             if not all_same_predicate:
                 break
 
     if all_same_predicate:
+        previous_result["continue"] = not (all_same_subject or all_same_object)
         return previous_result
 
     verbs = [tr.palavra_canonica for tr in helper.frase.termos_relevantes if
