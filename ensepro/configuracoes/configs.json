@@ -41,8 +41,8 @@
     "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 8,
-    "threshold_predicate": 0.7,
-    "threshold_answer": 0.7,
+    "threshold_predicate": 0.35,
+    "threshold_answer": 0.8,
     "pesos": {
       "classes": {
         "substantivo_proprio": 10,
@@ -159,7 +159,7 @@
             "nivel": "INFO"
           },
           "selecting_answer_step": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           }
         }
       },
@@ -229,7 +229,7 @@
           "nivel": "INFO"
         },
         "word_embedding": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         }
       },
       "sinonimos": {
