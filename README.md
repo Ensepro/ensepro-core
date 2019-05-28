@@ -13,7 +13,7 @@ linux = python 3.6.8 / 3.7
 ```
 
 ```bash
-pip install --upgrade flask ==1.0.2
+pip install --upgrade flask==1.0.2
 pip install --upgrade chatterbot==0.8.6
 pip install --upgrade chatterbot_corpus==1.1.1 
 pip install --upgrade nltk==3.4.1
