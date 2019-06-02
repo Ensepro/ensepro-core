@@ -21,6 +21,6 @@ pip install --upgrade tensorflow==1.13.1
 pip install --upgrade elasticsearch==6.2.0
 pip install --upgrade bert-serving-server==1.8.9
 pip install --upgrade bert-serving-client==1.8.9
-pip install --upgarde gensim==3.7.3
+pip install --upgrade gensim==3.7.3
 ```
 
