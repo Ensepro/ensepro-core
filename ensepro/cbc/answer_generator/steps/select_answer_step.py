@@ -65,6 +65,7 @@ def answer_pattern_for(answer, reversed_=False):
 
     triple_pattern = ""
     score = 0.0
+    full_match_count = 0
     triples = answer["triples"] if not reversed_ else answer["triples"][::-1]
     for triple in triples:
         for value in triple:
@@ -80,6 +81,7 @@ def answer_pattern_for(answer, reversed_=False):
             if resource == tr:
                 tr = "f" + tr
                 score += 1.1
+                full_match_count += 1
             else:
                 tr = "p" + tr
                 score += 0.5
@@ -89,7 +91,8 @@ def answer_pattern_for(answer, reversed_=False):
     logger.debug("Obtendo o padrão para tripla [%s] -> %s (%s)", answer["triples"], triple_pattern, str(score))
     return {
         "pattern": triple_pattern,
-        "score": score
+        "score": score,
+        "full_match_count": full_match_count
     }
 
 
@@ -297,6 +300,17 @@ def format_concept(conecpt: str):
 
 
 def validate_binded_values(previous_result):
+    
+    continue = False
+    for answer in previous_result["answers"]:
+        if answer_pattern_for(answer)["full_match_count"] < 2
+            continue = True
+            break
+            
+    if not continue:
+        logger.info("Todas respostas com 2 ou mais fullmatches, ignorando validação.")
+        return
+                
     trs = []
     final_aswers = []
     for tr in helper.frase.termos_relevantes:
