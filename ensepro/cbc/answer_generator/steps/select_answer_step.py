@@ -301,15 +301,15 @@ def format_concept(conecpt: str):
 
 def validate_binded_values(previous_result):
     
-    continue = False
+    _continue = False
     for answer in previous_result["answers"]:
         if answer_pattern_for(answer)["full_match_count"] < 2
-            continue = True
+            _continue = True
             break
             
-    if not continue:
+    if not _continue:
         logger.info("Todas respostas com 2 ou mais fullmatches, ignorando validação.")
-        return
+        return previous_result
                 
     trs = []
     final_aswers = []
