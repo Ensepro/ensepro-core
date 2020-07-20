@@ -133,8 +133,9 @@ def check_sub_query(frase: Frase):
         logger.info("Subquery não necessária. [menos de 3 TRs]")
         return None
 
-    if (size_cn * 2) >= size_tr:
-        logger.info("Subquery não necessária. [(size_cn * 2) >= size_tr]")
+    if size_cn == 1 and size_tr == 2:
+        logger.info("Subquery não necessária. [size_cn == 1 and size_tr == 2]")
+        return None
 
     for cn in cns:
         if cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio():
@@ -154,7 +155,7 @@ def sub_query_and_update(check_result):
     verb = remover_acentos(check_result["verb"].palavra_canonica).lower()
     prop = remover_acentos(check_result["prop"].palavra_canonica).lower()
 
-    frase = Frase(palavras=[check_result["verb"], check_result["prop"]])
+    frase = Frase(palavras=[check_result["verb"], check_result["prop"]], frase="subquery of: " + verb + " + " + prop)
 
     params = {}
     params["termos"] = {}

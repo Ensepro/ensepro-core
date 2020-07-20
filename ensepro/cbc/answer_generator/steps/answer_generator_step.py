@@ -6,11 +6,11 @@
 
 """
 
-import subprocess
+import subprocess, sys
 import ensepro.configuracoes as configuracoes
 from ensepro import ConsultaConstantes, LoggerConstantes
 
-numero_respostas = configuracoes.get_config(ConsultaConstantes.NUMERO_RESPOSTAS)
+lca_size = configuracoes.get_config(ConsultaConstantes.LCA_SIZE)
 threads = configuracoes.get_config(ConsultaConstantes.THREADS_ANSWER_GENERATOR)
 path_answer_generator = configuracoes.get_config(ConsultaConstantes.PATH_ANSWER_GENERATOR)
 
@@ -24,7 +24,7 @@ def answer_generator_step(params, step, steps):
         "java -jar",
         path_answer_generator,
         file_name,
-        str(numero_respostas),
+        str(lca_size if lca_size > 0 else sys.maxsize),
         str(threads),
         str(params["nivel_combination"])
     ])
@@ -34,4 +34,4 @@ def answer_generator_step(params, step, steps):
     subprocess.check_output(comando, shell=True)
     if steps.get(step, None):
         logger.debug("Chamando próximo passo: %s", steps[step][1])
-        return steps[step][0](["queries_renqueadas.json", params["frase"]], steps[step][1], steps)
+        return steps[step][0](["queries_renqueadas.json", params["frase"], params["frase_analisada"]], steps[step][1], steps)
