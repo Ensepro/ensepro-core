@@ -38,7 +38,7 @@
   "cbc": {
     "lca_size": 10000,
     "numero_respostas": 10,
-    "path_answer_generator": "/root/github/ensepro-answer-generator/target/ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
+    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\target\\ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 8,
     "threshold_predicate": 0.35,
@@ -107,7 +107,7 @@
       }
     },
     "elastic_search": {
-      "endpoint": "172.17.0.2",
+      "endpoint": "127.0.0.1",
       "porta": "9200",
       "settings": {
         "index_name": "ensepro_triplas",
@@ -117,7 +117,7 @@
       }
     },
     "dbpedia_spotlight": {
-      "endpoint": "http://172.17.0.1:2228",
+      "endpoint": "http://localhost:2228",
       "confiancas": [
         0.8,
         0.7,
@@ -140,7 +140,7 @@
     "nome_arquivo": "/ensepro.log",
     "modo_arquivo": "w",
     "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    "default_logger_nivel": "DEBUG",
+    "default_logger_nivel": "INFO",
     "modulos": {
       "arvore": {
         "nivel": "ERROR"
@@ -159,7 +159,7 @@
             "nivel": "INFO"
           },
           "selecting_answer_step": {
-            "nivel": "DEBUG"
+            "nivel": "INFO"
           }
         }
       },
@@ -229,7 +229,7 @@
           "nivel": "INFO"
         },
         "word_embedding": {
-          "nivel": "DEBUG"
+          "nivel": "INFO"
         }
       },
       "sinonimos": {

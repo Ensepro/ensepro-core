@@ -16,11 +16,11 @@ endpoint = configuracoes.get_config(KnowledgeGraphSearchConstantes.ENDPOINT)
 search_service = configuracoes.get_config(KnowledgeGraphSearchConstantes.SEARCH_SERVICE)
 
 api_key = ""
-try:
-    api_key = open(configuracoes.get_config(KnowledgeGraphSearchConstantes.API_KEY)).read()
-except Exception as ex:
-    logger.info("Erro ao carregar arquivo com key de autenticação com GoogleKnowledgeGraph. ")
-    logger.exception(ex)
+# try:
+#     api_key = open(configuracoes.get_config(KnowledgeGraphSearchConstantes.API_KEY)).read()
+# except Exception as ex:
+#     logger.info("Erro ao carregar arquivo com key de autenticação com GoogleKnowledgeGraph. ")
+#     logger.exception(ex)
 
 
 def search(request: KnowledgeGraphSearchRequest) -> KnowledgeGraphSearchResponse:

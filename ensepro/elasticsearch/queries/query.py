@@ -8,9 +8,8 @@
 
 class Query:
 
-    def __init__(self, index_name, index_type, query):
+    def __init__(self, index_name, query):
         self.index_name = index_name
-        self.index_type = index_type
         self.query = query
 
     @classmethod
@@ -19,11 +18,9 @@ class Query:
         from ensepro.constantes import ElasticSearchConstantes
 
         index_name = configuracoes.get_config(ElasticSearchConstantes.INDEX_NAME)
-        index_type = configuracoes.get_config(ElasticSearchConstantes.INDEX_TYPE)
 
         return cls(
                 index_name,
-                index_type,
                 query
         )
 

@@ -303,7 +303,7 @@ def validate_binded_values(previous_result):
     
     _continue = False
     for answer in previous_result["answers"]:
-        if answer_pattern_for(answer)["full_match_count"] < 2
+        if answer_pattern_for(answer)["full_match_count"] < 2:
             _continue = True
             break
             

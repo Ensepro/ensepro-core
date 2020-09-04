@@ -51,7 +51,7 @@ def search(fields, value, query):
             field_key = field.value["key"]
             search_result = query(field_name, value)
 
-            if search_result["hits"]["total"] > 0:
+            if search_result["hits"]["total"]["value"] > 0:
                 full_search_result[field_name] = search_result
                 search_result_keys += field_key
 

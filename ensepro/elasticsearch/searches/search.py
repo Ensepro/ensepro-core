@@ -15,9 +15,9 @@ def execute_search(client: Elasticsearch, query: Query):
     logger.debug("Executando consulta simples: %s", query)
     result =  client.search(
             index=query.index_name,
-            doc_type=query.index_type,
+            # doc_type=query.index_type,
             body=query.query,
             request_timeout=30
     )
-    logger.debug("Elasticsearch query result size=%s", result["hits"]["total"])
+    logger.debug("Elasticsearch query result size=%s", result["hits"]["total"]["value"])
     return result
