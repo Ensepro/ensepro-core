@@ -248,7 +248,7 @@ def bind_tr_to_resources(previous_result):
             predicates_looked.append(str(triple[1]))
 
             original_triple = search_in_elasticsearch(triple)
-            if original_triple["hits"]["total"] == 0:
+            if original_triple["hits"]["total"]["value"]  == 0:
                 continue
             original_triple = original_triple["hits"]["hits"][0]["_source"]
             predicado = original_triple["predicado"]
@@ -300,17 +300,16 @@ def format_concept(conecpt: str):
 
 
 def validate_binded_values(previous_result):
-    
     _continue = False
     for answer in previous_result["answers"]:
         if answer_pattern_for(answer)["full_match_count"] < 2:
             _continue = True
             break
-            
+
     if not _continue:
         logger.info("Todas respostas com 2 ou mais fullmatches, ignorando validação.")
         return previous_result
-                
+
     trs = []
     final_aswers = []
     for tr in helper.frase.termos_relevantes:
@@ -320,8 +319,9 @@ def validate_binded_values(previous_result):
         resources = []
         for triple in answer["triples"]:
             original_triple = search_in_elasticsearch(triple)
-            if original_triple["hits"]["total"] == 0:
+            if original_triple["hits"]["total"]["value"] == 0:
                 continue
+            #            ["hits"]["total"]["value"]
             original_triple = original_triple["hits"]["hits"][0]["_source"]
 
             subject = original_triple["sujeito"]

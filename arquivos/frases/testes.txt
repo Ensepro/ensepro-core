@@ -1,0 +1,6 @@
+#Qual é o brasão de Novo Hamburgo?
+#Quais são as igrejas de Roma?
+#Quais são os estilos das igrejas de Roma?
+
+#Quem é o prefeito da capital de Juneau?
+Lista as cidades que tenham prefeitos.

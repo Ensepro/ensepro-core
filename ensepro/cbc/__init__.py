@@ -138,7 +138,7 @@ def check_sub_query(frase: Frase):
         return None
 
     for cn in cns:
-        if cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio():
+        if False and (cn.complemento.is_substantivo_proprio() and not cn.nome.is_substantivo_proprio()):
             logger.info("Subquery necessária.")
             sub_query_values = {
                 "prop": cn.complemento,

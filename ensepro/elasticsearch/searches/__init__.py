@@ -58,7 +58,7 @@ def search(fields, value, query):
     return {
         "result": full_search_result,
         "keys": search_result_keys
-    }
+    }   
 
 
 def full_match_serach(fields, value):
