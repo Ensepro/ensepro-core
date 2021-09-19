@@ -37,8 +37,10 @@
   },
   "cbc": {
     "lca_size": 10000,
-    "numero_respostas": 10,
-    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\target\\ensepro-answer-generator-1.0-SNAPSHOT-spring-boot.jar",
+    "slm1_factor": 1000,
+    "slm1_factor_only_l1": true,
+    "numero_respostas": 30,
+    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\ensepro-answer-generator-size-base.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 8,
     "threshold_predicate": 0.35,
@@ -140,26 +142,26 @@
     "nome_arquivo": "/ensepro.log",
     "modo_arquivo": "w",
     "formato": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    "default_logger_nivel": "INFO",
+    "default_logger_nivel": "DEBUG",
     "modulos": {
       "arvore": {
         "nivel": "ERROR"
       },
       "cbc": {
-        "nivel": "INFO",
+        "nivel": "DEBUG",
         "answer_generator": {
-          "nivel": "INFO",
+          "nivel": "DEBUG",
           "elastic_search_step": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           },
           "answer_generator_step": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           },
           "normalizar_step": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           },
           "selecting_answer_step": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           }
         }
       },
@@ -167,45 +169,45 @@
         "nivel": "ERROR"
       },
       "consulta": {
-        "nivel": "INFO",
+        "nivel": "DEBUG",
         "localizar_referencia_substantivo_proprio": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         }
       },
       "elasticsearch": {
-        "nivel": "INFO",
+        "nivel": "DEBUG",
         "connection": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "helpers": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "loaders": {
-          "nivel": "INFO",
+          "nivel": "DEBUG",
           "dataset": {
-            "nivel": "INFO"
+            "nivel": "DEBUG"
           }
         },
         "queries": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "searches": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         }
       },
       "cln": {
         "nivel": "ERROR",
         "complementos_nominais": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "locucao_verbal": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "nominalizacao": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "termos_relevantes": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "tipo_frases": {
           "nivel": "ERROR",
@@ -220,20 +222,20 @@
       "servicos": {
         "nivel": "ERROR",
         "palavras_service": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "dbpedia_spotlight_service": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "knowledge_graph_search_service": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         },
         "word_embedding": {
-          "nivel": "INFO"
+          "nivel": "DEBUG"
         }
       },
       "sinonimos": {
-        "nivel": "INFO"
+        "nivel": "DEBUG"
       }
     }
   },
@@ -252,7 +254,7 @@
         },
         {
           "import_path": "chatterbot.logic.LowConfidenceAdapter",
-          "threshold": 0.20,
+          "threshold": 0.2,
           "default_response": "desconhecido"
         }
       ]

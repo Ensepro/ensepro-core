@@ -19,6 +19,7 @@ class ClasseGramatical(Enum):
     ADJETIVO = "a"
     SUBSTANTIVO = "n"
     PREPOSICAO = "r"
+    ADJ_SAT = "s"
 
     def __to_json__(self):
         return str(self)

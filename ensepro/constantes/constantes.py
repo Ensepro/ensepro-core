@@ -247,6 +247,8 @@ class ConsultaConstantes:
     PESO_M3 = PESOS_METRICAS + ".m3"
 
     LCA_SIZE = ConfiguracoesConstantes.CBC + ".lca_size"
+    SLM1_FACTOR = ConfiguracoesConstantes.CBC + ".slm1_factor"
+    SLM1_FACTOR_ONLY_L1 = ConfiguracoesConstantes.CBC + ".slm1_factor_only_l1"
     THRESHOLD_ANSWER = ConfiguracoesConstantes.CBC + ".threshold_answer"
     NUMERO_RESPOSTAS = ConfiguracoesConstantes.CBC + ".numero_respostas"
     RESULTADO_RESUMIDO = ConfiguracoesConstantes.CBC + ".resultado_resumido"

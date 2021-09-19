@@ -370,11 +370,18 @@ def select_answer_value(params, step, steps, log=False):
     helper.frase = params["frase"]
 
     logger.info("Resultado java: size=%s", len(params["answers"]))
-    if not remover_variaveis:
-        return params["answers"]
 
     values = {"answers": params["answers"], "continue": True}
     all_answers = list(params["answers"])
+
+    if not remover_variaveis:
+        return {
+            "correct_answer": values["answers"],
+            "all_answers": all_answers[:numero_respostas],
+            "ranking_time": params["ranking_time"],
+            "l_sizes": params["l_sizes"],
+            "ranking_time_only": params["secondsNano"]
+        }
 
     for method in methods:
         logger.debug("Executando metodo: %s", method.__name__)
@@ -388,7 +395,10 @@ def select_answer_value(params, step, steps, log=False):
 
     return {
         "correct_answer": values["answers"],
-        "all_answers": all_answers[:numero_respostas]
+        "all_answers": all_answers[:numero_respostas],
+        "ranking_time": params["ranking_time"],
+        "l_sizes": params["l_sizes"],
+        "ranking_time_only": params["secondsNano"]
     }
 
 
@@ -396,6 +406,7 @@ def select_answer_step(params, step, steps, log=False):
     with open(params[0], encoding="UTF-8", mode="r") as f:
         value = json.load(f)
     value["frase"] = params[2]
+    value["ranking_time"] = params[3]
     return select_answer_value(value, step, steps, log=log)
 
 

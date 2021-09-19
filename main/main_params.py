@@ -139,4 +139,10 @@ def get_args():
                         action="store_true",
                         default=False)
 
+    parser.add_argument("-filename",
+                        default="resultados",
+                        type=str,
+                        dest="filename",
+                        help="Nome do arquivo a ser salvo.")
+
     return parser.parse_args()

@@ -30,7 +30,7 @@ frases_texto = []
 frases_analisadas = []
 frases_reanalisadas = []
 respostas = []
-file = open("resultados.txt", mode="a", encoding="UTF-8") if args.save_txt else None
+file = open(args.filename +".txt", mode="a", encoding="UTF-8") if args.save_txt else None
 
 if args.arquivo_frases:
     if not args.quiet:
@@ -52,7 +52,7 @@ deve_responder = (args.verbose or args.resposta) and not args.sem_resposta
 
 def analisar(frase_texto):
     frase_final = None
-    resposta = []
+    resposta = {}
     frase_original = ensepro.analisar_frase(frase_texto)
     frases_analisadas.append(frase_original)
 
@@ -102,4 +102,4 @@ if args.save_json:
 
         resultado_json.append(json)
 
-    ensepro.save_as_json(resultado_json, "resultados.json")
+    ensepro.save_as_json(resultado_json, args.filename + ".json")
