@@ -36,15 +36,15 @@
     ]
   },
   "cbc": {
-    "lca_size": 10000,
-    "slm1_factor": 1000,
-    "slm1_factor_only_l1": true,
+    "lca_size": 500,
+    "slm1_factor": 2000,
+    "slm1_factor_only_l1": false,
     "numero_respostas": 30,
-    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\ensepro-answer-generator-size-base.jar",
+    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\jars\\ensepro-answer-generator-size-slm1.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 8,
-    "threshold_predicate": 0.35,
-    "threshold_answer": 0.8,
+    "threshold_predicate": 0.3,
+    "threshold_answer": 0.3,
     "pesos": {
       "classes": {
         "substantivo_proprio": 10,
@@ -145,7 +145,7 @@
     "default_logger_nivel": "DEBUG",
     "modulos": {
       "arvore": {
-        "nivel": "ERROR"
+        "nivel": "DEBUG"
       },
       "cbc": {
         "nivel": "DEBUG",
@@ -166,7 +166,7 @@
         }
       },
       "configuracoes": {
-        "nivel": "ERROR"
+        "nivel": "DEBUG"
       },
       "consulta": {
         "nivel": "DEBUG",
@@ -196,7 +196,7 @@
         }
       },
       "cln": {
-        "nivel": "ERROR",
+        "nivel": "DEBUG",
         "complementos_nominais": {
           "nivel": "DEBUG"
         },
@@ -210,17 +210,17 @@
           "nivel": "DEBUG"
         },
         "tipo_frases": {
-          "nivel": "ERROR",
+          "nivel": "DEBUG",
           "chatterbot_helper": {
-            "nivel": "ERROR"
+            "nivel": "DEBUG"
           }
         },
         "voz": {
-          "nivel": "ERROR"
+          "nivel": "DEBUG"
         }
       },
       "servicos": {
-        "nivel": "ERROR",
+        "nivel": "DEBUG",
         "palavras_service": {
           "nivel": "DEBUG"
         },

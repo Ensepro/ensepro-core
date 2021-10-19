@@ -35,10 +35,10 @@ def answer_generator_step(params, step, steps):
 
     logger.debug("Gerando combinações e calculando valores via Java[%s]", comando)
 
-    start = time.time()
+    start = time.time_ns()
     subprocess.check_output(comando, shell=True)
-    end = time.time()
+    end = time.time_ns()
 
     if steps.get(step, None):
         logger.debug("Chamando próximo passo: %s", steps[step][1])
-        return steps[step][0](["queries_renqueadas.json", params["frase"], params["frase_analisada"], (end - start)*1000], steps[step][1], steps)
+        return steps[step][0](["queries_renqueadas.json", params["frase"], params["frase_analisada"], (end - start)], steps[step][1], steps)
