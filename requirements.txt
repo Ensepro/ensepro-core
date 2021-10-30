@@ -1,0 +1,9 @@
+flask==1.0.2
+chatterbot==0.8.6
+chatterbot_corpus==1.1.1 
+nltk==3.4.1
+tensorflow==1.13.1
+elasticsearch==6.2.0
+bert-serving-server==1.8.9
+bert-serving-client==1.8.9
+gensim==3.7.3
