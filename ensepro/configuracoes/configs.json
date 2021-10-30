@@ -40,7 +40,7 @@
     "slm1_factor": 2000,
     "slm1_factor_only_l1": false,
     "numero_respostas": 30,
-    "path_answer_generator": "C:\\_ensepro\\ensepro-answer-generator\\jars\\ensepro-answer-generator-size-slm1.jar",
+    "path_answer_generator": "/jars/ensepro-answer-generator-size-slm1.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 8,
     "threshold_predicate": 0.3,
