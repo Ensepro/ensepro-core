@@ -95,21 +95,21 @@
   },
   "servidores": {
     "palavras": {
-      "endpoint": "http://127.0.0.1",
+      "endpoint": "http://host.docker.internal",
       "porta": "8099",
       "servicos": {
         "analisar_frase": "/palavras/analisar/"
       }
     },
     "word_embedding": {
-      "endpoint": "http://127.0.0.1",
+      "endpoint": "http://host.docker.internal",
       "porta": "8098",
       "servicos": {
         "word_embedding": "/similarity"
       }
     },
     "elastic_search": {
-      "endpoint": "127.0.0.1",
+      "endpoint": "host.docker.internal",
       "porta": "9200",
       "settings": {
         "index_name": "ensepro_triplas",
@@ -119,7 +119,7 @@
       }
     },
     "dbpedia_spotlight": {
-      "endpoint": "http://localhost:2228",
+      "endpoint": "http://host.docker.internal:2228",
       "confiancas": [
         0.8,
         0.7,
