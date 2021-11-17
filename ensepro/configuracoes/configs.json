@@ -42,9 +42,9 @@
     "numero_respostas": 30,
     "path_answer_generator": "/jars/ensepro-answer-generator-size-slm1.jar",
     "nivel_answer_generator": 2,
-    "threads_answer_generator": 8,
+    "threads_answer_generator": 32,
     "threshold_predicate": 0.3,
-    "threshold_answer": 0.3,
+    "threshold_answer": 0.5,
     "pesos": {
       "classes": {
         "substantivo_proprio": 10,
