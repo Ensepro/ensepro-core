@@ -380,6 +380,7 @@ def select_answer_value(params, step, steps, log=False):
             "all_answers": all_answers[:numero_respostas],
             "ranking_time": params["ranking_time"],
             "l_sizes": params["l_sizes"],
+            "a_sizes": params["answer_sizes"],
             "ranking_time_only": params["nanoSeconds"]
         }
 
@@ -398,6 +399,7 @@ def select_answer_value(params, step, steps, log=False):
         "all_answers": all_answers[:numero_respostas],
         "ranking_time": params["ranking_time"],
         "l_sizes": params["l_sizes"],
+        "a_sizes": params["answer_sizes"],
         "ranking_time_only": params["nanoSeconds"]
     }
 
