@@ -374,13 +374,14 @@ def select_answer_value(params, step, steps, log=False):
     values = {"answers": params["answers"], "continue": True}
     all_answers = list(params["answers"])
 
-    if not remover_variaveis:
+    if not remover_variaveis or len(all_answers) == 0:
         return {
             "correct_answer": values["answers"],
             "all_answers": all_answers[:numero_respostas],
             "ranking_time": params["ranking_time"],
             "l_sizes": params["l_sizes"],
             "a_sizes": params["answer_sizes"],
+            "stats": params["stats"],
             "ranking_time_only": params["nanoSeconds"]
         }
 
@@ -400,6 +401,7 @@ def select_answer_value(params, step, steps, log=False):
         "ranking_time": params["ranking_time"],
         "l_sizes": params["l_sizes"],
         "a_sizes": params["answer_sizes"],
+        "stats": params["stats"],
         "ranking_time_only": params["nanoSeconds"]
     }
 
@@ -409,6 +411,7 @@ def select_answer_step(params, step, steps, log=False):
         value = json.load(f)
     value["frase"] = params[2]
     value["ranking_time"] = params[3]
+    value["helper"] = params[4]
     return select_answer_value(value, step, steps, log=log)
 
 

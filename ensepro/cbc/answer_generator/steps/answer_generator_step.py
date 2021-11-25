@@ -41,4 +41,4 @@ def answer_generator_step(params, step, steps):
 
     if steps.get(step, None):
         logger.debug("Chamando próximo passo: %s", steps[step][1])
-        return steps[step][0](["queries_renqueadas.json", params["frase"], params["frase_analisada"], (end - start)], steps[step][1], steps)
+        return steps[step][0](["queries_renqueadas.json", params["frase"], params["frase_analisada"], (end - start), params["helper"]], steps[step][1], steps)

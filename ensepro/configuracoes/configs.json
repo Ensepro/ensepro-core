@@ -36,14 +36,14 @@
     ]
   },
   "cbc": {
-    "lca_size": 500,
+    "lca_size": 30,
     "slm1_factor": 2000,
     "slm1_factor_only_l1": false,
-    "numero_respostas": 30,
+    "numero_respostas": 50,
     "path_answer_generator": "/jars/ensepro-answer-generator-size-slm1.jar",
     "nivel_answer_generator": 2,
     "threads_answer_generator": 32,
-    "threshold_predicate": 0.3,
+    "threshold_predicate": 0.29,
     "threshold_answer": 0.5,
     "pesos": {
       "classes": {
